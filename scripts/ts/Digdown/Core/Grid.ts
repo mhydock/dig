@@ -15,19 +15,27 @@ namespace Digdown.Core {
 		itemsFactory : ItemsFactory;
 	    blockClearedListeners = new Listener<BlockClearedListenerFunc>();
     
-        get width() : number { return WIDTH; }
-        get height() : number { return HEIGHT; }        
+        get Width() : number { return WIDTH; }
+        get Height() : number { return HEIGHT; }        
 
 		getRow(y : number) : Array<Block> {
             return this.grid.slice(y*WIDTH, (y+1)*WIDTH);
         }
 
-        blockHpPerc(x: number, y: number) : number {
+        healthPercent(x: number, y: number) : number {
             let bl = this.block(x,y);
             if (bl != null)
                 return bl.healthPercent();
             
             return -1;
+        }
+
+        isCleared(x: number, y: number) : boolean {
+            let bl = this.block(x,y);
+            if (bl != null)
+                return bl.cleared();
+            
+            return false;
         }
 
         block(x: number, y: number) : Block {

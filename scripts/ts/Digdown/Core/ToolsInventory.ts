@@ -49,5 +49,9 @@ namespace Digdown.Core {
                     this.tools['LDrill'].Amount > 0 ||
                     this.tools['GDrill'].Amount > 0;
         }
+
+        dig(grid : Grid, x : number, y : number) {
+            
+        }
     }
 }

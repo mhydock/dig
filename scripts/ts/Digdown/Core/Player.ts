@@ -1,87 +1,82 @@
-function Player(x, y) {
-    var self = this;
-    
-    var _x = x;
-    var _y = y;
-    var _orient = Orientation.SOUTH;
+namespace Digdown.Core {
 
-    var _grid;
-    var _tools;    
+    export class Player{
+        constructor (private x: number,
+                     private y: number) {}
 
-    function _step(x, y) {
-        if (x < 0 || x >= _grid.getWidth() ||
-            y < -1 || y >= _grid.getHeight())
-            return -1;
-        
-        log('Attempting to move to [' + x + ',' + y + ']');
+        orient = Orientation.SOUTH;
 
-        // if player is above ground, just let them move.
-        if (_y == -1 && y == _y)
-        {
-            log('Player is above ground');
-            _x = x;
-            return;            
-        }
+        grid : Grid;
+        tools : ToolsInventory;    
+
+        step(x: number, y: number) : number {
+            if (x < 0 || x >= this.grid.Width ||
+                y < -1 || y >= this.grid.Height)
+                return -1;
             
-        if (_grid.isBlockCleared(x, y))
-        {
-            log('Path is clear');
-            _y = y;
-            _x = x;
-            return -1;            
-        }
-        else
-        {
-            log('Path is not clear');
-            var damage = _grid.dig(_tools.getPower(), x, y);
-            
-            if (_tools.canMoveAndStep() && _grid.isBlockCleared(x,y))
+            log('Attempting to move to [' + x + ',' + y + ']');
+
+            // if player is above ground, just let them move.
+            if (this.y == -1 && y == this.y)
             {
-                _y = y;
-                _x = x;
+                log('Player is above ground');
+                this.x = x;
+                return;            
             }
-            
-            return damage;   
+                
+            if (this.grid.isCleared(x, y))
+            {
+                log('Path is clear');
+                this.y = y;
+                this.x = x;
+                return -1;            
+            }
+            else
+            {
+                log('Path is not clear');
+                var damage = this.tools.dig(this.grid, x, y);
+                
+                if (this.tools.canMoveAndStep() &&
+                    this.grid.isCleared(x,y))
+                {
+                    this.y = y;
+                    this.x = x;
+                }
+                
+                return damage;   
+            }
+        }
+        
+        moveUp() : number {
+            this.orient = Orientation.NORTH;
+            return this.step(this.x, this.y-1);
+        }
+        
+        moveDown() : number {
+            this.orient = Orientation.SOUTH;
+            return this.step(this.x, this.y+1);
+        }
+        
+        moveLeft() : number {
+            this.orient = Orientation.WEST;
+            return this.step(this.x-1, this.y);
+        }
+        
+        moveRight() : number {
+            this.orient = Orientation.EAST;
+            return this.step(this.x+1, this.y);
+        }
+        
+        get X() : number {
+            return this.x;
+        }
+        
+        get Y() : number {
+            return this.y;
+        }
+
+        get Orientation() : number {
+            return this.orient;
         }
     }
-    
-    self.moveUp = function() {
-        _orient = Orientation.NORTH;
-        return _step(_x, _y-1);
-    };
-    
-    self.moveDown = function() {
-        _orient = Orientation.SOUTH;
-        return _step(_x, _y+1);
-    };
-    
-    self.moveLeft = function() {
-        _orient = Orientation.WEST;
-        return _step(_x-1, _y);
-    };
-    
-    self.moveRight = function() {
-        _orient = Orientation.EAST;
-        return _step(_x+1, _y);
-    };
-    
-    self.getOrientation = function() {
-        return _orient;
-    };
-    
-    self.setGrid = function(grid) {
-        _grid = grid;
-    };
-    
-    self.setTools = function(tools) {
-        _tools = tools;
-    };
-    
-    self.getX = function() {
-        return _x;
-    };
-    
-    self.getY = function() {
-        return _y;
-    };
 }
