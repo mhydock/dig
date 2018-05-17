@@ -1,7 +1,7 @@
 namespace Digdown.Core {
     export class ItemsInventory {
    
-        private items = {
+        private items : { [key: string] : Item } = {
             'CMDIRT': new Item('Common Dirt',       'Just some dirt, no big deal.',                             0, 1,   true),
             'TFCLAY': new Item('Tough Clay',        'Tough clay, not good for much.',                           0, 2,   false),
             'GDDIRT': new Item('Quality Topsoil',   'The good stuff; great for gardens.',                       0, 3,   false),

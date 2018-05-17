@@ -33,7 +33,7 @@ namespace Digdown.Core {
             return this.tools;
         }
         
-        get Power() {
+        get Power() : number {
             var total = 0; 
             for (var i in this.tools)
             {
@@ -43,15 +43,15 @@ namespace Digdown.Core {
             return total;
         }
         
-        canMoveAndStep() { 
+        canMoveAndStep() : boolean { 
             return  this.tools['Shovel'].Amount > 0 ||
                     this.tools['SDrill'].Amount > 0 ||
                     this.tools['LDrill'].Amount > 0 ||
                     this.tools['GDrill'].Amount > 0;
         }
 
-        dig(grid : Grid, x : number, y : number) {
-            
+        dig(grid : Grid, x : number, y : number) : number {
+            return 0;
         }
     }
 }

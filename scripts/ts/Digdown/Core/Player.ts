@@ -1,6 +1,6 @@
 namespace Digdown.Core {
 
-    export class Player{
+    export class Player {
         constructor (private x: number,
                      private y: number) {}
 
@@ -21,7 +21,7 @@ namespace Digdown.Core {
             {
                 log('Player is above ground');
                 this.x = x;
-                return;            
+                return 0;            
             }
                 
             if (this.grid.isCleared(x, y))

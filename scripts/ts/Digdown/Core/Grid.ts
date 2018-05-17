@@ -63,10 +63,6 @@ namespace Digdown.Core {
             return blocks;
         }
         
-        setItemsFactory(itemsFactory : ItemsFactory) {
-		    this.itemsFactory = itemsFactory;
-		};
-		
 		addBlockClearedListener(func : BlockClearedListenerFunc) {
 		    return this.blockClearedListeners.add(func);
 		};
