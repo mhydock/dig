@@ -8,6 +8,16 @@ namespace Digdown.Core {
         private water1 = new Technology('Low-Pressure Water-based Erosion',     100,    false,  this.shovel, 1);
         private water2 = new Technology('High-pressure Water-based Erosion',    1000,   false,  this.water1, 2);
         private explos = new Technology('Explosives',                           1000,   false,  this.hammer, 3);        
+        private technologies: Technology[];
+
+        constructor() {
+            this.technologies = [this.shovel,
+                                 this.hammer,
+                                 this.drills,
+                                 this.water1,
+                                 this.water2,
+                                 this.explos];
+        }
         
         get SHOVEL() { return this.shovel; }
         get HAMMER() { return this.hammer; }
@@ -15,5 +25,9 @@ namespace Digdown.Core {
         get WATER1() { return this.water1; }
         get WATER2() { return this.water2; }
         get EXPLOS() { return this.explos; }
+
+        get Technologies() : Technology[] {
+            return this.technologies;
+        }
     }
 }
