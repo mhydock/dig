@@ -1,3 +1,5 @@
+/// <reference path='../Core/Common.ts'/>
+
 namespace Digdown.UI {
     import log = Core.log;
 
@@ -5,46 +7,68 @@ namespace Digdown.UI {
        
         private game = new Game();
                 
-        private $window: Window = $(window);
-        private wrapper: HTMLDivElement = $('#wrapper');
-        private tooltip: HTMLDivElement = $('#tooltip');
-        private gameScreen: HTMLDivElement = $('#gameScreen');
-        private progCursor: HTMLDivElement = $('#progCursor');    
+        private wrapper: HTMLDivElement = <HTMLDivElement>document.getElementById('#wrapper');
+        private tooltip: HTMLDivElement = <HTMLDivElement>document.getElementById('#tooltip');
+        private gameScreen: HTMLDivElement = <HTMLDivElement>document.getElementById('#gameScreen');
+        private progCursor: HTMLDivElement = <HTMLDivElement>document.getElementById('#progCursor');    
         
-        private moneyDiv: HTMLDivElement = $('#money');
+        private moneyDiv: HTMLDivElement = <HTMLDivElement>document.getElementById('#money');
         private mainContent: HTMLDivElement = $('#inventory > .content');
         private subContent: HTMLDivElement = $('#econList > .content');
         
-        private toolsTab: HTMLLIElement = $('#tools');
-        private itemsTab: HTMLLIElement = $('#items');
-        private econTab: HTMLLIElement = $('#econ');
-        private techTab: HTMLLIElement = $('#tech');
-        private busiTab: HTMLLIElement = $('#busi');
+        private toolsTab: HTMLLIElement = <HTMLLIElement>document.getElementById('#tools');
+        private itemsTab: HTMLLIElement = <HTMLLIElement>document.getElementById('#items');
+        private econTab: HTMLLIElement = <HTMLLIElement>document.getElementById('#econ');
+        private techTab: HTMLLIElement = <HTMLLIElement>document.getElementById('#tech');
+        private busiTab: HTMLLIElement = <HTMLLIElement>document.getElementById('#busi');
 
-        private toolBoxList: HTMLDivElement = $('#toolsList');
-        private itemBoxList: HTMLDivElement = $('#itemsList');
-        private econBoxList: HTMLDivElement = $('#econList');
-        private techBoxList: HTMLDivElement = $('#techList');
-        private busiBoxList: HTMLDivElement = $('#busiList');
+        private toolBoxList: HTMLDivElement = <HTMLDivElement>document.getElementById('#toolsList');
+        private itemBoxList: HTMLDivElement = <HTMLDivElement>document.getElementById('#itemsList');
+        private econBoxList: HTMLDivElement = <HTMLDivElement>document.getElementById('#econList');
+        private techBoxList: HTMLDivElement = <HTMLDivElement>document.getElementById('#techList');
+        private busiBoxList: HTMLDivElement = <HTMLDivElement>document.getElementById('#busiList');
         
         constructor() {
             log("Game has begun");
 
             var tools = this.game.ToolsInventory.Tools;
             for (var t in tools) {
-                var box = new ToolBox(this.game, tools[t]);
+                let box = new ToolBox(this.game, tools[t]);
                 this.toolBoxList.appendChild(box.ToolBox);
             }
 
             var items = this.game.ItemsInventory.Items;
             for (var i in items) {
-                buildItemBox(items[i]);
+                let box = new ItemBox(this.game, items[i]);
+                this.itemBoxList.appendChild(box.ItemBox);
             }
             
             var techs = this.game.TechnologyTree.Technologies;
             for (var h in techs) {
-                buildTechBox(techs[h]);
+                let box = new ToolBox(this.game, tools[i]);
+                this.toolBoxList.appendChild(box.ToolBox);
             }
+
+            this.toolsTab.click = this.changeTab(this.toolsTab, this.toolBoxList);
+            this.itemsTab.click = this.changeTab(this.itemsTab, this.itemBoxList);            
+            this.econTab.click = this.changeTab(this.econTab, this.econBoxList);            
+            this.techTab.click = this.changeTab(this.techTab, this.techBoxList);            
+            this.busiTab.click = this.changeTab(this.busiTab, this.busiBoxList);
+
+            this.game.setFontSize(this.gameScreen.style.fontSize);
+            
+            window.onresize = this.onResizeFunc;
+            this.onResizeFunc();
+            
+            this.gameScreen.innerHTML = this.game.printVisibleGrid();
+
+            this.updateMoney(this.game.Money);
+            this.game.addMoneyListener(this.updateMoney);
+            this.gameScreen.onmousemove = this.updateHover;
+            this.gameScreen.onmouseleave = this.hideTooltip;
+
+            this.techTab.click();
+            this.toolsTab.click();
         }
 
         updateMoney(money: number) {
@@ -61,205 +85,55 @@ namespace Digdown.UI {
             var hoverText = this.game.getHoverText(x, y);
             if (hoverText === null)
             {
-                this.tooltip.hide();
+                this.hideTooltip();
                 return;
             }
             
-            this.tooltip.html(this.game.getHoverText(x, y));
-            this.tooltip.css({'top': (event.pageY+2)+'px', 'left': (event.pageX+2)+'px'});
-            this.tooltip.show();
+            this.tooltip.innerHTML = this.game.getHoverText(x, y);
+            this.tooltip.style.top = (event.pageY+2)+'px';
+            this.tooltip.style.left = (event.pageX+2)+'px';
+            this.tooltip.style.display = 'block';
         }
-    
-        function buildItemBox(item) {
-            var itemBox = $('<div>');
-            var title = $('<h4>').text(item.getName());
-            var amountLbl = $('<label>').text('x ' + item.getAmount());
-            var valueLbl = $('<label>').text('$ ' + item.getValue() + ' per');
-            var sellBtn = $('<button>Sell</button>').click(function() {
-                var sale = item.trySell();
-                if (sale >= 0)
-                    game.addMoney(sale);
-                else
-                    alert('You cannot sell that item');
-            });
-            var sell100Btn = $('<button>Sell x100</button>').click(function() {
-                var sale = item.trySellMany(100);
-                if (sale >= 0)
-                    game.addMoney(sale);
-                else
-                    alert('You cannot sell 100 of that item');
-            });
-            var sellAllBtn =$('<button>Sell All</button>').click(function() {
-                var sale = item.trySellAll();
-                if (sale >= 0)
-                    game.addMoney(sale);
-                else
-                    alert('You cannot sell those items');
-            });
-            
-            itemBox[0].title = item.getDescription();
-            
-            function checkAmount(amount) {
-                sellBtn[0].disabled = amount <= 0;
-                sell100Btn[0].disabled = amount < 100;
-                
-                if (amount < 100)   sell100Btn.hide();
-                else                sell100Btn.show();
-                
-                if (amount < 1000)  sellAllBtn.hide();
-                else                sellAllBtn.show();
-                
-                amountLbl.text('x ' + withSuffix(amount));
-                if (amount > 1000)  amountLbl[0].title = amount;
-                else                amountLbl[0].title = '';
-            }
-            
-            function checkKnown(known) {
-                if (known)
-                    itemBox.css({'display': 'block'});
-                else
-                    itemBox.css({'display': 'none'});
-            }
-            
-            checkKnown(item.isKnown());
-            checkAmount(item.getAmount());
-            
-            item.addKnownListener(checkKnown);
-            item.addAmountListener(checkAmount);
-                
-            itemBox.append(title)
-                .append(amountLbl)
-                .append(valueLbl)
-                .append(sellBtn)
-                .append(sell100Btn)
-                .append(sellAllBtn);
-            itemBoxList.append(itemBox);
-        }
-        
-        function buildTechBox(tech) {
-            var techBox = $('<div>');
-            var title = $('<h3>').text(tech.getName());
-            var levelLbl = $('<label>');
-            var resCostLbl = $('<label>');   
-            var researchBtn = $('<button>Research</button>').click(function () {
-                var cost = tech.tryResearch(game.getMoney());
-                if (cost >= 0)
-                    game.subMoney(cost);
-                else
-                    alert('You do not have enough money to research ' + tech.getName());
-            });
-            
-            function checkCost(cost) {
-                resCostLbl.text('Next: $ ' + cost);
-                if (cost > game.getMoney())
-                    researchBtn[0].disabled = true;
-            }
-            
-            function checkMoney(money) {
-                if (money < tech.getResearchCost())
-                    researchBtn[0].disabled = true;
-                else
-                    researchBtn[0].disabled = false;
-            }
-            
-            function checkLevel(level) {
-                levelLbl.text('Level: ' + level);
-            }
-            
-            function checkVisibility(visible) {
-                if (visible)
-                    techBox.show();
-                else
-                    techBox.hide();
-            }
-            
-            checkCost(tech.getResearchCost());
-            checkLevel(tech.getLevel());
-            checkVisibility(tech.getVisibility());
-            
-            tech.addCostListener(checkCost);
-            tech.addLevelListener(checkLevel);
-            tech.addVisibilityListener(checkVisibility);
-                
-            checkMoney(game.getMoney());
-            game.addMoneyListener(checkMoney);
-            
-            techBox.append(title)
-                .append(levelLbl)
-                .append(resCostLbl)
-                .append(researchBtn);
-            techBoxList.append(techBox);
-        }
-        
-        function changeTab(tab, list) {
-            var parent = tab.parent().parent();
-            
-            var select = parent.children('.tabs').find('li.selected').first();
-            if (select === tab)
-                return;
-            
-            var content = parent.children('.content').first();
-            content.children().hide();
-            list.show();
-            
-            select.removeClass('selected');
-            tab.addClass('selected');
-        }
-        
-        toolsTab.click(function() {
-            changeTab(toolsTab, toolBoxList);
-        });
-        
-        itemsTab.click(function() {
-            changeTab(itemsTab, itemBoxList);
-        });
-        
-        econTab.click(function() {
-            changeTab(econTab, econBoxList);
-        });
-        
-        techTab.click(function() {
-            changeTab(techTab, techBoxList);
-        });
-        
-        busiTab.click(function() {
-            changeTab(busiTab, busiBoxList);
-        });
-        
-        wrapper.css({'height': $window.height() + 'px'});
-    
-        game.setFontSize(gameScreen.css('font-size'));
-        game.setViewHeight(gameScreen.height());
-        
-        $window.resize(function () {
-            wrapper.css({'height': $window.height() + 'px'});
-            game.setViewHeight(gameScreen.height());
-        });
-        
-        gameScreen.html(game.printVisibleGrid());
 
-        updateMoney(game.getMoney());
-        game.addMoneyListener(updateMoney);
-        gameScreen.mousemove(updateHover);
-        gameScreen.mouseleave(function() {tooltip.hide();});
+        private hideTooltip() {
+            this.tooltip.style.display = 'none';
+        }
+        
+        private changeTab(tab: HTMLLIElement, list: HTMLDivElement) {
+            return function() {
+                var parent = tab.parent().parent();
+                
+                var select = parent.children('.tabs').find('li.selected').first();
+                if (select === tab)
+                    return;
+                
+                var content = parent.children('.content').first();
+                content.children().hide();
+                list.show();
+                
+                select.removeClass('selected');
+                tab.addClass('selected');
+            }
+        }
 
-        techTab.click();
-        toolsTab.click();
+        private onResizeFunc() {
+            this.wrapper.style.height = window.innerHeight + 'px';
+            this.game.setViewHeight(this.gameScreen.height());
+        }
         
         // keycodes found here http://www.javascriptkeycode.com/
-        $(document).keydown(function(event) {
+        private onKeyDownFunc(event: KeyboardEvent) {
             if (event.which == 37)          // left arrow
-                game.moveLeft();
+                this.game.moveLeft();
             if (event.which == 38)          // up arrow
-                game.moveUp();
+                this.game.moveUp();
             if (event.which == 39)          // right arrow
-                game.moveRight();
+                this.game.moveRight();
             if (event.which == 40)          // down arrow
-                game.moveDown();
+                this.game.moveDown();
 
-            gameScreen.html(game.printVisibleGrid()); 
-            progCursor.css({'top': game.Progress + '%'});        
-        });
-
+            this.gameScreen.innerHTML = this.game.printVisibleGrid(); 
+            this.progCursor.style.top = this.game.Progress + '%';        
+        }
     }
 }
