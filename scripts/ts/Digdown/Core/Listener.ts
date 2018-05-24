@@ -17,7 +17,7 @@ namespace Digdown.Core {
         }
         
         callAll(...args : any[]) {
-        for(let i in this.listeners)
+            for(let i in this.listeners)
                 if (this.listeners.hasOwnProperty(i))
                     this.listeners[i].apply(this, args); 
         }

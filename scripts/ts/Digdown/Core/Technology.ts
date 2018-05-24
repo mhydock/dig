@@ -6,6 +6,7 @@ namespace Digdown.Core {
         private static defaultCostFunc : CostFunction = (baseCost, level) => baseCost * Math.pow(level+1, 2);
 
         private level = 0;
+        private maxLevel = 10;
 		private currCost : number;
 		
         private costListeners = new Listener<CostListenerFunc>();
@@ -36,6 +37,8 @@ namespace Digdown.Core {
         tryResearch(money : number) : number {
             if (money >= this.currCost)
             {
+                var cost = this.currCost;
+                
                 this.level++;
                 
                 this.currCost = this.costFunc(this.baseCost, this.level+1);
