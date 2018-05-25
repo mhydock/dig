@@ -50,7 +50,7 @@ namespace Digdown.Core {
                     this.tools['GDrill'].Amount > 0;
         }
 
-        dig(grid : Grid, x : number, y : number) : number {
+        dig(grid : Grid, x : number, y : number, orient: Orientation) : number {
             return 0;
         }
     }

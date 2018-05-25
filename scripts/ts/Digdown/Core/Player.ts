@@ -34,7 +34,7 @@ namespace Digdown.Core {
             else
             {
                 log('Path is not clear');
-                var damage = this.tools.dig(this.grid, x, y);
+                var damage = this.tools.dig(this.grid, x, y, this.orient);
                 
                 if (this.tools.canMoveAndStep() &&
                     this.grid.isCleared(x,y))
@@ -65,6 +65,22 @@ namespace Digdown.Core {
         moveRight() : number {
             this.orient = Orientation.EAST;
             return this.step(this.x+1, this.y);
+        }
+
+        faceUp() : void {
+            this.orient = Orientation.NORTH;
+        }
+        
+        faceDown() : void {
+            this.orient = Orientation.SOUTH;
+        }
+        
+        faceLeft() : void {
+            this.orient = Orientation.WEST;
+        }
+        
+        faceRight() : void {
+            this.orient = Orientation.EAST;
         }
         
         get X() : number {
