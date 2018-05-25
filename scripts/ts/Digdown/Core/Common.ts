@@ -43,5 +43,5 @@ namespace Digdown.Core {
     export interface LevelListenerFunc { (level : number) : void }
     export interface KnownListenerFunc { (known : boolean) : void }
     export interface AmountListenerFunc { (amount : number) : void }
-    export interface VisibleListenerFunc { (visible : number) : void }
+    export interface VisibleListenerFunc { (visible : boolean) : void }
 }

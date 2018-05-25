@@ -46,7 +46,7 @@ namespace Digdown.Core {
             }
         }
         
-        addMany = function(amount : number) {
+        addMany(amount : number) {
             this.amount += amount;
             this.amountListeners.callAll(this.amount);
             
@@ -75,7 +75,7 @@ namespace Digdown.Core {
             return this.value * amount;
         }
         
-        trySellAll = function() {
+        trySellAll() : number {
             if (this.amount <= 0)
                 return -1;
                 
