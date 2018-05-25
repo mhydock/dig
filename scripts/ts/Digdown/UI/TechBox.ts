@@ -35,7 +35,7 @@ namespace Digdown.UI {
             return this.techBox;
         }
 
-        private clickResearchButton () {
+        private clickResearchButton = () => {
             var cost = this.tech.tryResearch(this.game.Money);
             if (cost >= 0)
                 this.game.subMoney(cost);
@@ -43,24 +43,24 @@ namespace Digdown.UI {
                 alert('You do not have enough money to research ' + this.tech.Name);
         }
         
-        private checkCost(cost: number) {
+        private checkCost = (cost: number) => {
             this.resCostLbl.textContent = 'Next: $ ' + cost;
             if (cost > this.game.Money)
                 this.researchBtn.disabled = true;
         }
         
-        private checkMoney(money: number) {
+        private checkMoney = (money: number) => {
             if (money < this.tech.ResearchCost)
                 this.researchBtn.disabled = true;
             else
                 this.researchBtn.disabled = false;
         }
         
-        private checkLevel(level: number) {
+        private checkLevel = (level: number) => {
             this.levelLbl.textContent = 'Level: ' + level;
         }
         
-        private checkVisibility(visible: boolean) {
+        private checkVisibility = (visible: boolean) => {
             if (visible)
                 this.techBox.style.display = 'block';
             else

@@ -13,8 +13,6 @@ namespace Digdown.UI {
         private progCursor: HTMLDivElement = <HTMLDivElement>document.getElementById('#progCursor');    
         
         private moneyDiv: HTMLDivElement = <HTMLDivElement>document.getElementById('#money');
-        private mainContent: HTMLDivElement = $('#inventory > .content');
-        private subContent: HTMLDivElement = $('#econList > .content');
         
         private toolsTab: HTMLLIElement = <HTMLLIElement>document.getElementById('#tools');
         private itemsTab: HTMLLIElement = <HTMLLIElement>document.getElementById('#items');
@@ -60,32 +58,30 @@ namespace Digdown.UI {
             window.onresize = this.onResizeFunc;
             this.onResizeFunc();
             
-            this.gameScreen.innerHTML = this.game.printVisibleGrid();
-
             this.updateMoney(this.game.Money);
             this.game.addMoneyListener(this.updateMoney);
+
             this.gameScreen.onmousemove = this.updateHover;
             this.gameScreen.onmouseleave = this.hideTooltip;
+            document.onkeydown = this.onKeyDownFunc;
 
             this.techTab.click();
             this.toolsTab.click();
+
+            this.gameScreen.innerHTML = this.game.printVisibleGrid();
         }
 
-        updateMoney(money: number) {
+        private updateMoney = (money: number) => {
             this.moneyDiv.textContent = '$ ' + money
         }
         
-        updateHover(event: MouseEvent) {
-            var x = event.pageX - this.offsetLeft;
-            var y = event.pageY - this.offsetTop;
-            
-            var w = this.gameScreen.width();
-            var h = this.gameScreen.height();
+        private updateHover = (event: MouseEvent) => {
+            var x = event.pageX - this.gameScreen.offsetLeft;
+            var y = event.pageY - this.gameScreen.offsetTop;
             
             var hoverText = this.game.getHoverText(x, y);
-            if (hoverText === null)
-            {
-                this.hideTooltip();
+            if (hoverText === null) {
+                this.tooltip.style.display = 'none';
                 return;
             }
             
@@ -95,34 +91,17 @@ namespace Digdown.UI {
             this.tooltip.style.display = 'block';
         }
 
-        private hideTooltip() {
+        private hideTooltip = () => {
             this.tooltip.style.display = 'none';
         }
         
-        private changeTab(tab: HTMLLIElement, list: HTMLDivElement) {
-            return function() {
-                var parent = tab.parent().parent();
-                
-                var select = parent.children('.tabs').find('li.selected').first();
-                if (select === tab)
-                    return;
-                
-                var content = parent.children('.content').first();
-                content.children().hide();
-                list.show();
-                
-                select.removeClass('selected');
-                tab.addClass('selected');
-            }
-        }
-
-        private onResizeFunc() {
+        private onResizeFunc = () => {
             this.wrapper.style.height = window.innerHeight + 'px';
-            this.game.setViewHeight(this.gameScreen.height());
+            this.game.setViewHeight(this.gameScreen.offsetHeight);
         }
         
         // keycodes found here http://www.javascriptkeycode.com/
-        private onKeyDownFunc(event: KeyboardEvent) {
+        private onKeyDownFunc = (event: KeyboardEvent) => {
             if (event.which == 37)          // left arrow
                 this.game.moveLeft();
             if (event.which == 38)          // up arrow
@@ -134,6 +113,25 @@ namespace Digdown.UI {
 
             this.gameScreen.innerHTML = this.game.printVisibleGrid(); 
             this.progCursor.style.top = this.game.Progress + '%';        
+        }
+
+        // this is safe only because `this` isn't being used
+        private changeTab(tab: HTMLLIElement, list: HTMLDivElement) {
+            return function() {
+                var parent = tab.parentElement;
+                var select = parent.querySelector('.selected');
+                if (select === tab)
+                    return;
+                
+                var content = parent.parentElement.querySelector('.content');
+                for (let node of content.children) {
+                    (<HTMLElement>node).style.display = 'none';
+                }
+                list.style.display = 'block';
+                
+                select.classList.remove('selected');
+                tab.classList.add('selected');
+            }
         }
     }
 }

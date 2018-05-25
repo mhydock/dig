@@ -26,7 +26,7 @@ namespace Digdown.Core {
             this.currCost = baseCost;
         }
         
-        private checkDependencyLevel(level : number) {
+        private checkDependencyLevel = (level : number) => {
             if (level == this.dependLevel)
             {
                 this.visible = true;

@@ -47,7 +47,7 @@ namespace Digdown.UI {
             return this.itemBox;
         }
 
-        private clickSellButton() {
+        private clickSellButton = () => {
             var sale = this.item.trySell();
             if (sale >= 0)
                 this.game.addMoney(sale);
@@ -55,7 +55,7 @@ namespace Digdown.UI {
                 alert('You cannot sell that item');
         }
 
-        private clickSell100Button() {
+        private clickSell100Button = () => {
             var sale = this.item.trySellMany(100);
             if (sale >= 0)
                 this.game.addMoney(sale);
@@ -63,7 +63,7 @@ namespace Digdown.UI {
                 alert('You cannot sell 100 of that item');
         }
 
-        private clickSellAllButton() {
+        private clickSellAllButton = () => {
             var sale = this.item.trySellAll();
             if (sale >= 0)
                 this.game.addMoney(sale);
@@ -71,7 +71,7 @@ namespace Digdown.UI {
                 alert('You cannot sell those items');
         }
         
-        private checkAmount(amount: number) {
+        private checkAmount = (amount: number) => {
             this.sellBtn.disabled = amount <= 0;
             this.sell100Btn.disabled = amount < 100;
             
@@ -86,12 +86,11 @@ namespace Digdown.UI {
             else                this.amountLbl.title = '';
         }
         
-        private checkKnown(known: boolean) {
+        private checkKnown = (known: boolean) => {
             if (known)
                 this.itemBox.style.display = 'block';
             else
                 this.itemBox.style.display = 'none';
         }
-    
     }
 }

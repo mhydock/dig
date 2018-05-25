@@ -46,7 +46,7 @@ namespace Digdown.UI {
             return this.toolBox;
         }
 
-        private clickBuyButton() {
+        private clickBuyButton = () => {
             var cost = this.tool.tryBuy(this.game.Money);
             if (cost >= 0)
                 this.game.subMoney(cost);
@@ -54,7 +54,7 @@ namespace Digdown.UI {
                 alert('You do not have enough money to buy a ' + this.tool.Name);
         }
 
-        private clickSellButton() {
+        private clickSellButton = () => {
             var sale = this.tool.trySell();
             if (sale >= 0)
                 this.game.addMoney(sale);
@@ -62,27 +62,27 @@ namespace Digdown.UI {
                 alert('You cannot sell that tool');
         }
 
-        private checkCost(cost: number) {
+        private checkCost = (cost: number) => {
             this.buyCostLbl.textContent = 'Next: $ ' + cost;
             if (cost > this.game.Money)
                 this.buyBtn.disabled = true;
         }
         
-        private checkMoney(money: number) {
+        private checkMoney = (money: number) => {
             if (money < this.tool.BuyCost)
                 this.buyBtn.disabled = true;
             else
                 this.buyBtn.disabled = false;
         }
         
-        private checkAmount(amount: number) {
+        private checkAmount = (amount: number) => {
             this.sellBtn.disabled = amount <= 0;
             this.amountLbl.textContent = 'x ' + withSuffix(amount);
             if (amount > 1000)  this.amountLbl.title = String(amount);
             else                this.amountLbl.title = '';
         }
         
-        private checkResearched(level: number) {
+        private checkResearched = (level: number) => {
             if (level >= this.tool.MinTechLevel || this.tool.IsKnown)
                 this.toolBox.style.display = 'block';
             else
