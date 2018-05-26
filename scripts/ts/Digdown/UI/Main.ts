@@ -7,24 +7,24 @@ namespace Digdown.UI {
        
         private game = new Game();
                 
-        private wrapper: HTMLDivElement = <HTMLDivElement>document.getElementById('#wrapper');
-        private tooltip: HTMLDivElement = <HTMLDivElement>document.getElementById('#tooltip');
-        private gameScreen: HTMLDivElement = <HTMLDivElement>document.getElementById('#gameScreen');
-        private progCursor: HTMLDivElement = <HTMLDivElement>document.getElementById('#progCursor');    
+        private wrapper: HTMLDivElement = <HTMLDivElement>document.getElementById('wrapper');
+        private tooltip: HTMLDivElement = <HTMLDivElement>document.getElementById('tooltip');
+        private gameScreen: HTMLDivElement = <HTMLDivElement>document.getElementById('gameScreen');
+        private progCursor: HTMLDivElement = <HTMLDivElement>document.getElementById('progCursor');    
         
-        private moneyDiv: HTMLDivElement = <HTMLDivElement>document.getElementById('#money');
+        private moneyDiv: HTMLDivElement = <HTMLDivElement>document.getElementById('money');
         
-        private toolsTab: HTMLLIElement = <HTMLLIElement>document.getElementById('#tools');
-        private itemsTab: HTMLLIElement = <HTMLLIElement>document.getElementById('#items');
-        private econTab: HTMLLIElement = <HTMLLIElement>document.getElementById('#econ');
-        private techTab: HTMLLIElement = <HTMLLIElement>document.getElementById('#tech');
-        private busiTab: HTMLLIElement = <HTMLLIElement>document.getElementById('#busi');
+        private toolsTab: HTMLLIElement = <HTMLLIElement>document.getElementById('tools');
+        private itemsTab: HTMLLIElement = <HTMLLIElement>document.getElementById('items');
+        private econTab: HTMLLIElement = <HTMLLIElement>document.getElementById('econ');
+        private techTab: HTMLLIElement = <HTMLLIElement>document.getElementById('tech');
+        private busiTab: HTMLLIElement = <HTMLLIElement>document.getElementById('busi');
 
-        private toolBoxList: HTMLDivElement = <HTMLDivElement>document.getElementById('#toolsList');
-        private itemBoxList: HTMLDivElement = <HTMLDivElement>document.getElementById('#itemsList');
-        private econBoxList: HTMLDivElement = <HTMLDivElement>document.getElementById('#econList');
-        private techBoxList: HTMLDivElement = <HTMLDivElement>document.getElementById('#techList');
-        private busiBoxList: HTMLDivElement = <HTMLDivElement>document.getElementById('#busiList');
+        private toolBoxList: HTMLDivElement = <HTMLDivElement>document.getElementById('toolsList');
+        private itemBoxList: HTMLDivElement = <HTMLDivElement>document.getElementById('itemsList');
+        private econBoxList: HTMLDivElement = <HTMLDivElement>document.getElementById('econList');
+        private techBoxList: HTMLDivElement = <HTMLDivElement>document.getElementById('techList');
+        private busiBoxList: HTMLDivElement = <HTMLDivElement>document.getElementById('busiList');
         
         constructor() {
             log("Game has begun");
@@ -43,8 +43,8 @@ namespace Digdown.UI {
             
             var techs = this.game.TechnologyTree.Technologies;
             for (var h in techs) {
-                let box = new ToolBox(this.game, tools[i]);
-                this.toolBoxList.appendChild(box.ToolBox);
+                let box = new TechBox(this.game, techs[h]);
+                this.techBoxList.appendChild(box.TechBox);
             }
 
             this.toolsTab.click = this.changeTab(this.toolsTab, this.toolBoxList);
@@ -114,10 +114,10 @@ namespace Digdown.UI {
             this.gameScreen.innerHTML = this.game.printVisibleGrid(); 
             this.progCursor.style.top = this.game.Progress + '%';        
         }
-
         // this is safe only because `this` isn't being used
         private changeTab(tab: HTMLLIElement, list: HTMLDivElement) {
             return function() {
+                log('doing a thing');
                 var parent = tab.parentElement;
                 var select = parent.querySelector('.selected');
                 if (select === tab)
@@ -129,7 +129,9 @@ namespace Digdown.UI {
                 }
                 list.style.display = 'block';
                 
-                select.classList.remove('selected');
+                if (select)
+                    select.classList.remove('selected');
+                
                 tab.classList.add('selected');
             }
         }
