@@ -25,7 +25,7 @@ namespace Digdown.Core {
         healthPercent(x: number, y: number) : number {
             let bl = this.block(x,y);
             if (bl != null)
-                return bl.healthPercent();
+                return bl.HealthPercent;
             
             return -1;
         }
@@ -33,7 +33,7 @@ namespace Digdown.Core {
         isCleared(x: number, y: number) : boolean {
             let bl = this.block(x,y);
             if (bl != null)
-                return bl.cleared();
+                return bl.IsCleared;
             
             return false;
         }

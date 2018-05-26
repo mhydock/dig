@@ -1,3 +1,4 @@
+/// <reference path='../Core/Common.ts'/>
 /// <reference path='../Core/Grid.ts'/>
 /// <reference path='../Core/Player.ts'/>
 /// <reference path='../Core/TechnologyTree.ts'/>
@@ -10,7 +11,18 @@ namespace Digdown.UI {
     import log = Core.log;
     import Orientation = Core.Orientation;
 
-    export class Game {       
+    export class Game {
+        private static SPRITE_LIST = [
+            '\u2593',
+            '\u2592',
+            '\u2591',
+            '%',
+            '#',
+            '=',
+            '?',
+            '&amp;',
+        ];
+
         private _grid = new Core.Grid();
         private _player = new Core.Player(this._grid.Width/2, -1);
         private _techTree = new Core.TechnologyTree();
@@ -53,44 +65,6 @@ namespace Digdown.UI {
             return '&nbsp;';
         }
         
-        private _getBlockSprite(type: number) : string {
-            if (type == 1)
-                return '\u2593';
-            if (type == 2)
-                return '\u2592';
-            if (type == 3)
-                return '\u2591';
-            if (type == 4)
-                return '%';
-            if (type == 5)
-                return '#'; 
-            if (type == 6) 
-                return '=';
-            if (type == 7)
-                return '?';
-            if (type == 8)
-                return '&amp;';
-        }
-        
-        private _getBlockTypePhrase(type: number) : string {
-            if (type == 1)
-                return '<label>Dirt</label><br/>';
-            if (type == 2)
-                return '<label>Clay</label><br/>';
-            if (type == 3)
-                return '<label>Gravel</label><br/>';
-            if (type == 4)
-                return '<label>Limestone</label><br/>';
-            if (type == 5)
-                return '<label>Sandstone</label><br/>';
-            if (type == 6) 
-                return '<label>Marble</label><br/>';
-            if (type == 7)
-                return '<label>Granite</label><br/>';
-            if (type == 8)
-                return '<label>Bedrock</label><br/>';
-        }
-        
         get ToolsInventory() { return this._tools; };
     
         get ItemsInventory() { return this._items; };
@@ -128,7 +102,7 @@ namespace Digdown.UI {
             var type = block.Type;
             var dura = block.Durability;
             
-            var text = this._getBlockTypePhrase(type);
+            var text = `<label>${block.TypePhrase}</label><br/>`;
             text += 'HP: ' + Math.ceil(health*dura) + '/' + dura;
             return text;
         };
@@ -181,10 +155,10 @@ namespace Digdown.UI {
                     var type = block.Type;
                     var dura = block.Durability;
 
-                    if (block.cleared)
+                    if (block.IsCleared)
                         output += this._getEmptyOrPlayer(j, i);
                     else
-                        output += this._getBlockSprite(type);
+                        output += Game.SPRITE_LIST[type];
                 }
                 output += '<br/>';
             }
@@ -192,7 +166,7 @@ namespace Digdown.UI {
         };
         
         setFontSize(size: string) {
-            this._fontSize = Number(size.substr(0, size.length-2)) || 0;
+            this._fontSize = Number(size.substr(0, size.length-2)) || this._fontSize;
             log('font size: ' + this._fontSize);
         };
         

@@ -12,6 +12,16 @@ namespace Digdown.Core {
     const BASE_DIGS_PER_UNIT_POWER = 2.0;
     const BASE_BLOCK_DURABILITY = 255;
     const BASE_POWER_MULTIPLIER = BASE_BLOCK_DURABILITY/BASE_DIGS_PER_UNIT_POWER;
+    const BLOCK_TYPE_PHRASE = [
+        'Dirt',
+        'Clay',
+        'Gravel',
+        'Limestone',
+        'Sandstone',
+        'Marble',
+        'Granite',
+        'Bedrock',
+    ]
 
     export enum BlockType {
         SDIRT = 1,
@@ -34,14 +44,6 @@ namespace Digdown.Core {
             this.type = Math.ceil(Math.log(this.durability / Math.LN10));
         }
 
-        cleared() : boolean {
-            return this.health == 0;
-        }
-
-        healthPercent() : number {
-            return this.health / BASE_BLOCK_DURABILITY;
-        }
-
         dig(power : number, x : number, y : number) : number {
             let damage : number = Math.ceil(power * BASE_POWER_MULTIPLIER / this.durability);
             let remainingHP : number = this.health;
@@ -62,12 +64,24 @@ namespace Digdown.Core {
             return this.type;
         }
 
+        get TypePhrase() : string {
+            return BLOCK_TYPE_PHRASE[this.type];
+        }
+
         get Depth() : number {
             return this.depth;
         }
 
         get Health() : number {
             return this.health;
+        }
+
+        get IsCleared() : boolean {
+            return this.health == 0;
+        }
+
+        get HealthPercent() : number {
+            return this.health / BASE_BLOCK_DURABILITY;
         }
 
         get Durability() : number {
