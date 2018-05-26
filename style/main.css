@@ -58,7 +58,7 @@ button:disabled:hover {
 
 #gameScreen {
     cursor: pointer;
-    font-family: 'Ubuntu Mono';
+    font-family: 'Ubuntu Mono', monospace;
     border: 1px solid black;
     
     width: auto;
