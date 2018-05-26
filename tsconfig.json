@@ -1,9 +1,13 @@
 {
+  "files": [ 
+    "scripts/ts/**/*.ts"
+  ],
+  
   "compilerOptions": {
-      "noImplicitAny": true,
-      "noEmitOnError": true,
-      "sourceMap": true,
-      "target": "es5"
+    "noImplicitAny": true,
+    "noEmitOnError": true,
+    "sourceMap": true,
+    "target": "es2017"
   },
 
   "compileOnSave": true
