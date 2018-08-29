@@ -1,3 +1,42 @@
+var Digdown;
+(function (Digdown) {
+    var Core;
+    (function (Core) {
+        let printLogs = true;
+        function log(message) {
+            if (printLogs)
+                console.log(message);
+        }
+        Core.log = log;
+        function toDecimal(val, dec) {
+            return Number(val).toString().match(/^\d+(?:\.\d{0,2})?/)[0];
+        }
+        Core.toDecimal = toDecimal;
+        var Suffix = ['', 'k', 'm', 'b', 't'];
+        function withSuffix(value) {
+            if (value < 1000)
+                return value.toString();
+            let suff;
+            for (suff = 0; value >= 1000; suff++)
+                value /= 1000;
+            let text;
+            if (suff > 0)
+                text = toDecimal(value, 2);
+            else
+                text = value.toString();
+            return text + Suffix[suff];
+        }
+        Core.withSuffix = withSuffix;
+        let Orientation;
+        (function (Orientation) {
+            Orientation[Orientation["NORTH"] = 1] = "NORTH";
+            Orientation[Orientation["EAST"] = 2] = "EAST";
+            Orientation[Orientation["SOUTH"] = 3] = "SOUTH";
+            Orientation[Orientation["WEST"] = 4] = "WEST";
+        })(Orientation = Core.Orientation || (Core.Orientation = {}));
+        ;
+    })(Core = Digdown.Core || (Digdown.Core = {}));
+})(Digdown || (Digdown = {}));
 function log2(value) {
     return Math.log(value) / Math.log(2);
 }
@@ -74,45 +113,6 @@ var Digdown;
         Core.Block = Block;
     })(Core = Digdown.Core || (Digdown.Core = {}));
 })(Digdown || (Digdown = {}));
-var Digdown;
-(function (Digdown) {
-    var Core;
-    (function (Core) {
-        let printLogs = true;
-        function log(message) {
-            if (printLogs)
-                console.log(message);
-        }
-        Core.log = log;
-        function toDecimal(val, dec) {
-            return Number(val).toString().match(/^\d+(?:\.\d{0,2})?/)[0];
-        }
-        Core.toDecimal = toDecimal;
-        var Suffix = ['', 'k', 'm', 'b', 't'];
-        function withSuffix(value) {
-            if (value < 1000)
-                return value.toString();
-            let suff;
-            for (suff = 0; value >= 1000; suff++)
-                value /= 1000;
-            let text;
-            if (suff > 0)
-                text = toDecimal(value, 2);
-            else
-                text = value.toString();
-            return text + Suffix[suff];
-        }
-        Core.withSuffix = withSuffix;
-        let Orientation;
-        (function (Orientation) {
-            Orientation[Orientation["NORTH"] = 1] = "NORTH";
-            Orientation[Orientation["EAST"] = 2] = "EAST";
-            Orientation[Orientation["SOUTH"] = 3] = "SOUTH";
-            Orientation[Orientation["WEST"] = 4] = "WEST";
-        })(Orientation = Core.Orientation || (Core.Orientation = {}));
-        ;
-    })(Core = Digdown.Core || (Digdown.Core = {}));
-})(Digdown || (Digdown = {}));
 /// <reference path='Block.ts'/>
 var Digdown;
 (function (Digdown) {
@@ -167,233 +167,6 @@ var Digdown;
             ;
         }
         Core.Grid = Grid;
-    })(Core = Digdown.Core || (Digdown.Core = {}));
-})(Digdown || (Digdown = {}));
-var Digdown;
-(function (Digdown) {
-    var Core;
-    (function (Core) {
-        class Item {
-            constructor(name, desc, amount, value, known) {
-                this.name = name;
-                this.desc = desc;
-                this.amount = amount;
-                this.value = value;
-                this.known = known;
-                this.amountListeners = new Core.Listener();
-                this.knownListeners = new Core.Listener();
-            }
-            get Name() {
-                return this.name;
-            }
-            get Description() {
-                return this.desc;
-            }
-            get Amount() {
-                return this.amount;
-            }
-            get Value() {
-                return this.value;
-            }
-            get TotalValue() {
-                return this.amount * this.value;
-            }
-            get IsKnown() {
-                return this.known;
-            }
-            add() {
-                this.amount++;
-                this.amountListeners.callAll(this.amount);
-                if (!this.known) {
-                    this.known = true;
-                    this.knownListeners.callAll(true);
-                }
-            }
-            addMany(amount) {
-                this.amount += amount;
-                this.amountListeners.callAll(this.amount);
-                if (!this.known) {
-                    this.known = true;
-                    this.knownListeners.callAll(true);
-                }
-            }
-            trySell() {
-                if (this.amount <= 0)
-                    return -1;
-                this.amount--;
-                this.amountListeners.callAll(this.amount);
-                return this.value;
-            }
-            trySellMany(amount) {
-                if (this.amount <= 0)
-                    return -1;
-                this.amount -= amount;
-                this.amountListeners.callAll(this.amount);
-                return this.value * amount;
-            }
-            trySellAll() {
-                if (this.amount <= 0)
-                    return -1;
-                let value = this.TotalValue;
-                this.amount = 0;
-                this.amountListeners.callAll(this.amount);
-                return value;
-            }
-            addAmountListener(func) {
-                return this.amountListeners.add(func);
-            }
-            addKnownListener(func) {
-                return this.knownListeners.add(func);
-            }
-        }
-        Core.Item = Item;
-    })(Core = Digdown.Core || (Digdown.Core = {}));
-})(Digdown || (Digdown = {}));
-var Digdown;
-(function (Digdown) {
-    var Core;
-    (function (Core) {
-        class ItemChance {
-            constructor(item, chance, minAmount, maxAmount) {
-                this.item = item;
-                this.chance = chance;
-                this.minAmount = minAmount;
-                this.maxAmount = maxAmount;
-                this.diff = this.maxAmount - this.minAmount;
-                minAmount = minAmount > 0 ? minAmount < maxAmount ? minAmount : maxAmount : 1;
-                maxAmount = maxAmount > minAmount ? maxAmount : minAmount;
-            }
-            rollForItems() {
-                var c = Math.random();
-                if (c > this.chance)
-                    return null;
-                var a = Math.random();
-                a = Math.round(a * this.diff + this.minAmount);
-                Core.log('Produced ' + a + ' items of type "' + this.item.Name + '"');
-                return { 'item': this.item, 'amount': a };
-            }
-        }
-        Core.ItemChance = ItemChance;
-    })(Core = Digdown.Core || (Digdown.Core = {}));
-})(Digdown || (Digdown = {}));
-var Digdown;
-(function (Digdown) {
-    var Core;
-    (function (Core) {
-        class ItemsFactory {
-            constructor(itemsInventory) {
-                this.itemsInventory = itemsInventory;
-                this.produceListeners = new Core.Listener();
-                this.items = this.itemsInventory.Items;
-                this.itemMap = [
-                    [
-                        new Core.ItemChance(this.items.CMDIRT, 1.0, 1, 10),
-                        new Core.ItemChance(this.items.GDDIRT, 0.5, 1, 5),
-                        new Core.ItemChance(this.items.TFCLAY, 0.4, 1, 5),
-                        new Core.ItemChance(this.items.SFCLAY, 0.2, 1, 2),
-                        new Core.ItemChance(this.items.SMSTNS, 0.1, 1, 3),
-                    ],
-                    [
-                        new Core.ItemChance(this.items.TFCLAY, 1.0, 1, 10),
-                        new Core.ItemChance(this.items.SFCLAY, 0.5, 1, 5),
-                        new Core.ItemChance(this.items.GRAVEL, 0.2, 1, 3),
-                        new Core.ItemChance(this.items.SMSTNS, 0.1, 1, 2),
-                        new Core.ItemChance(this.items.LGSTNS, 0.1, 1, 1),
-                    ],
-                    [
-                        new Core.ItemChance(this.items.GRAVEL, 1.0, 1, 10),
-                        new Core.ItemChance(this.items.TFCLAY, 0.4, 1, 5),
-                        new Core.ItemChance(this.items.SMSTNS, 0.3, 1, 3),
-                        new Core.ItemChance(this.items.LGSTNS, 0.1, 1, 2),
-                    ],
-                    [
-                        new Core.ItemChance(this.items.SMSTNS, 1.0, 1, 10),
-                        new Core.ItemChance(this.items.LGSTNS, 0.4, 1, 5),
-                        new Core.ItemChance(this.items.GRAVEL, 0.2, 1, 5),
-                        new Core.ItemChance(this.items.HGSTNS, 0.1, 1, 2),
-                    ],
-                    [
-                        new Core.ItemChance(this.items.LGSTNS, 1.0, 1, 10),
-                        new Core.ItemChance(this.items.SMSTNS, 0.4, 1, 10),
-                        new Core.ItemChance(this.items.HGSTNS, 0.4, 1, 5),
-                        new Core.ItemChance(this.items.GRAVEL, 0.1, 1, 3),
-                        new Core.ItemChance(this.items.BOULDR, 0.1, 1, 1),
-                    ],
-                    [],
-                    [],
-                    []
-                ];
-            }
-            produceItems(type) {
-                type -= 1; // Type/array offset
-                if (type > this.itemMap.length)
-                    return;
-                var chances = this.itemMap[type];
-                for (var i in chances) {
-                    var result = chances[i].rollForItems();
-                    if (result !== null) {
-                        this.produceListeners.callAll(result);
-                        result.item.addMany(result.amount);
-                    }
-                }
-            }
-            addProduceListener(func) {
-                return this.produceListeners.add(func);
-            }
-        }
-        Core.ItemsFactory = ItemsFactory;
-    })(Core = Digdown.Core || (Digdown.Core = {}));
-})(Digdown || (Digdown = {}));
-var Digdown;
-(function (Digdown) {
-    var Core;
-    (function (Core) {
-        class ItemsInventory {
-            constructor() {
-                this.items = {
-                    'CMDIRT': new Core.Item('Common Dirt', 'Just some dirt, no big deal.', 0, 1, true),
-                    'TFCLAY': new Core.Item('Tough Clay', 'Tough clay, not good for much.', 0, 2, false),
-                    'GDDIRT': new Core.Item('Quality Topsoil', 'The good stuff; great for gardens.', 0, 3, false),
-                    'SFCLAY': new Core.Item('Soft Clay', 'Soft, smooth clay; great for ceramics.', 0, 4, false),
-                    'GRAVEL': new Core.Item('Gravel', 'Tiny rocks, good for cheap driveways/parking lots.', 0, 5, false),
-                    'SMSTNS': new Core.Item('Small Stones', 'Small, smooth rocks. Would look nice in a garden.', 0, 10, false),
-                    'LGSTNS': new Core.Item('Large Stones', 'Large, heavy stones. Could have decorative uses?', 0, 25, false),
-                    'HGSTNS': new Core.Item('Huge Stones', 'Very large stones. Can probably be used in sculpture.', 0, 50, false),
-                    'BOULDR': new Core.Item('Boulder', 'A huge rock; not much you can do with it but break it.', 0, 100, false),
-                };
-            }
-            get Items() {
-                return this.items;
-            }
-        }
-        Core.ItemsInventory = ItemsInventory;
-    })(Core = Digdown.Core || (Digdown.Core = {}));
-})(Digdown || (Digdown = {}));
-var Digdown;
-(function (Digdown) {
-    var Core;
-    (function (Core) {
-        class Listener {
-            constructor() {
-                this.listeners = {};
-                this.listenerID = 0;
-            }
-            add(func) {
-                this.listeners[this.listenerID] = func;
-                let id = this.listenerID;
-                this.listenerID++;
-                return id;
-            }
-            remove(id) {
-                delete this.listeners[id];
-            }
-            callAll(...args) {
-                for (let i in this.listeners)
-                    if (this.listeners.hasOwnProperty(i))
-                        this.listeners[i].apply(this, args);
-            }
-        }
-        Core.Listener = Listener;
     })(Core = Digdown.Core || (Digdown.Core = {}));
 })(Digdown || (Digdown = {}));
 var Digdown;
@@ -473,6 +246,33 @@ var Digdown;
             }
         }
         Core.Player = Player;
+    })(Core = Digdown.Core || (Digdown.Core = {}));
+})(Digdown || (Digdown = {}));
+var Digdown;
+(function (Digdown) {
+    var Core;
+    (function (Core) {
+        class Listener {
+            constructor() {
+                this.listeners = {};
+                this.listenerID = 0;
+            }
+            add(func) {
+                this.listeners[this.listenerID] = func;
+                let id = this.listenerID;
+                this.listenerID++;
+                return id;
+            }
+            remove(id) {
+                delete this.listeners[id];
+            }
+            callAll(...args) {
+                for (let i in this.listeners)
+                    if (this.listeners.hasOwnProperty(i))
+                        this.listeners[i].apply(this, args);
+            }
+        }
+        Core.Listener = Listener;
     })(Core = Digdown.Core || (Digdown.Core = {}));
 })(Digdown || (Digdown = {}));
 /// <reference path='Listener.ts'/>
@@ -576,114 +376,6 @@ var Digdown;
         Core.TechnologyTree = TechnologyTree;
     })(Core = Digdown.Core || (Digdown.Core = {}));
 })(Digdown || (Digdown = {}));
-/// <reference path='Technology.ts'/>
-var Digdown;
-(function (Digdown) {
-    var Core;
-    (function (Core) {
-        class Tool {
-            constructor(name, amount, power, baseCost, technology, workers, level, costFunc = Tool.defaultCostFunc) {
-                this.name = name;
-                this.amount = amount;
-                this.power = power;
-                this.baseCost = baseCost;
-                this.technology = technology;
-                this.workers = workers;
-                this.level = level;
-                this.costFunc = costFunc;
-                this.amountListeners = new Core.Listener();
-                this.costListeners = new Core.Listener();
-                this.saleMult = 0.75;
-                this.minLevel = this.level;
-                if (amount > 0)
-                    this.updateCosts(amount);
-                else
-                    this.buyCost = baseCost;
-            }
-            getCostForAmount(amount) {
-                return this.costFunc(this.baseCost, amount);
-            }
-            getBuyCost(amount) {
-                return this.getCostForAmount(amount + 1);
-            }
-            getSaleCost(amount) {
-                return this.getCostForAmount(amount) * this.saleMult;
-            }
-            updateCosts(amount) {
-                this.buyCost = this.getBuyCost(amount);
-                this.saleCost = this.getSaleCost(amount);
-            }
-            tryBuy(money) {
-                if (this.minLevel < this.technology.Level)
-                    return -1;
-                let cost = this.BuyCost;
-                if (money >= cost) {
-                    this.amount++;
-                    this.buyCost = this.getBuyCost(this.amount);
-                    this.saleCost = this.getSaleCost(this.amount);
-                    this.costListeners.callAll(this.buyCost);
-                    this.amountListeners.callAll(this.amount);
-                    return cost;
-                }
-                return -1;
-            }
-            ;
-            trySell() {
-                //if (_minLevel < _technology.getLevel())
-                //return -1;
-                if (this.amount > 0) {
-                    let sale = this.SaleCost;
-                    this.amount--;
-                    this.buyCost = this.getBuyCost(this.amount);
-                    this.saleCost = this.getSaleCost(this.amount);
-                    this.costListeners.callAll(this.buyCost);
-                    this.amountListeners.callAll(this.amount);
-                    return sale;
-                }
-                return -1;
-            }
-            ;
-            addCostListener(func) {
-                this.costListeners.add(func);
-            }
-            addAmountListener(func) {
-                this.amountListeners.add(func);
-            }
-            get Name() {
-                return this.name;
-            }
-            get Level() {
-                return this.level;
-            }
-            get Amount() {
-                return this.amount;
-            }
-            get Workers() {
-                return this.workers;
-            }
-            get BuyCost() {
-                return this.buyCost;
-            }
-            get SaleCost() {
-                return this.saleCost;
-            }
-            get Technology() {
-                return this.technology;
-            }
-            get MinTechLevel() {
-                return this.minLevel;
-            }
-            get TotalPower() {
-                return this.amount * this.power;
-            }
-            get IsKnown() {
-                return this.amount > 0;
-            }
-        }
-        Tool.defaultCostFunc = (baseCost, amount) => baseCost + Math.floor(amount * amount / 4);
-        Core.Tool = Tool;
-    })(Core = Digdown.Core || (Digdown.Core = {}));
-})(Digdown || (Digdown = {}));
 /// <reference path='Grid.ts'/>
 /// <reference path='TechnologyTree.ts'/>
 var Digdown;
@@ -740,6 +432,99 @@ var Digdown;
             }
         }
         Core.ToolsInventory = ToolsInventory;
+    })(Core = Digdown.Core || (Digdown.Core = {}));
+})(Digdown || (Digdown = {}));
+var Digdown;
+(function (Digdown) {
+    var Core;
+    (function (Core) {
+        class ItemsInventory {
+            constructor() {
+                this.items = {
+                    'CMDIRT': new Core.Item('Common Dirt', 'Just some dirt, no big deal.', 0, 1, true),
+                    'TFCLAY': new Core.Item('Tough Clay', 'Tough clay, not good for much.', 0, 2, false),
+                    'GDDIRT': new Core.Item('Quality Topsoil', 'The good stuff; great for gardens.', 0, 3, false),
+                    'SFCLAY': new Core.Item('Soft Clay', 'Soft, smooth clay; great for ceramics.', 0, 4, false),
+                    'GRAVEL': new Core.Item('Gravel', 'Tiny rocks, good for cheap driveways/parking lots.', 0, 5, false),
+                    'SMSTNS': new Core.Item('Small Stones', 'Small, smooth rocks. Would look nice in a garden.', 0, 10, false),
+                    'LGSTNS': new Core.Item('Large Stones', 'Large, heavy stones. Could have decorative uses?', 0, 25, false),
+                    'HGSTNS': new Core.Item('Huge Stones', 'Very large stones. Can probably be used in sculpture.', 0, 50, false),
+                    'BOULDR': new Core.Item('Boulder', 'A huge rock; not much you can do with it but break it.', 0, 100, false),
+                };
+            }
+            get Items() {
+                return this.items;
+            }
+        }
+        Core.ItemsInventory = ItemsInventory;
+    })(Core = Digdown.Core || (Digdown.Core = {}));
+})(Digdown || (Digdown = {}));
+var Digdown;
+(function (Digdown) {
+    var Core;
+    (function (Core) {
+        class ItemsFactory {
+            constructor(itemsInventory) {
+                this.itemsInventory = itemsInventory;
+                this.produceListeners = new Core.Listener();
+                this.items = this.itemsInventory.Items;
+                this.itemMap = [
+                    [
+                        new Core.ItemChance(this.items.CMDIRT, 1.0, 1, 10),
+                        new Core.ItemChance(this.items.GDDIRT, 0.5, 1, 5),
+                        new Core.ItemChance(this.items.TFCLAY, 0.4, 1, 5),
+                        new Core.ItemChance(this.items.SFCLAY, 0.2, 1, 2),
+                        new Core.ItemChance(this.items.SMSTNS, 0.1, 1, 3),
+                    ],
+                    [
+                        new Core.ItemChance(this.items.TFCLAY, 1.0, 1, 10),
+                        new Core.ItemChance(this.items.SFCLAY, 0.5, 1, 5),
+                        new Core.ItemChance(this.items.GRAVEL, 0.2, 1, 3),
+                        new Core.ItemChance(this.items.SMSTNS, 0.1, 1, 2),
+                        new Core.ItemChance(this.items.LGSTNS, 0.1, 1, 1),
+                    ],
+                    [
+                        new Core.ItemChance(this.items.GRAVEL, 1.0, 1, 10),
+                        new Core.ItemChance(this.items.TFCLAY, 0.4, 1, 5),
+                        new Core.ItemChance(this.items.SMSTNS, 0.3, 1, 3),
+                        new Core.ItemChance(this.items.LGSTNS, 0.1, 1, 2),
+                    ],
+                    [
+                        new Core.ItemChance(this.items.SMSTNS, 1.0, 1, 10),
+                        new Core.ItemChance(this.items.LGSTNS, 0.4, 1, 5),
+                        new Core.ItemChance(this.items.GRAVEL, 0.2, 1, 5),
+                        new Core.ItemChance(this.items.HGSTNS, 0.1, 1, 2),
+                    ],
+                    [
+                        new Core.ItemChance(this.items.LGSTNS, 1.0, 1, 10),
+                        new Core.ItemChance(this.items.SMSTNS, 0.4, 1, 10),
+                        new Core.ItemChance(this.items.HGSTNS, 0.4, 1, 5),
+                        new Core.ItemChance(this.items.GRAVEL, 0.1, 1, 3),
+                        new Core.ItemChance(this.items.BOULDR, 0.1, 1, 1),
+                    ],
+                    [],
+                    [],
+                    []
+                ];
+            }
+            produceItems(type) {
+                type -= 1; // Type/array offset
+                if (type > this.itemMap.length)
+                    return;
+                var chances = this.itemMap[type];
+                for (var i in chances) {
+                    var result = chances[i].rollForItems();
+                    if (result !== null) {
+                        this.produceListeners.callAll(result);
+                        result.item.addMany(result.amount);
+                    }
+                }
+            }
+            addProduceListener(func) {
+                return this.produceListeners.add(func);
+            }
+        }
+        Core.ItemsFactory = ItemsFactory;
     })(Core = Digdown.Core || (Digdown.Core = {}));
 })(Digdown || (Digdown = {}));
 /// <reference path='../Core/Common.ts'/>
@@ -803,7 +588,7 @@ var Digdown;
                 x -= 2;
                 y -= 2;
                 if (x < 0 || y < 0)
-                    return;
+                    return null;
                 var row = Math.floor(y / this._fontSize); // height of row == height of text
                 var col = Math.floor(x / this._fontSize * 2); // text half as wide as tall
                 row += this._yOffset;
@@ -929,6 +714,86 @@ var Digdown;
         ];
         UI.Game = Game;
     })(UI = Digdown.UI || (Digdown.UI = {}));
+})(Digdown || (Digdown = {}));
+var Digdown;
+(function (Digdown) {
+    var Core;
+    (function (Core) {
+        class Item {
+            constructor(name, desc, amount, value, known) {
+                this.name = name;
+                this.desc = desc;
+                this.amount = amount;
+                this.value = value;
+                this.known = known;
+                this.amountListeners = new Core.Listener();
+                this.knownListeners = new Core.Listener();
+            }
+            get Name() {
+                return this.name;
+            }
+            get Description() {
+                return this.desc;
+            }
+            get Amount() {
+                return this.amount;
+            }
+            get Value() {
+                return this.value;
+            }
+            get TotalValue() {
+                return this.amount * this.value;
+            }
+            get IsKnown() {
+                return this.known;
+            }
+            add() {
+                this.amount++;
+                this.amountListeners.callAll(this.amount);
+                if (!this.known) {
+                    this.known = true;
+                    this.knownListeners.callAll(true);
+                }
+            }
+            addMany(amount) {
+                this.amount += amount;
+                this.amountListeners.callAll(this.amount);
+                if (!this.known) {
+                    this.known = true;
+                    this.knownListeners.callAll(true);
+                }
+            }
+            trySell() {
+                if (this.amount <= 0)
+                    return -1;
+                this.amount--;
+                this.amountListeners.callAll(this.amount);
+                return this.value;
+            }
+            trySellMany(amount) {
+                if (this.amount <= 0)
+                    return -1;
+                this.amount -= amount;
+                this.amountListeners.callAll(this.amount);
+                return this.value * amount;
+            }
+            trySellAll() {
+                if (this.amount <= 0)
+                    return -1;
+                let value = this.TotalValue;
+                this.amount = 0;
+                this.amountListeners.callAll(this.amount);
+                return value;
+            }
+            addAmountListener(func) {
+                return this.amountListeners.add(func);
+            }
+            addKnownListener(func) {
+                return this.knownListeners.add(func);
+            }
+        }
+        Core.Item = Item;
+    })(Core = Digdown.Core || (Digdown.Core = {}));
 })(Digdown || (Digdown = {}));
 /// <reference path='../Core/Common.ts'/>
 /// <reference path='../Core/Item.ts'/>
@@ -1200,6 +1065,114 @@ var Digdown;
         UI.TechBox = TechBox;
     })(UI = Digdown.UI || (Digdown.UI = {}));
 })(Digdown || (Digdown = {}));
+/// <reference path='Technology.ts'/>
+var Digdown;
+(function (Digdown) {
+    var Core;
+    (function (Core) {
+        class Tool {
+            constructor(name, amount, power, baseCost, technology, workers, level, costFunc = Tool.defaultCostFunc) {
+                this.name = name;
+                this.amount = amount;
+                this.power = power;
+                this.baseCost = baseCost;
+                this.technology = technology;
+                this.workers = workers;
+                this.level = level;
+                this.costFunc = costFunc;
+                this.amountListeners = new Core.Listener();
+                this.costListeners = new Core.Listener();
+                this.saleMult = 0.75;
+                this.minLevel = this.level;
+                if (amount > 0)
+                    this.updateCosts(amount);
+                else
+                    this.buyCost = baseCost;
+            }
+            getCostForAmount(amount) {
+                return this.costFunc(this.baseCost, amount);
+            }
+            getBuyCost(amount) {
+                return this.getCostForAmount(amount + 1);
+            }
+            getSaleCost(amount) {
+                return this.getCostForAmount(amount) * this.saleMult;
+            }
+            updateCosts(amount) {
+                this.buyCost = this.getBuyCost(amount);
+                this.saleCost = this.getSaleCost(amount);
+            }
+            tryBuy(money) {
+                if (this.minLevel < this.technology.Level)
+                    return -1;
+                let cost = this.BuyCost;
+                if (money >= cost) {
+                    this.amount++;
+                    this.buyCost = this.getBuyCost(this.amount);
+                    this.saleCost = this.getSaleCost(this.amount);
+                    this.costListeners.callAll(this.buyCost);
+                    this.amountListeners.callAll(this.amount);
+                    return cost;
+                }
+                return -1;
+            }
+            ;
+            trySell() {
+                //if (_minLevel < _technology.getLevel())
+                //return -1;
+                if (this.amount > 0) {
+                    let sale = this.SaleCost;
+                    this.amount--;
+                    this.buyCost = this.getBuyCost(this.amount);
+                    this.saleCost = this.getSaleCost(this.amount);
+                    this.costListeners.callAll(this.buyCost);
+                    this.amountListeners.callAll(this.amount);
+                    return sale;
+                }
+                return -1;
+            }
+            ;
+            addCostListener(func) {
+                this.costListeners.add(func);
+            }
+            addAmountListener(func) {
+                this.amountListeners.add(func);
+            }
+            get Name() {
+                return this.name;
+            }
+            get Level() {
+                return this.level;
+            }
+            get Amount() {
+                return this.amount;
+            }
+            get Workers() {
+                return this.workers;
+            }
+            get BuyCost() {
+                return this.buyCost;
+            }
+            get SaleCost() {
+                return this.saleCost;
+            }
+            get Technology() {
+                return this.technology;
+            }
+            get MinTechLevel() {
+                return this.minLevel;
+            }
+            get TotalPower() {
+                return this.amount * this.power;
+            }
+            get IsKnown() {
+                return this.amount > 0;
+            }
+        }
+        Tool.defaultCostFunc = (baseCost, amount) => baseCost + Math.floor(amount * amount / 4);
+        Core.Tool = Tool;
+    })(Core = Digdown.Core || (Digdown.Core = {}));
+})(Digdown || (Digdown = {}));
 /// <reference path='../Core/Common.ts'/>
 /// <reference path='../Core/Tool.ts'/>
 var Digdown;
@@ -1282,6 +1255,33 @@ var Digdown;
         }
         UI.ToolBox = ToolBox;
     })(UI = Digdown.UI || (Digdown.UI = {}));
+})(Digdown || (Digdown = {}));
+var Digdown;
+(function (Digdown) {
+    var Core;
+    (function (Core) {
+        class ItemChance {
+            constructor(item, chance, minAmount, maxAmount) {
+                this.item = item;
+                this.chance = chance;
+                this.minAmount = minAmount;
+                this.maxAmount = maxAmount;
+                this.diff = this.maxAmount - this.minAmount;
+                minAmount = minAmount > 0 ? minAmount < maxAmount ? minAmount : maxAmount : 1;
+                maxAmount = maxAmount > minAmount ? maxAmount : minAmount;
+            }
+            rollForItems() {
+                var c = Math.random();
+                if (c > this.chance)
+                    return null;
+                var a = Math.random();
+                a = Math.round(a * this.diff + this.minAmount);
+                Core.log('Produced ' + a + ' items of type "' + this.item.Name + '"');
+                return { 'item': this.item, 'amount': a };
+            }
+        }
+        Core.ItemChance = ItemChance;
+    })(Core = Digdown.Core || (Digdown.Core = {}));
 })(Digdown || (Digdown = {}));
 
 //# sourceMappingURL=../maps/game.js.map
