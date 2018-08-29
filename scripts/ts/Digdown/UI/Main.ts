@@ -47,11 +47,11 @@ namespace Digdown.UI {
                 this.techBoxList.appendChild(box.TechBox);
             }
 
-            this.toolsTab.click = this.changeTab(this.toolsTab, this.toolBoxList);
-            this.itemsTab.click = this.changeTab(this.itemsTab, this.itemBoxList);            
-            this.econTab.click = this.changeTab(this.econTab, this.econBoxList);            
-            this.techTab.click = this.changeTab(this.techTab, this.techBoxList);            
-            this.busiTab.click = this.changeTab(this.busiTab, this.busiBoxList);
+            this.toolsTab.onclick = this.changeTab(this.toolsTab, this.toolBoxList);
+            this.itemsTab.onclick = this.changeTab(this.itemsTab, this.itemBoxList);            
+            this.econTab.onclick = this.changeTab(this.econTab, this.econBoxList);            
+            this.techTab.onclick = this.changeTab(this.techTab, this.techBoxList);            
+            this.busiTab.onclick = this.changeTab(this.busiTab, this.busiBoxList);
 
             this.game.setFontSize(this.gameScreen.style.fontSize);
             

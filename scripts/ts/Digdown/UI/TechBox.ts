@@ -12,7 +12,7 @@ namespace Digdown.UI {
                     private tech: Core.Technology) {
             this.title.textContent = tech.Name;
             this.researchBtn.textContent = 'Research';
-            this.researchBtn.click = this.clickResearchButton;
+            this.researchBtn.onclick = this.clickResearchButton;
 
             this.checkCost(tech.ResearchCost);
             this.checkLevel(tech.Level);

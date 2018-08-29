@@ -1,3 +1,5 @@
+/// <reference path='Technology.ts'/>
+
 namespace Digdown.Core {
     export class Tool {
         private static defaultCostFunc : CostFunction = (baseCost, amount) => baseCost + Math.floor(amount*amount/4)
@@ -22,6 +24,11 @@ namespace Digdown.Core {
                      private costFunc : CostFunction = Tool.defaultCostFunc) {
             
             this.minLevel = this.level;
+
+            if (amount > 0)
+                this.updateCosts(amount);
+            else
+                this.buyCost = baseCost;
         }
         
         private getCostForAmount (amount : number) : number {

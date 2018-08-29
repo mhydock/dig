@@ -19,8 +19,8 @@ namespace Digdown.UI {
             this.sellBtn.textContent = 'Sell';
 
             this.title.textContent = this.tool.Name;
-            this.buyBtn.click = this.clickBuyButton;
-            this.sellBtn.click = this.clickSellButton;
+            this.buyBtn.onclick = this.clickBuyButton;
+            this.sellBtn.onclick = this.clickSellButton;
             
             this.checkCost(tool.BuyCost);
             this.checkAmount(tool.Amount);

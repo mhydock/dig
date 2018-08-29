@@ -73,13 +73,13 @@ namespace Digdown.UI {
     
         get PlayerPower() { return this._tools.Power; };
     
-        getHoverText(x: number, y: number) {
+        getHoverText(x: number, y: number) : string {
             // border offset (1px all sides)
             x -= 2;
             y -= 2;
             
             if (x < 0 || y < 0)
-                return;
+                return null;
             
             var row = Math.floor(y/this._fontSize);      // height of row == height of text
             var col = Math.floor(x/this._fontSize*2);    // text half as wide as tall
@@ -107,7 +107,7 @@ namespace Digdown.UI {
             return text;
         };
         
-        printVisibleGrid() {
+        printVisibleGrid() : string {
             var maxRows = this._viewRows;
             var maxSky = Math.ceil(maxRows/3);
             

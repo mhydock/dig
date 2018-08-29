@@ -1,3 +1,6 @@
+/// <reference path='Grid.ts'/>
+/// <reference path='TechnologyTree.ts'/>
+
 namespace Digdown.Core {
     export class ToolsInventory {
 

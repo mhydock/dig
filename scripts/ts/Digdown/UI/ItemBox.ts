@@ -25,9 +25,9 @@ namespace Digdown.UI {
 
             this.itemBox.title = item.Description;
 
-            this.sellBtn.click = this.clickSellButton;
-            this.sell100Btn.click = this.clickSell100Button;
-            this.sellAllBtn.click = this.clickSellAllButton;
+            this.sellBtn.onclick = this.clickSellButton;
+            this.sell100Btn.onclick = this.clickSell100Button;
+            this.sellAllBtn.onclick = this.clickSellAllButton;
 
             this.checkKnown(item.IsKnown);
             this.checkAmount(item.Amount);
