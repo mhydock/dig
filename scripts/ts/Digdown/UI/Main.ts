@@ -5,12 +5,13 @@ namespace Digdown.UI {
 
     export class Main {
        
-        private game = new Game();
-                
+        private game: Game;
+        private grid: GameGrid;
+
         private wrapper: HTMLDivElement = <HTMLDivElement>document.getElementById('wrapper');
         private tooltip: HTMLDivElement = <HTMLDivElement>document.getElementById('tooltip');
         private gameScreen: HTMLDivElement = <HTMLDivElement>document.getElementById('gameScreen');
-        private progCursor: HTMLDivElement = <HTMLDivElement>document.getElementById('progCursor');    
+        private progCursor: HTMLDivElement = <HTMLDivElement>document.getElementById('progCursor');
         
         private moneyDiv: HTMLDivElement = <HTMLDivElement>document.getElementById('money');
         
@@ -28,6 +29,8 @@ namespace Digdown.UI {
         
         constructor() {
             log("Game has begun");
+            this.game = new Game();
+            this.grid = new TextGrid(this.game.Player, this.game.Grid);
 
             var tools = this.game.ToolsInventory.Tools;
             for (var t in tools) {
@@ -53,7 +56,9 @@ namespace Digdown.UI {
             this.techTab.onclick = this.changeTab(this.techTab, this.techBoxList);            
             this.busiTab.onclick = this.changeTab(this.busiTab, this.busiBoxList);
 
-            this.game.setFontSize(this.gameScreen.style.fontSize);
+            var fontSize = this.gameScreen.style.fontSize;
+            var tileSize = Number(fontSize.substr(0, fontSize.length-2));
+            this.grid.setTileSize(tileSize);
             
             window.onresize = this.onResizeFunc;
             this.onResizeFunc();
@@ -68,12 +73,28 @@ namespace Digdown.UI {
             this.techTab.click();
             this.toolsTab.click();
 
-            this.gameScreen.innerHTML = this.game.printVisibleGrid();
+            this.grid.render();
         }
 
         private updateMoney = (money: number) => {
             this.moneyDiv.textContent = '$ ' + money
         }
+
+        private getHoverText(x: number, y: number) : string {
+            var {row, col} = this.grid.normalizeXY(x, y);
+
+            if (row == this.game.Player.Y && col == this.game.Player.X)
+                return 'Power: ' + this.game.PlayerPower;
+            
+            if (row < 0)
+                return null;
+
+            var tt = this.game.Grid.getTooltipText(col, row);
+            
+            var text = `<label>${block.TypePhrase}</label><br/>`;
+            text += 'HP: ' + Math.ceil(health*dura) + '/' + dura;
+            return text;
+        };
         
         private updateHover = (event: MouseEvent) => {
             var x = event.pageX - this.gameScreen.offsetLeft;
@@ -97,7 +118,7 @@ namespace Digdown.UI {
         
         private onResizeFunc = () => {
             this.wrapper.style.height = window.innerHeight + 'px';
-            this.game.setViewHeight(this.gameScreen.offsetHeight);
+            this.grid.ViewRows(this.gameScreen.offsetHeight);
         }
         
         // keycodes found here http://www.javascriptkeycode.com/
@@ -111,9 +132,10 @@ namespace Digdown.UI {
             if (event.which == 40)          // down arrow
                 this.game.moveDown();
 
-            this.gameScreen.innerHTML = this.game.printVisibleGrid(); 
-            this.progCursor.style.top = this.game.Progress + '%';        
+            this.progCursor.style.top = this.game.Progress + '%';
+            this.grid.render();
         }
+
         // this is safe only because `this` isn't being used
         private changeTab(tab: HTMLLIElement, list: HTMLDivElement) {
             return function() {

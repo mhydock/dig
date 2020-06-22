@@ -38,6 +38,22 @@ namespace Digdown.Core {
             return false;
         }
 
+        getTooltipText(x: number, y: number) : {type: string, maxHP: number, currHP: number} {
+            var health = this.healthPercent(x, y);
+            if (health === 0)
+                return null;
+            
+            var block = this.block(x, y);
+            if (block === null)
+                return null;
+
+            return {
+                type: block.TypePhrase,
+                maxHP: block.Durability,
+                currHP: Math.ceil(health*block.Durability)
+            };
+        }
+
         block(x: number, y: number) : Block {
             if (x >= 0 && x < WIDTH &&
                 y >= 0 && y < HEIGHT)
