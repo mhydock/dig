@@ -1,15 +1,14 @@
-DIG
-===
+# DIG
 
 A game about digging. That's about it really.
 
-Controls
---------
+## Controls
+
 * Arrow keys - Move avatar
 * Mouse - Navigate menus
 
-Menus
------
+## Menus
+
 * Tools
   - Contains a variety of tools to help you dig
   - Buy more tools to improve digging efficiency
@@ -23,3 +22,37 @@ Menus
 * Econ (Economy)
   - Tools and other upgrades can be researched here
   - Businesses can be purchased to refine and/or autosell items
+
+
+## Project setup
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Run your unit tests
+```
+npm run test:unit
+```
+
+### Run your end-to-end tests
+```
+npm run test:e2e
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+        <title><%= htmlWebpackPlugin.options.title %></title>
+        <script src="scripts/js/game.js"></script>
+        <script>
+            window.addEventListener('unload', function () { });
+            window.addEventListener('load', function () {
+                var game = new Digdown.UI.Main();
+            });
+        </script>
+
+        <title>DIG</title>
+        <link href="style/main.css" rel="Stylesheet" type="text/css" />
+    </head>
+    <body>
+        <noscript>
+            <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+                Please enable it to continue.</strong>
+        </noscript>
+        <!-- when it's ready, the vue app goes here -->
+        <!-- <div id="app"></div> -->
+        <!-- built files will be auto injected -->
+        <div id="wrapper">
+            <div id="progress">
+                <div id="progCursor">
+                    &gt;
+                </div>
+            </div>
+            <div id="gameScreen">
+            </div>
+            <div id="inventory">
+                <ul class="tabs">
+                    <li id="tools">Tools</li>
+                    <li id="items">Items</li>
+                    <li id="econ">Econ</li>
+                </ul>
+                <div id="money"></div>
+                <div class="content">
+                    <div id="toolsList"></div>
+                    <div id="itemsList"></div>
+                    <div id="econList">
+                        <ul class="tabs">
+                            <li id="tech">Technologies</li>
+                            <li id="busi">Businesses</li>
+                        </ul>
+                        <div class="content">
+                            <div id="techList"></div>
+                            <div id="busiList"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="tooltip"></div>
+    </body>
+</html>
