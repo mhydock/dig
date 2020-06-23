@@ -1,4 +1,4 @@
-/// <reference path='../Core/Common.ts'/>
+/// <reference path='../../../Core/Common.ts'/>
 
 namespace Digdown.UI {
     import log = Core.log;

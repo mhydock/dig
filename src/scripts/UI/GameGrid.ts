@@ -1,5 +1,5 @@
-/// <reference path='../Core/Grid.ts'/>
-/// <reference path='../Core/Player.ts'/>
+/// <reference path='../../../Core/Grid.ts'/>
+/// <reference path='../../../Core/Player.ts'/>
 
 namespace DigDown.UI {
     export interface GameGrid {

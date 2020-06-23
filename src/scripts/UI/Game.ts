@@ -1,11 +1,11 @@
-/// <reference path='../Core/Common.ts'/>
-/// <reference path='../Core/Grid.ts'/>
-/// <reference path='../Core/Player.ts'/>
-/// <reference path='../Core/TechnologyTree.ts'/>
-/// <reference path='../Core/ToolsInventory.ts'/>
-/// <reference path='../Core/ItemsInventory.ts'/>
-/// <reference path='../Core/ItemsFactory.ts'/>
-/// <reference path='../Core/ItemsFactory.ts'/>
+/// <reference path='../../../Core/Common.ts'/>
+/// <reference path='../../../Core/Grid.ts'/>
+/// <reference path='../../../Core/Player.ts'/>
+/// <reference path='../../../Core/TechnologyTree.ts'/>
+/// <reference path='../../../Core/ToolsInventory.ts'/>
+/// <reference path='../../../Core/ItemsInventory.ts'/>
+/// <reference path='../../../Core/ItemsFactory.ts'/>
+/// <reference path='../../../Core/ItemsFactory.ts'/>
 
 namespace Digdown.UI {
     import log = Core.log;

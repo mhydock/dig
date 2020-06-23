@@ -1,5 +1,5 @@
-/// <reference path='../Core/Common.ts'/>
-/// <reference path='../Core/Item.ts'/>
+/// <reference path='../../../Core/Common.ts'/>
+/// <reference path='../../../Core/Item.ts'/>
 
 namespace Digdown.UI {
     var log = Core.log;

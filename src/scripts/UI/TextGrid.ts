@@ -1,6 +1,6 @@
-/// <reference path='../Core/Common.ts'/>
-/// <reference path='../Core/Player.ts'/>
-/// <reference path='../Core/Grid.ts'/>
+/// <reference path='../../../Core/Common.ts'/>
+/// <reference path='../../../Core/Player.ts'/>
+/// <reference path='../../../Core/Grid.ts'/>
 
 namespace DigDown.UI {
     import log = Core.log;
