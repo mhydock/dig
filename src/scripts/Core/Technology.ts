@@ -14,12 +14,12 @@ namespace Core {
         constructor (private name : string,
                      private baseCost : number,
                      private visible : boolean,
-                     private dependTech : Technology = null,
+                     private dependTech : Technology|null = null,
                      private dependLevel : number = 0,
                      private costFunc : CostFunction = Technology.defaultCostFunc) {
 
-            if (dependTech)
-                dependTech.addLevelListener(this.checkDependencyLevel);
+            if (this.dependTech)
+                this.dependTech.addLevelListener(this.checkDependencyLevel);
                 
             this.currCost = baseCost;
         }

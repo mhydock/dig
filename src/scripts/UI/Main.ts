@@ -28,7 +28,7 @@ namespace UI {
         constructor() {
             log("Game has begun");
             this.game = new Game();
-            this.grid = new TextGrid(this.game.Player, this.game.Grid);
+            this.grid = new TextGrid(this.game.Grid, this.game.Player, this.gameScreen);
 
             var tools = this.game.ToolsInventory.Tools;
             for (var t in tools) {
@@ -56,7 +56,7 @@ namespace UI {
 
             var fontSize = this.gameScreen.style.fontSize;
             var tileSize = Number(fontSize.substr(0, fontSize.length-2));
-            this.grid.setTileSize(tileSize);
+            this.grid.TileSize = tileSize;
             
             window.onresize = this.onResizeFunc;
             this.onResizeFunc();
@@ -78,33 +78,18 @@ namespace UI {
             this.moneyDiv.textContent = '$ ' + money
         }
 
-        private getHoverText(x: number, y: number) : string {
-            var {row, col} = this.grid.normalizeXY(x, y);
 
-            if (row == this.game.Player.Y && col == this.game.Player.X)
-                return 'Power: ' + this.game.PlayerPower;
-            
-            if (row < 0)
-                return null;
-
-            var tt = this.game.Grid.getTooltipText(col, row);
-            
-            var text = `<label>${block.TypePhrase}</label><br/>`;
-            text += 'HP: ' + Math.ceil(health*dura) + '/' + dura;
-            return text;
-        };
-        
         private updateHover = (event: MouseEvent) => {
             var x = event.pageX - this.gameScreen.offsetLeft;
             var y = event.pageY - this.gameScreen.offsetTop;
             
-            var hoverText = this.game.getHoverText(x, y);
+            var hoverText = this.grid.getHoverText(x, y);
             if (hoverText === null) {
                 this.tooltip.style.display = 'none';
                 return;
             }
             
-            this.tooltip.innerHTML = this.game.getHoverText(x, y);
+            this.tooltip.innerHTML = hoverText;
             this.tooltip.style.top = (event.pageY+2)+'px';
             this.tooltip.style.left = (event.pageX+2)+'px';
             this.tooltip.style.display = 'block';
@@ -116,7 +101,7 @@ namespace UI {
         
         private onResizeFunc = () => {
             this.wrapper.style.height = window.innerHeight + 'px';
-            this.grid.ViewRows(this.gameScreen.offsetHeight);
+            this.grid.ViewRows = this.gameScreen.offsetHeight;
         }
         
         // keycodes found here http://www.javascriptkeycode.com/
@@ -139,12 +124,16 @@ namespace UI {
             return function() {
                 log('doing a thing');
                 var parent = tab.parentElement;
-                var select = parent.querySelector('.selected');
+                var select = parent ? parent.querySelector('.selected') : null;
                 if (select === tab)
                     return;
                 
-                var content = parent.parentElement.querySelector('.content');
-                for (let node of content.children) {
+                let grandP =  parent ? parent.parentElement : null;
+                var content = grandP ? grandP.querySelector('.content') : null;
+                if (!content)
+                    return;
+
+                    for (let node of content.children) {
                     (<HTMLElement>node).style.display = 'none';
                 }
                 list.style.display = 'block';

@@ -1,11 +1,10 @@
 namespace Core {
     export class Tool {
         private static defaultCostFunc : CostFunction = (baseCost, amount) => baseCost + Math.floor(amount*amount/4)
-        private known : boolean;
         private minLevel : number;
         
-        private buyCost : number;
-        private saleCost : number;
+        private buyCost : number = 0;
+        private saleCost : number = 0;
 
         private amountListeners = new Listener<AmountListenerFunc>();
         private costListeners = new Listener<CostListenerFunc>();
@@ -129,7 +128,7 @@ namespace Core {
         }
 
         get IsKnown() : boolean {
-            return this.amount > 0;
+            return this.technology.IsVisible && this.technology.Level > 0;
         }
     }
 }

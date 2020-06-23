@@ -15,7 +15,7 @@ namespace Core {
         
         diff = this.maxAmount - this.minAmount;
             
-        rollForItems() : ItemPrize {
+        rollForItems() : ItemPrize|null {
             var c = Math.random();
             if (c > this.chance)
                 return null;

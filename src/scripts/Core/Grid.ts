@@ -10,7 +10,8 @@ namespace Core {
     export class Grid {
         grid = new Array<Block>(WIDTH * HEIGHT);
 
-		itemsFactory : ItemsFactory;
+        constructor(private itemsFactory: ItemsFactory) { }
+
 	    blockClearedListeners = new Listener<BlockClearedListenerFunc>();
     
         get Width() : number { return WIDTH; }
@@ -36,7 +37,7 @@ namespace Core {
             return false;
         }
 
-        getTooltipText(x: number, y: number) : {type: string, maxHP: number, currHP: number} {
+        getTooltipText(x: number, y: number) : {type: string, maxHP: number, currHP: number} | null {
             var health = this.healthPercent(x, y);
             if (health === 0)
                 return null;
@@ -52,7 +53,7 @@ namespace Core {
             };
         }
 
-        block(x: number, y: number) : Block {
+        block(x: number, y: number) : Block | null {
             if (x >= 0 && x < WIDTH &&
                 y >= 0 && y < HEIGHT)
             {
@@ -67,7 +68,7 @@ namespace Core {
         }
 
         blocks(coords: Array<Point>) : Array<Block> {
-            let bl : Block;
+            let bl : Block | null;
             let blocks = Array<Block>();
             for (let coord of coords) {
                 if ((bl = this.block(coord.x, coord.y)) != null)

@@ -10,5 +10,8 @@ namespace UI {
         Screen: HTMLDivElement
 
         render() : void
+
+        normalizeXY(x: number, y: number) : {row: number, col: number}
+        getHoverText(x: number, y: number) : string|null
     }
 }

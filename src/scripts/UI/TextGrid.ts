@@ -71,15 +71,31 @@ namespace UI {
             x -= 2;
             y -= 2;
             
-            if (x < 0 || y < 0)
-                return null;
-            
             var row = Math.floor(y/this.TileSize);      // height of row == height of text
             var col = Math.floor(x/this.TileSize*2);    // text half as wide as tall
             
             row += this.YOffset;
 
             return {row, col};
+        }
+        
+        getHoverText(x: number, y: number) : string|null {
+            var {row, col} = this.normalizeXY(x, y);
+
+            if (row == this.Player.Y && col == this.Player.X)
+                return 'Power: ' + this.Player.PlayerPower;
+            
+            if (row < 0)
+                return null;
+
+            let tt = this.gameGrid.getTooltipText(col, row);
+            let text = "";
+            if (tt) {
+                text = `<label>${tt.type}</label><br/>`;
+                text += 'HP: ' + tt.currHP + '/' + tt.maxHP;
+            }
+
+            return text;
         }
 
         render(): void {

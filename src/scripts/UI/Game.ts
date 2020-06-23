@@ -3,29 +3,24 @@ namespace UI {
 
     export class Game {
 
-        private _grid = new Core.Grid();
-        private _player = new Core.Player(this._grid.Width/2, -1);
         private _techTree = new Core.TechnologyTree();
         private _tools = new Core.ToolsInventory(this._techTree);
         private _items = new Core.ItemsInventory();
         private _itemFac = new Core.ItemsFactory(this._items);
 
+        private _grid = new Core.Grid(this._itemFac);
+        private _player = new Core.Player(this._grid.Width/2, -1, this._grid, this._tools);
+
         private _money = 0;
         private _moneyListeners = new Core.Listener();
 
-        constructor() {
-            this._player.grid = this._grid;
-            this._player.tools = this._tools;
-            this._grid.itemsFactory = this._itemFac;
-        }
+        constructor() { }
 
         get ToolsInventory() { return this._tools; }
 
         get ItemsInventory() { return this._items; }
 
         get TechnologyTree() { return this._techTree; }
-
-        get PlayerPower() { return this._tools.Power; }
 
         get Player() { return this._player; }
 

@@ -2,12 +2,11 @@ namespace Core {
 
     export class Player {
         constructor (private x: number,
-                     private y: number) {}
+                     private y: number,
+                     private grid: Grid,
+                     private tools: ToolsInventory) {}
 
         orient = Orientation.SOUTH;
-
-        grid : Grid;
-        tools : ToolsInventory;    
 
         step(x: number, y: number) : number {
             if (x < 0 || x >= this.grid.Width ||
@@ -93,6 +92,10 @@ namespace Core {
 
         get Orientation() : number {
             return this.orient;
+        }
+
+        get PlayerPower() : number { 
+            return this.tools.Power; 
         }
     }
 }
