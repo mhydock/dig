@@ -1,7 +1,4 @@
-/// <reference path='Grid.ts'/>
-/// <reference path='TechnologyTree.ts'/>
-
-namespace Digdown.Core {
+namespace Core {
     export class ToolsInventory {
 
         constructor(private techTree : TechnologyTree) {

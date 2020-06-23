@@ -1,7 +1,4 @@
-/// <reference path='../../../Core/Grid.ts'/>
-/// <reference path='../../../Core/Player.ts'/>
-
-namespace DigDown.UI {
+namespace UI {
     export interface GameGrid {
 
         TileSize: number,

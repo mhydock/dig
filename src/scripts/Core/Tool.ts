@@ -1,6 +1,4 @@
-/// <reference path='Technology.ts'/>
-
-namespace Digdown.Core {
+namespace Core {
     export class Tool {
         private static defaultCostFunc : CostFunction = (baseCost, amount) => baseCost + Math.floor(amount*amount/4)
         private known : boolean;

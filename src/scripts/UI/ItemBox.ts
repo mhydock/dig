@@ -1,7 +1,4 @@
-/// <reference path='../../../Core/Common.ts'/>
-/// <reference path='../../../Core/Item.ts'/>
-
-namespace Digdown.UI {
+namespace UI {
     var log = Core.log;
     var withSuffix = Core.withSuffix;
 

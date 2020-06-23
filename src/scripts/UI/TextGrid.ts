@@ -1,8 +1,4 @@
-/// <reference path='../../../Core/Common.ts'/>
-/// <reference path='../../../Core/Player.ts'/>
-/// <reference path='../../../Core/Grid.ts'/>
-
-namespace DigDown.UI {
+namespace UI {
     import log = Core.log;
     import Orientation = Core.Orientation;
 

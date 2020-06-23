@@ -1,4 +1,4 @@
-namespace Digdown.Core {
+namespace Core {
 
     export class Player {
         constructor (private x: number,

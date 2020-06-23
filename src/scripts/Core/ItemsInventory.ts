@@ -1,4 +1,4 @@
-namespace Digdown.Core {
+namespace Core {
     export class ItemsInventory {
    
         private items : { [key: string] : Item } = {

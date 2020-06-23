@@ -1,4 +1,4 @@
-namespace Digdown.UI {
+namespace UI {
     var log = Core.log;
     
     export class TechBox {

@@ -1,13 +1,9 @@
-namespace Digdown.Core {
+namespace Core {
     let printLogs = true;
 
     export function log (message : any) {
         if (printLogs)
             console.log(message);
-    }
-
-    export function toDecimal(val : number, dec : number) : string {
-        return Number(val).toString().match(/^\d+(?:\.\d{0,2})?/)[0];
     }
 
     var Suffix = ['','k','m','b','t'];
@@ -22,7 +18,7 @@ namespace Digdown.Core {
                     
         let text : string;
         if (suff > 0)
-            text = toDecimal(value, 2);        
+            text = value.toFixed(2);
         else
             text = value.toString();
 

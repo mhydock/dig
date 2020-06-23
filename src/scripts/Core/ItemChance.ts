@@ -1,4 +1,4 @@
-namespace Digdown.Core {
+namespace Core {
     export interface ItemPrize {item : Item, amount : number}
     export interface ProduceListenerFunc { (prize : ItemPrize) : void }
 

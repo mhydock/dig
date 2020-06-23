@@ -1,6 +1,4 @@
-/// <reference path='Technology.ts'/>
-
-namespace Digdown.Core {
+namespace Core {
     export class TechnologyTree {
         private shovel = new Technology('Shovels and Diggers',                  100,    true,   null,   0);
         private hammer = new Technology('Hammers and Picks',                    500,    false,  this.shovel, 1);

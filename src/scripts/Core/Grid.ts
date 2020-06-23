@@ -1,6 +1,4 @@
-/// <reference path='Block.ts'/>
-
-namespace Digdown.Core {
+namespace Core {
     const WIDTH = 64;         // blocks/row
     const HEIGHT = 10240;     // rows
 

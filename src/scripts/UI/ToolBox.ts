@@ -1,7 +1,4 @@
-/// <reference path='../../../Core/Common.ts'/>
-/// <reference path='../../../Core/Tool.ts'/>
-
-namespace Digdown.UI {
+namespace UI {
     import log = Core.log;
     import withSuffix = Core.withSuffix;
     

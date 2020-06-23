@@ -1,6 +1,4 @@
-/// <reference path='Listener.ts'/>
-
-namespace Digdown.Core {
+namespace Core {
 
     export class Technology {
         private static defaultCostFunc : CostFunction = (baseCost, level) => baseCost * Math.pow(level+1, 2);

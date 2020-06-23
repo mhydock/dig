@@ -1,6 +1,4 @@
-/// <reference path='../../../Core/Common.ts'/>
-
-namespace Digdown.UI {
+namespace UI {
     import log = Core.log;
 
     export class Main {

@@ -1,5 +1,4 @@
-
-namespace Digdown.Core {
+namespace Core {
     export class ItemsFactory {
 
         constructor (private itemsInventory : ItemsInventory) {}

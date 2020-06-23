@@ -6,7 +6,7 @@ function log10(value : number) : number {
     return Math.log(value) / Math.log(10);
 }
 
-namespace Digdown.Core {
+namespace Core {
     export interface BlockClearedListenerFunc { (items : ItemPrize) : void }
 
     const BASE_DIGS_PER_UNIT_POWER = 2.0;
