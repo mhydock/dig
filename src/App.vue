@@ -58,5 +58,6 @@ export default class App extends Vue {}
   flex-direction: row;
   align-items: stretch;
   justify-content: center;
+  overflow: hidden;
 }
 </style>

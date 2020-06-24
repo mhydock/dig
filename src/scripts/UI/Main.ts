@@ -96,8 +96,10 @@ export class Main {
       return;
     }
 
+    let offset = this.tooltip.getBoundingClientRect().height - (this.gameScreen.clientHeight - y);
+    offset = offset >= 0 ? offset : 0;
     this.tooltip.innerHTML = hoverText;
-    this.tooltip.style.top = event.pageY + 2 + "px";
+    this.tooltip.style.top = event.pageY + 2 - offset + "px";
     this.tooltip.style.left = event.pageX + 2 + "px";
     this.tooltip.style.display = "block";
   };
