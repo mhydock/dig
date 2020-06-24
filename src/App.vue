@@ -35,10 +35,16 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 
+import { Main } from "./scripts/UI/Main";
+
 @Component({
   components: {}
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  mounted() {
+    new Main();
+  }
+}
 </script>
 
 <style lang="scss">
