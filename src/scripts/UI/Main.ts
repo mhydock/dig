@@ -14,7 +14,6 @@ export class Main {
   private game: Game;
   private grid: GameGrid;
 
-  private wrapper: HTMLDivElement = byId("app") as HTMLDivElement;
   private tooltip: HTMLDivElement = byId("tooltip") as HTMLDivElement;
   private gameScreen: HTMLDivElement = byId("gameScreen") as HTMLDivElement;
   private progCursor: HTMLDivElement = byId("progCursor") as HTMLDivElement;
@@ -109,7 +108,6 @@ export class Main {
   };
 
   private onResizeFunc = () => {
-    this.wrapper.style.height = window.innerHeight + "px";
     this.grid.ViewRows = this.gameScreen.offsetHeight;
   };
 
