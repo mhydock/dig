@@ -14,7 +14,7 @@ export class Main {
   private game: Game;
   private grid: GameGrid;
 
-  private wrapper: HTMLDivElement = byId("wrapper") as HTMLDivElement;
+  private wrapper: HTMLDivElement = byId("app") as HTMLDivElement;
   private tooltip: HTMLDivElement = byId("tooltip") as HTMLDivElement;
   private gameScreen: HTMLDivElement = byId("gameScreen") as HTMLDivElement;
   private progCursor: HTMLDivElement = byId("progCursor") as HTMLDivElement;
@@ -62,8 +62,8 @@ export class Main {
     this.techTab.onclick = this.changeTab(this.techTab, this.techBoxList);
     this.busiTab.onclick = this.changeTab(this.busiTab, this.busiBoxList);
 
-    const fontSize = this.gameScreen.style.fontSize;
-    const tileSize = Number(fontSize.substr(0, fontSize.length - 2)) || 16;
+    const fontSize = getComputedStyle(this.gameScreen).fontSize;
+    const tileSize = Number(fontSize.substr(0, fontSize.length - 2));
     this.grid.TileSize = tileSize;
 
     window.onresize = this.onResizeFunc;
