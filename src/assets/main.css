@@ -1,30 +1,10 @@
 @font-face {
-    font-family: 'DejaVu Sans Mono';
-    src: url('../fonts/DejaVu Sans Mono/DejaVuSansMono.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'Droid Sans Mono';
-    src: url('../fonts/Droid Sans Mono/DroidSansMono.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'Liberation Mono';
-    src: url('../fonts/Liberation Mono/LiberationMono-Regular.ttf') format('truetype');
-}
-
-@font-face {
     font-family: 'Ubuntu Mono';
-    src: url('fonts/Ubuntu Mono/UbuntuMono-R.ttf') format('truetype');
+    src: url('./fonts/Ubuntu Mono/UbuntuMono-R.ttf') format('truetype');
 }
 
-@font-face {
-    font-family: 'Gee WP Handwriting';
-    src: url('../fonts/Gee WP Handwriting/Gee_WP_Handwriting.ttf') format('truetype');
-}    
-        
 * {
-    font-family: 'Ubuntu Mono';
+    font-family: 'Ubuntu Mono', monospace;
     box-sizing: border-box;
 }
 

@@ -1,17 +1,17 @@
-namespace UI {
-    export interface GameGrid {
+import { Grid } from "../Core/Grid";
+import { Player } from "../Core/Player";
 
-        TileSize: number,
-        ViewRows: number,
-        YOffset: number,
+export interface GameGrid {
+  TileSize: number;
+  ViewRows: number;
+  YOffset: number;
 
-        GameGrid: Core.Grid,
-        Player: Core.Player,
-        Screen: HTMLDivElement
+  GameGrid: Grid;
+  Player: Player;
+  Screen: HTMLDivElement;
 
-        render() : void
+  render(): void;
 
-        normalizeXY(x: number, y: number) : {row: number, col: number}
-        getHoverText(x: number, y: number) : string|null
-    }
+  normalizeXY(x: number, y: number): { row: number; col: number };
+  getHoverText(x: number, y: number): string | null;
 }

@@ -1,67 +1,83 @@
-namespace UI {
-    import log = Core.log;
+import { Grid } from "../Core/Grid";
+import { ItemsFactory } from "../Core/ItemsFactory";
+import { ItemsInventory } from "../Core/ItemsInventory";
+import { Listener } from "../Core/Listener";
+import { Player } from "../Core/Player";
+import { TechnologyTree } from "../Core/TechnologyTree";
+import { ToolsInventory } from "../Core/ToolsInventory";
 
-    export class Game {
+export class Game {
+  private _techTree = new TechnologyTree();
+  private _tools = new ToolsInventory(this._techTree);
+  private _items = new ItemsInventory();
+  private _itemFac = new ItemsFactory(this._items);
 
-        private _techTree = new Core.TechnologyTree();
-        private _tools = new Core.ToolsInventory(this._techTree);
-        private _items = new Core.ItemsInventory();
-        private _itemFac = new Core.ItemsFactory(this._items);
+  private _grid = new Grid(this._itemFac);
+  private _player = new Player(
+    this._grid.Width / 2,
+    -1,
+    this._grid,
+    this._tools
+  );
 
-        private _grid = new Core.Grid(this._itemFac);
-        private _player = new Core.Player(this._grid.Width/2, -1, this._grid, this._tools);
+  private _money = 0;
+  private _moneyListeners = new Listener();
 
-        private _money = 0;
-        private _moneyListeners = new Core.Listener();
+  get ToolsInventory() {
+    return this._tools;
+  }
 
-        constructor() { }
+  get ItemsInventory() {
+    return this._items;
+  }
 
-        get ToolsInventory() { return this._tools; }
+  get TechnologyTree() {
+    return this._techTree;
+  }
 
-        get ItemsInventory() { return this._items; }
+  get Player() {
+    return this._player;
+  }
 
-        get TechnologyTree() { return this._techTree; }
+  get Grid() {
+    return this._grid;
+  }
 
-        get Player() { return this._player; }
+  get Progress() {
+    return (Math.max(0, this._player.Y) / this._grid.Height) * 100;
+  }
 
-        get Grid() { return this._grid; }
+  get Money() {
+    return this._money;
+  }
 
-        get Progress() { 
-            return Math.max(0, this._player.Y) / this._grid.Height * 100;
-        };
-        
-        get Money() {
-            return this._money;
-        };
-        
-        addMoney(money: number) {
-            this._money += money;
-            this._moneyListeners.callAll(this._money);
-        };
-        
-        subMoney(money: number) {
-            this._money -= money;
-            this._moneyListeners.callAll(this._money);
-        };
-        
-        addMoneyListener(func: Function) {
-            return this._moneyListeners.add(func);
-        };
-        
-        moveUp() {
-            this._player.moveUp();
-        };
-        
-        moveDown() {
-            this._player.moveDown();
-        };
-        
-        moveLeft() {
-            this._player.moveLeft();
-        };
-        
-        moveRight() {
-            this._player.moveRight();
-        };
-    }
+  addMoney(money: number) {
+    this._money += money;
+    this._moneyListeners.callAll(this._money);
+  }
+
+  subMoney(money: number) {
+    this._money -= money;
+    this._moneyListeners.callAll(this._money);
+  }
+
+  addMoneyListener(func: (money: number) => void) {
+    return this._moneyListeners.add(func);
+  }
+
+  moveUp() {
+    this._player.moveUp();
+  }
+
+  moveDown() {
+    this._player.moveDown();
+  }
+
+  moveLeft() {
+    this._player.moveLeft();
+  }
+
+  moveRight() {
+    this._player.moveRight();
+  }
 }
