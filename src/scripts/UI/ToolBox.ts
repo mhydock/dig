@@ -1,6 +1,6 @@
 import { withSuffix } from "../Core/Common";
+import { Game } from "../Core/Game";
 import { Tool } from "../Core/Tool";
-import { Game } from "./Game";
 
 export class ToolBox {
   private toolBox: HTMLDivElement = document.createElement("div");

@@ -35,14 +35,23 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 
+import { Game } from "./scripts/Core/Game";
 import { Main } from "./scripts/UI/Main";
 
 @Component({
   components: {}
 })
 export default class App extends Vue {
+  private game: Game;
+
+  constructor() {
+    super();
+
+    this.game = new Game();
+  }
+
   mounted() {
-    new Main();
+    new Main(this.game);
   }
 }
 </script>

@@ -1,5 +1,5 @@
+import { Game } from "../Core/Game";
 import { Technology } from "../Core/Technology";
-import { Game } from "./Game";
 
 export class TechBox {
   private techBox: HTMLDivElement = document.createElement("div");

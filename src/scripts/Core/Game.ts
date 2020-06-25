@@ -1,10 +1,10 @@
-import { Grid } from "../Core/Grid";
-import { ItemsFactory } from "../Core/ItemsFactory";
-import { ItemsInventory } from "../Core/ItemsInventory";
-import { Listener } from "../Core/Listener";
-import { Player } from "../Core/Player";
-import { TechnologyTree } from "../Core/TechnologyTree";
-import { ToolsInventory } from "../Core/ToolsInventory";
+import { Grid } from "./Grid";
+import { ItemsFactory } from "./ItemsFactory";
+import { ItemsInventory } from "./ItemsInventory";
+import { Listener } from "./Listener";
+import { Player } from "./Player";
+import { TechnologyTree } from "./TechnologyTree";
+import { ToolsInventory } from "./ToolsInventory";
 
 export class Game {
   private _techTree = new TechnologyTree();

@@ -1,5 +1,5 @@
 import { log } from "../Core/Common";
-import { Game } from "./Game";
+import { Game } from "../Core/Game";
 import { GameGrid } from "./GameGrid";
 import { ItemBox } from "./ItemBox";
 import { TechBox } from "./TechBox";
@@ -11,7 +11,6 @@ function byId(id: string) {
 }
 
 export class Main {
-  private game: Game;
   private grid: GameGrid;
 
   private tooltip: HTMLDivElement = byId("tooltip") as HTMLDivElement;
@@ -32,9 +31,8 @@ export class Main {
   private techBoxList: HTMLDivElement = byId("techList") as HTMLDivElement;
   private busiBoxList: HTMLDivElement = byId("busiList") as HTMLDivElement;
 
-  constructor() {
+  constructor(private game: Game) {
     log("Game has begun");
-    this.game = new Game();
     this.grid = new TextGrid(this.game.Grid, this.game.Player, this.gameScreen);
 
     const tools = this.game.ToolsInventory.Tools;
@@ -95,7 +93,9 @@ export class Main {
       return;
     }
 
-    let offset = this.tooltip.getBoundingClientRect().height - (this.gameScreen.clientHeight - y);
+    let offset =
+      this.tooltip.getBoundingClientRect().height -
+      (this.gameScreen.clientHeight - y);
     offset = offset >= 0 ? offset : 0;
     this.tooltip.innerHTML = hoverText;
     this.tooltip.style.top = event.pageY + 2 - offset + "px";
