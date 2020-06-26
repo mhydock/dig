@@ -6,28 +6,7 @@
       </div>
     </div>
     <div id="gameScreen"></div>
-    <div id="inventory">
-      <ul class="tabs">
-        <li id="tools">Tools</li>
-        <li id="items">Items</li>
-        <li id="econ">Econ</li>
-      </ul>
-      <div id="money"></div>
-      <div class="content">
-        <div id="toolsList"></div>
-        <div id="itemsList"></div>
-        <div id="econList">
-          <ul class="tabs">
-            <li id="tech">Technologies</li>
-            <li id="busi">Businesses</li>
-          </ul>
-          <div class="content">
-            <div id="techList"></div>
-            <div id="busiList"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Inventory :game="game"></Inventory>
     <div id="tooltip"></div>
   </div>
 </template>
@@ -35,11 +14,12 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 
+import Inventory from "./components/Inventory.vue";
 import { Game } from "./scripts/Core/Game";
 import { Main } from "./scripts/UI/Main";
 
 @Component({
-  components: {}
+  components: { Inventory }
 })
 export default class App extends Vue {
   private game: Game;
