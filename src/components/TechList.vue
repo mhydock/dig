@@ -1,25 +1,27 @@
 <template>
-  <div id="techList"></div>
+  <div id="techList">
+    <template v-for="(tech, key) of game.TechnologyTree.Technologies">
+      <TechBox
+        :game="game"
+        :tech="tech"
+        :key="key"
+        v-if="tech.IsVisible"
+      ></TechBox>
+    </template>
+  </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 
 import { Game } from "../scripts/Core/Game";
-import { TechBox } from "../scripts/UI/TechBox";
+import TechBox from "./TechBox.vue";
 
-@Component
+@Component({
+  components: { TechBox }
+})
 export default class ToolsList extends Vue {
-  @Prop() game: Game;
-
-  mounted() {
-    const techBoxList = document.getElementById("techList");
-    const techs = this.game.TechnologyTree.Technologies;
-    for (const h in techs) {
-      const box = new TechBox(this.game, techs[h]);
-      techBoxList.appendChild(box.TechBox);
-    }
-  }
+  @Prop() game!: Game;
 }
 </script>
 
