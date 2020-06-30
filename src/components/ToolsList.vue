@@ -5,7 +5,7 @@
         :game="game"
         :tool="tool"
         :key="key"
-        v-if="item.IsResearched"
+        v-if="tool.IsResearched"
       ></ToolBox>
     </template>
   </div>

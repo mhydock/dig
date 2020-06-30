@@ -132,6 +132,6 @@ export class Tool {
   }
 
   get IsResearched(): boolean {
-    return this.technology.Level > this.MinTechLevel || this.IsKnown;
+    return this.technology.Level >= this.MinTechLevel || this.IsKnown;
   }
 }
