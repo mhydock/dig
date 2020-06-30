@@ -5,7 +5,7 @@
       <li id="items" @click="selectTab('items')">Items</li>
       <li id="econ" @click="selectTab('econ')">Econ</li>
     </ul>
-    <div id="money"></div>
+    <div id="money">$ {{ game.Money }}</div>
     <div class="content">
       <ToolsList v-if="tab === 'tools'" :game="game"></ToolsList>
       <ItemsList v-if="tab === 'items'" :game="game"></ItemsList>
@@ -30,7 +30,7 @@ import ToolsList from "./ToolsList.vue";
   }
 })
 export default class Inventory extends Vue {
-  @Prop() game: Game;
+  @Prop() game!: Game;
 
   private tab = "tools";
 

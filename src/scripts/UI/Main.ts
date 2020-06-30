@@ -14,8 +14,6 @@ export class Main {
   private gameScreen: HTMLDivElement = byId("gameScreen") as HTMLDivElement;
   private progCursor: HTMLDivElement = byId("progCursor") as HTMLDivElement;
 
-  private moneyDiv: HTMLDivElement = byId("money") as HTMLDivElement;
-
   constructor(private game: Game) {
     log("Game has begun");
     this.grid = new TextGrid(this.game.Grid, this.game.Player, this.gameScreen);
@@ -27,19 +25,12 @@ export class Main {
     window.onresize = this.onResizeFunc;
     this.onResizeFunc();
 
-    this.updateMoney(this.game.Money);
-    this.game.addMoneyListener(this.updateMoney);
-
     this.gameScreen.onmousemove = this.updateHover;
     this.gameScreen.onmouseleave = this.hideTooltip;
     document.onkeydown = this.onKeyDownFunc;
 
     this.grid.render();
   }
-
-  private updateMoney = (money: number) => {
-    this.moneyDiv.textContent = "$ " + money;
-  };
 
   private updateHover = (event: MouseEvent) => {
     const x = event.pageX - this.gameScreen.offsetLeft;
