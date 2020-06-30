@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="progress">
-      <div id="progCursor">
+      <div id="progCursor" :style="{ top: game.Progress + '%' }">
         &gt;
       </div>
     </div>

@@ -12,7 +12,6 @@ export class Main {
 
   private tooltip: HTMLDivElement = byId("tooltip") as HTMLDivElement;
   private gameScreen: HTMLDivElement = byId("gameScreen") as HTMLDivElement;
-  private progCursor: HTMLDivElement = byId("progCursor") as HTMLDivElement;
 
   constructor(private game: Game) {
     log("Game has begun");
@@ -75,7 +74,6 @@ export class Main {
       // down arrow
       this.game.moveDown();
 
-    this.progCursor.style.top = this.game.Progress + "%";
     this.grid.render();
   };
 }
