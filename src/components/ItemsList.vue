@@ -1,25 +1,27 @@
 <template>
-  <div id="itemsList"></div>
+  <div id="itemsList">
+    <template v-for="(item, key) of game.ItemsInventory.Items">
+      <ItemBox
+        :game="game"
+        :item="item"
+        :key="key"
+        v-if="item.IsKnown"
+      ></ItemBox>
+    </template>
+  </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 
 import { Game } from "../scripts/Core/Game";
-import { ItemBox } from "../scripts/UI/ItemBox";
+import ItemBox from "./ItemBox.vue";
 
-@Component
+@Component({
+  components: { ItemBox }
+})
 export default class ItemsList extends Vue {
-  @Prop() game: Game;
-
-  mounted() {
-    const itemBoxList = document.getElementById("itemsList");
-    const items = this.game.ItemsInventory.Items;
-    for (const i in items) {
-      const box = new ItemBox(this.game, items[i]);
-      itemBoxList.appendChild(box.ItemBox);
-    }
-  }
+  @Prop() game!: Game;
 }
 </script>
 
