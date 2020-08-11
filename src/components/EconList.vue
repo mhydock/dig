@@ -21,7 +21,7 @@ import TechList from "./TechList.vue";
   components: { TechList }
 })
 export default class EconList extends Vue {
-  @Prop() game: Game;
+  @Prop() game!: Game;
 
   private tab = "tech";
 

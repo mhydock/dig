@@ -1,7 +1,6 @@
 import { Grid } from "./Grid";
 import { ItemsFactory } from "./ItemsFactory";
 import { ItemsInventory } from "./ItemsInventory";
-import { Listener } from "./Listener";
 import { Player } from "./Player";
 import { TechnologyTree } from "./TechnologyTree";
 import { ToolsInventory } from "./ToolsInventory";
@@ -21,7 +20,6 @@ export class Game {
   );
 
   private _money = 0;
-  private _moneyListeners = new Listener();
 
   get ToolsInventory() {
     return this._tools;
@@ -53,16 +51,10 @@ export class Game {
 
   addMoney(money: number) {
     this._money += money;
-    this._moneyListeners.callAll(this._money);
   }
 
   subMoney(money: number) {
     this._money -= money;
-    this._moneyListeners.callAll(this._money);
-  }
-
-  addMoneyListener(func: (money: number) => void) {
-    return this._moneyListeners.add(func);
   }
 
   moveUp() {

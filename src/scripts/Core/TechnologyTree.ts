@@ -1,36 +1,22 @@
 import { Technology } from "./Technology";
 
 export class TechnologyTree {
-  private shovel = new Technology("Shovels and Diggers", 100, true, null, 0);
-  private hammer = new Technology(
-    "Hammers and Picks",
-    500,
-    false,
-    this.shovel,
-    1
-  );
-  private drills = new Technology(
-    "Drills and Borers",
-    1000,
-    false,
-    this.hammer,
-    1
-  );
+  private shovel = new Technology("Shovels and Diggers", 100, null, 0);
+  private hammer = new Technology("Hammers and Picks", 500, this.shovel, 1);
+  private drills = new Technology("Drills and Borers", 1000, this.hammer, 1);
   private water1 = new Technology(
     "Low-Pressure Water-based Erosion",
     100,
-    false,
     this.shovel,
     1
   );
   private water2 = new Technology(
     "High-pressure Water-based Erosion",
     1000,
-    false,
     this.water1,
     2
   );
-  private explos = new Technology("Explosives", 1000, false, this.hammer, 3);
+  private explos = new Technology("Explosives", 1000, this.hammer, 3);
   private technologies: Technology[];
 
   constructor() {

@@ -29,19 +29,3 @@ export enum Orientation {
 export interface CostFunction {
   (baseCost: number, level: number): number;
 }
-
-export interface CostListenerFunc {
-  (cost: number): void;
-}
-export interface LevelListenerFunc {
-  (level: number): void;
-}
-export interface KnownListenerFunc {
-  (known: boolean): void;
-}
-export interface AmountListenerFunc {
-  (amount: number): void;
-}
-export interface VisibleListenerFunc {
-  (visible: boolean): void;
-}
