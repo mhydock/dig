@@ -10,8 +10,15 @@ export interface GameGrid {
   Player: Player;
   Screen: HTMLDivElement;
 
-  render(): void;
+  drawScreen(): void;
 
   normalizeXY(x: number, y: number): { row: number; col: number };
-  getHoverText(x: number, y: number): string | null;
+  getHoverText(x: number, y: number): HoverText | null;
+}
+
+export interface HoverText {
+  power?: number;
+  type?: string;
+  maxHP?: number;
+  currHP?: number;
 }

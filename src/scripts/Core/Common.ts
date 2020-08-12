@@ -19,6 +19,23 @@ export function withSuffix(value: number): string {
   return text + Suffix[suff];
 }
 
+export function byId(id: string) {
+  return document.getElementById(id);
+}
+
+export function getTrueOffsets(
+  element: HTMLElement | null
+): { offsetLeft: number; offsetTop: number } {
+  if (!element) return { offsetLeft: 0, offsetTop: 0 };
+  const offsetLeft = element.offsetLeft;
+  const offsetTop = element.offsetTop;
+  const parentOffsets = getTrueOffsets(element.parentElement);
+  return {
+    offsetLeft: offsetLeft + parentOffsets.offsetLeft,
+    offsetTop: offsetTop + parentOffsets.offsetTop
+  };
+}
+
 export enum Orientation {
   NORTH = 1,
   EAST,

@@ -40,4 +40,15 @@ export default class Inventory extends Vue {
 }
 </script>
 
-<style lang="sass"></style>
+<style lang="scss">
+#money {
+  height: 3rem;
+  line-height: 3rem;
+
+  margin-right: 2rem;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+</style>
