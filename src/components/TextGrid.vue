@@ -1,9 +1,20 @@
-import { log, Orientation } from "../Core/Common";
-import { Grid } from "../Core/Grid";
-import { Player } from "../Core/Player";
-import { GameGrid } from "./GameGrid";
+<template>
+  <div id="gameScreen" @mousemove="updateToolTip"></div>
+</template>
 
-export class TextGrid implements GameGrid {
+<script lang="ts">
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+
+import { byId, getTrueOffsets, log, Orientation } from "../scripts/Core/Common";
+import { Game } from "../scripts/Core/Game";
+import { Grid } from "../scripts/Core/Grid";
+import { Player } from "../scripts/Core/Player";
+import { GameGrid, HoverText } from "../scripts/UI/GameGrid";
+
+@Component({
+  components: {}
+})
+export default class TextGrid extends Vue implements GameGrid {
   private static SPRITE_LIST = [
     "\u2593",
     "\u2592",
@@ -15,24 +26,22 @@ export class TextGrid implements GameGrid {
     "&amp;"
   ];
 
-  private gameGrid: Grid;
-  private player: Player;
-  private screen: HTMLDivElement;
+  @Prop() game!: Game;
 
   private viewRows = 100;
-  private fontSize = 16;
+  private fontSize = 20;
   private yOffset = 0;
 
   get GameGrid(): Grid {
-    return this.gameGrid;
+    return this.game.Grid;
   }
 
   get Player(): Player {
-    return this.player;
+    return this.game.Player;
   }
 
   get Screen(): HTMLDivElement {
-    return this.screen;
+    return byId("gameScreen") as HTMLDivElement;
   }
 
   get TileSize(): number {
@@ -57,16 +66,35 @@ export class TextGrid implements GameGrid {
     return this.yOffset;
   }
 
-  constructor(gameGrid: Grid, player: Player, screen: HTMLDivElement) {
-    this.gameGrid = gameGrid;
-    this.player = player;
-    this.screen = screen;
+  mounted() {
+    const fontSize = getComputedStyle(this.Screen).fontSize;
+    const tileSize = Number(fontSize.substr(0, fontSize.length - 2));
+    this.TileSize = tileSize;
+
+    window.onresize = this.onResizeFunc;
+    this.onResizeFunc();
+    this.drawScreen();
+  }
+
+  unmount() {
+    window.onresize = null;
+  }
+
+  private onResizeFunc = () => {
+    this.ViewRows = this.Screen.offsetHeight;
+  };
+
+  @Watch("Player.X")
+  @Watch("Player.Y")
+  @Watch("Player.Orientation")
+  private playerMoved() {
+    this.drawScreen();
   }
 
   normalizeXY(x: number, y: number): { row: number; col: number } {
     // border offset (1px all sides)
-    x -= 2;
-    y -= 2;
+    x -= 1;
+    y -= 1;
 
     let row = Math.floor(y / this.TileSize); // height of row == height of text
     const col = Math.floor((x / this.TileSize) * 2); // text half as wide as tall
@@ -76,32 +104,39 @@ export class TextGrid implements GameGrid {
     return { row, col };
   }
 
-  getHoverText(x: number, y: number): string | null {
+  getHoverText(x: number, y: number): HoverText | null {
     const { row, col } = this.normalizeXY(x, y);
 
     if (row == this.Player.Y && col == this.Player.X)
-      return "Power: " + this.Player.PlayerPower;
+      return { power: this.Player.PlayerPower };
 
     if (row < 0) return null;
 
-    const tt = this.gameGrid.getTooltipText(col, row);
-    let text = "";
-    if (tt) {
-      text = `<label>${tt.type}</label><br/>`;
-      text += "HP: " + tt.currHP + "/" + tt.maxHP;
-    }
-
-    return text;
+    return this.GameGrid.getTooltipText(col, row);
   }
 
-  render(): void {
+  updateToolTip(event: MouseEvent) {
+    const offsets = getTrueOffsets(this.Screen);
+    const x = event.pageX - offsets.offsetLeft;
+    const y = event.pageY - offsets.offsetTop;
+
+    this.$emit("updateToolTip", {
+      hoverText: this.getHoverText(x, y),
+      pos: {
+        x,
+        y
+      }
+    });
+  }
+
+  drawScreen(): void {
     const maxRows = this.ViewRows;
     const maxSky = Math.ceil(maxRows / 3);
 
     log("maxSky: " + maxSky);
 
-    let bottomRow = this.player.Y + Math.ceil(maxRows / 2);
-    if (bottomRow > this.gameGrid.Height) bottomRow = this.gameGrid.Height;
+    let bottomRow = this.Player.Y + Math.ceil(maxRows / 2);
+    if (bottomRow > this.GameGrid.Height) bottomRow = this.GameGrid.Height;
 
     let sky = 0;
     let topRow = bottomRow - maxRows;
@@ -121,7 +156,7 @@ export class TextGrid implements GameGrid {
     let output = "";
     log("generating sky");
     for (i = 0; i < sky; i++) {
-      for (j = 0; j < this.gameGrid.Width; j++)
+      for (j = 0; j < this.GameGrid.Width; j++)
         output += this._getEmptyOrPlayer(j, i - sky);
 
       output += "</br>";
@@ -129,8 +164,8 @@ export class TextGrid implements GameGrid {
 
     log("generating ground");
     for (i = topRow; i < bottomRow; i++) {
-      for (j = 0; j < this.gameGrid.Width; j++) {
-        const block = this.gameGrid.block(j, i);
+      for (j = 0; j < this.GameGrid.Width; j++) {
+        const block = this.GameGrid.block(j, i);
         if (block == null) continue;
 
         const type = block.Type;
@@ -141,11 +176,11 @@ export class TextGrid implements GameGrid {
       output += "<br/>";
     }
 
-    this.screen.innerHTML = output;
+    this.Screen.innerHTML = output;
   }
 
   private _getOrientationGlyph(): string {
-    const orient = this.player.orient;
+    const orient = this.Player.orient;
 
     if (orient == Orientation.NORTH) return "^";
     if (orient == Orientation.SOUTH) return "v";
@@ -156,9 +191,10 @@ export class TextGrid implements GameGrid {
   }
 
   private _getEmptyOrPlayer(x: number, y: number): string {
-    if (y == this.player.Y && x == this.player.X)
+    if (y == this.Player.Y && x == this.Player.X)
       return this._getOrientationGlyph();
 
     return "&nbsp;";
   }
 }
+</script>

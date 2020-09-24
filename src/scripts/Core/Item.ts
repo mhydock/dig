@@ -1,6 +1,3 @@
-import { AmountListenerFunc, KnownListenerFunc } from "./Common";
-import { Listener } from "./Listener";
-
 export class Item {
   constructor(
     private name: string,
@@ -9,9 +6,6 @@ export class Item {
     private value: number,
     private known: boolean
   ) {}
-
-  amountListeners = new Listener<AmountListenerFunc>();
-  knownListeners = new Listener<KnownListenerFunc>();
 
   get Name(): string {
     return this.name;
@@ -39,21 +33,17 @@ export class Item {
 
   add() {
     this.amount++;
-    this.amountListeners.callAll(this.amount);
 
     if (!this.known) {
       this.known = true;
-      this.knownListeners.callAll(true);
     }
   }
 
   addMany(amount: number) {
     this.amount += amount;
-    this.amountListeners.callAll(this.amount);
 
     if (!this.known) {
       this.known = true;
-      this.knownListeners.callAll(true);
     }
   }
 
@@ -61,7 +51,6 @@ export class Item {
     if (this.amount <= 0) return -1;
 
     this.amount--;
-    this.amountListeners.callAll(this.amount);
     return this.value;
   }
 
@@ -69,7 +58,6 @@ export class Item {
     if (this.amount <= 0) return -1;
 
     this.amount -= amount;
-    this.amountListeners.callAll(this.amount);
     return this.value * amount;
   }
 
@@ -78,15 +66,6 @@ export class Item {
 
     const value = this.TotalValue;
     this.amount = 0;
-    this.amountListeners.callAll(this.amount);
     return value;
-  }
-
-  addAmountListener(func: AmountListenerFunc) {
-    return this.amountListeners.add(func);
-  }
-
-  addKnownListener(func: KnownListenerFunc) {
-    return this.knownListeners.add(func);
   }
 }

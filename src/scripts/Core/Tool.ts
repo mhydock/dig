@@ -1,5 +1,4 @@
-import { AmountListenerFunc, CostFunction, CostListenerFunc } from "./Common";
-import { Listener } from "./Listener";
+import { CostFunction } from "./Common";
 import { Technology } from "./Technology";
 
 export class Tool {
@@ -9,9 +8,6 @@ export class Tool {
 
   private buyCost = 0;
   private saleCost = 0;
-
-  private amountListeners = new Listener<AmountListenerFunc>();
-  private costListeners = new Listener<CostListenerFunc>();
 
   saleMult = 0.75;
 
@@ -57,8 +53,6 @@ export class Tool {
 
       this.buyCost = this.getBuyCost(this.amount);
       this.saleCost = this.getSaleCost(this.amount);
-      this.costListeners.callAll(this.buyCost);
-      this.amountListeners.callAll(this.amount);
 
       return cost;
     }
@@ -75,20 +69,10 @@ export class Tool {
 
       this.buyCost = this.getBuyCost(this.amount);
       this.saleCost = this.getSaleCost(this.amount);
-      this.costListeners.callAll(this.buyCost);
-      this.amountListeners.callAll(this.amount);
 
       return sale;
     }
     return -1;
-  }
-
-  addCostListener(func: CostListenerFunc) {
-    this.costListeners.add(func);
-  }
-
-  addAmountListener(func: AmountListenerFunc) {
-    this.amountListeners.add(func);
   }
 
   get Name(): string {
@@ -129,5 +113,9 @@ export class Tool {
 
   get IsKnown(): boolean {
     return this.technology.IsVisible && this.technology.Level > 0;
+  }
+
+  get IsResearched(): boolean {
+    return this.technology.Level >= this.MinTechLevel || this.IsKnown;
   }
 }
