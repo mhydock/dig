@@ -1,6 +1,15 @@
 import { CostFunction } from "./Common";
 import { Technology } from "./Technology";
 
+interface Area {
+  width: number;
+  height: number;
+  offsetX: number;
+  offsetY: number;
+}
+
+export type ToolOrientation = "horz" | "vert" | "any";
+
 export class Tool {
   private static defaultCostFunc: CostFunction = (baseCost, amount) =>
     baseCost + Math.floor((amount * amount) / 4);
@@ -13,12 +22,17 @@ export class Tool {
 
   constructor(
     private name: string,
+    private desc: string,
     private amount: number,
     private power: number,
     private baseCost: number,
     private technology: Technology,
     private workers: number,
     private level: number,
+    private canMove: boolean,
+    private orientation: ToolOrientation = "any",
+    private areaOfEffect?: Area,
+    private collisionMask?: number[][],
     private costFunc: CostFunction = Tool.defaultCostFunc
   ) {
     this.minLevel = this.level;
@@ -79,6 +93,10 @@ export class Tool {
     return this.name;
   }
 
+  get Description(): string {
+    return this.desc;
+  }
+
   get Level(): number {
     return this.level;
   }
@@ -117,5 +135,17 @@ export class Tool {
 
   get IsResearched(): boolean {
     return this.technology.Level >= this.MinTechLevel || this.IsKnown;
+  }
+
+  get CanMoveAndDig(): boolean {
+    return this.canMove && this.amount > 0;
+  }
+
+  get Orientation() {
+    return this.orientation;
+  }
+
+  get CollisionMask() {
+    return [];
   }
 }
