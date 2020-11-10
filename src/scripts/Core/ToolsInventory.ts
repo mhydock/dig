@@ -49,10 +49,7 @@ export class ToolsInventory {
   }
 
   canMoveAndStep(): boolean {
-    return (
-        this.tools
-        .filter(t => t.CanMoveAndDig).length > 0
-    );
+    return this.tools.filter(t => t.CanMoveAndDig).length > 0;
   }
 
   dig(grid: Grid, x: number, y: number, orient: Orientation): number {

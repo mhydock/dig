@@ -2,7 +2,7 @@
   <div
     id="tooltip"
     v-if="hoverText"
-    :style="{ top: y + 2 + 'px', left: x + 2 + 'px' }"
+    :style="{ top: y + 4 + 'px', left: x + 4 + 'px' }"
   >
     <span v-if="hoverText.power">Power: {{ hoverText.power }}</span>
     <span v-if="hoverText.type">{{ hoverText.type }}</span>
@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 
 import { HoverText } from "../scripts/UI/GameGrid";
 
@@ -32,4 +32,8 @@ export default class ToolsList extends Vue {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+#tooltip {
+  white-space: nowrap;
+}
+</style>
