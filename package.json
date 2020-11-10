@@ -1,25 +1,9 @@
 {
   "name": "dig",
   "version": "1.0.0",
-  "description": "A game about digging",
-  "main": "Main.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mhydock/dig.git"
-  },
-  "keywords": [
-    "game",
-    "digging",
-    "ascii",
-    "evolving-gameplay"
-  ],
-  "author": "M. Matthew Hydock",
-  "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/mhydock/dig/issues"
-  },
-  "homepage": "https://github.com/mhydock/dig#readme",
   "private": true,
+  "description": "A game about digging",
+  "author": "M. Matthew Hydock",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -27,12 +11,14 @@
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint"
   },
+  "main": "Main.js",
   "dependencies": {
     "core-js": "^3.6.5",
     "uuid": "^8.3.1",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
-    "vue-property-decorator": "^8.4.2"
+    "vue-property-decorator": "^8.4.2",
+    "vue-router": "^3.2.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.19",
@@ -42,6 +28,7 @@
     "@vue/cli-plugin-babel": "~4.4.0",
     "@vue/cli-plugin-e2e-cypress": "~4.4.0",
     "@vue/cli-plugin-eslint": "~4.4.0",
+    "@vue/cli-plugin-router": "^4.5.8",
     "@vue/cli-plugin-typescript": "~4.4.0",
     "@vue/cli-plugin-unit-jest": "~4.4.0",
     "@vue/cli-service": "~4.4.0",
@@ -58,5 +45,20 @@
     "sass-loader": "^8.0.2",
     "typescript": "~3.9.3",
     "vue-template-compiler": "^2.6.11"
+  },
+  "bugs": {
+    "url": "https://github.com/mhydock/dig/issues"
+  },
+  "homepage": "https://github.com/mhydock/dig#readme",
+  "keywords": [
+    "game",
+    "digging",
+    "ascii",
+    "evolving-gameplay"
+  ],
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mhydock/dig.git"
   }
 }
