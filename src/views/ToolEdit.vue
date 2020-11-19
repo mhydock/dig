@@ -121,8 +121,18 @@ export default class ToolEdit extends Vue {
   currTool: Tool = this.tools.Tools[0];
   currIntensity = 0;
 
+  private gridDims = { width: 0, height: 0 };
+
   constructor() {
     super();
+  }
+
+  mounted() {
+    const grid = this.$refs["grid"] as HTMLDivElement;
+    if (grid) {
+      this.gridDims.width = grid.offsetWidth;
+      this.gridDims.height = grid.offsetHeight;
+    }
   }
 
   get ID() {
@@ -150,7 +160,6 @@ export default class ToolEdit extends Vue {
   }
 
   get Width() {
-    console.log("ey");
     return this.currTool.CollisionMask[0].length;
   }
 
@@ -164,11 +173,8 @@ export default class ToolEdit extends Vue {
   }
 
   get CellEdgeLen() {
-    const grid = this.$refs["grid"] as HTMLDivElement;
-    console.log(this.$refs);
-
-    const w = (grid ? grid.offsetWidth : 0) / this.Width;
-    const h = (grid ? grid.offsetHeight : 0) / this.Height;
+    const w = this.gridDims.width / this.Width;
+    const h = this.gridDims.height / this.Height;
     return Math.min(w, h);
   }
 
