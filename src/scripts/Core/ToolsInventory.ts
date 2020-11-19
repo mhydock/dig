@@ -24,8 +24,7 @@ export class ToolsInventory {
         tt.level,
         tt.canMove,
         tt.orientation as ToolOrientation,
-        tt.areaOfEffect,
-        []
+        tt.offset
       );
       this.toolsMap[tt.id] = tool;
       this.tools.push(tool);

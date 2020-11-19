@@ -1,11 +1,9 @@
 import { CostFunction } from "./Common";
 import { Technology } from "./Technology";
 
-interface Area {
-  width: number;
-  height: number;
-  offsetX: number;
-  offsetY: number;
+interface Offset {
+  x: number;
+  y: number;
 }
 
 export type ToolOrientation = "horz" | "vert" | "any";
@@ -31,8 +29,8 @@ export class Tool {
     private level: number,
     private canMove: boolean,
     private orientation: ToolOrientation = "any",
-    private areaOfEffect?: Area,
-    private collisionMask?: number[][],
+    private offset: Offset = { x: 0, y: 0 },
+    private collisionMask: number[][] = [[0]],
     private costFunc: CostFunction = Tool.defaultCostFunc
   ) {
     this.minLevel = this.level;
@@ -145,7 +143,11 @@ export class Tool {
     return this.orientation;
   }
 
+  get Offset() {
+    return this.offset;
+  }
+
   get CollisionMask() {
-    return [];
+    return this.collisionMask;
   }
 }
