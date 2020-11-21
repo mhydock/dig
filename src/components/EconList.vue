@@ -1,5 +1,5 @@
 <template>
-  <div id="econList">
+  <div id="econList" class="list-panel">
     <ul class="tabs">
       <li @click="selectTab('tech')">Technologies</li>
       <li @click="selectTab('busi')">Businesses</li>
@@ -31,4 +31,9 @@ export default class EconList extends Vue {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+#econList {
+  border: none;
+  width: 100%;
+}
+</style>

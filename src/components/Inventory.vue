@@ -1,5 +1,5 @@
 <template>
-  <div id="inventory">
+  <div id="inventory" class="list-panel">
     <ul class="tabs">
       <li id="tools" @click="selectTab('tools')">Tools</li>
       <li id="items" @click="selectTab('items')">Items</li>

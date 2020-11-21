@@ -1,12 +1,19 @@
 <template>
-  <div :title="tool.Description">
+  <div :title="tool.Description" class="list-item">
     <h3>{{ tool.Name }}</h3>
-    <label :title="AmountTooltip">x {{ AmountWithSuffix }}</label>
-    <label>Next: $ {{ tool.BuyCost }}</label>
-    <button @click="clickBuyButton" :disabled="tool.BuyCost > game.Money">
-      Buy
-    </button>
-    <button @click="clickSellButton" :disabled="tool.Amount <= 0">Sell</button>
+    <div class="list-item-body">
+      <label class="quantity" :title="AmountTooltip"
+        >x {{ AmountWithSuffix }}</label
+      >
+      <label>Next: $ {{ tool.BuyCost }}</label>
+      <span class="gap"></span>
+      <button @click="clickSellButton" :disabled="tool.Amount <= 0">
+        Sell
+      </button>
+      <button @click="clickBuyButton" :disabled="tool.BuyCost > game.Money">
+        Buy
+      </button>
+    </div>
   </div>
 </template>
 
