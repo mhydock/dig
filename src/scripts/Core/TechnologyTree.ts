@@ -1,4 +1,4 @@
-import * as techTemplates from "../../assets/tech.json";
+import techTemplates from "../../assets/tech.json";
 import { Technology } from "./Technology";
 
 export class TechnologyTree {
@@ -8,7 +8,7 @@ export class TechnologyTree {
   constructor() {
     this.technologies = [];
     this.techMap = {};
-    techTemplates.forEach(t => {
+    techTemplates.forEach((t) => {
       const tech = new Technology(
         t.name,
         t.baseCost,

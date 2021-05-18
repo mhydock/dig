@@ -11,22 +11,22 @@ const routes: Array<RouteConfig> = [
   {
     path: "/",
     name: "Game",
-    component: GameView
+    component: GameView,
   },
   {
     path: "/tools",
     name: "Tool Editor",
-    component: ToolEdit
+    component: ToolEdit,
   },
   {
     path: "/about",
     name: "About",
-    component: About
-  }
+    component: About,
+  },
 ];
 
 const router = new VueRouter({
-  routes
+  routes,
 });
 
 export default router;

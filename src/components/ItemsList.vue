@@ -18,7 +18,7 @@ import { Game } from "../scripts/Core/Game";
 import ItemBox from "./ItemBox.vue";
 
 @Component({
-  components: { ItemBox }
+  components: { ItemBox },
 })
 export default class ItemsList extends Vue {
   @Prop() game!: Game;

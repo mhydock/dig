@@ -1,4 +1,4 @@
-import * as toolTemplates from "../../assets/tools.json";
+import toolTemplates from "../../assets/tools.json";
 import { Orientation } from "./Common";
 import { Grid } from "./Grid";
 import { TechnologyTree } from "./TechnologyTree";
@@ -12,7 +12,7 @@ export class ToolsInventory {
     if (typeof techTree === "undefined" || techTree == null)
       throw "Tech Tree is undefined or null. Cannot create tools.";
 
-    toolTemplates.forEach(tt => {
+    toolTemplates.forEach((tt) => {
       const tool = new Tool(
         tt.name,
         tt.desc || "",
@@ -48,7 +48,7 @@ export class ToolsInventory {
   }
 
   canMoveAndStep(): boolean {
-    return this.tools.filter(t => t.CanMoveAndDig).length > 0;
+    return this.tools.filter((t) => t.CanMoveAndDig).length > 0;
   }
 
   dig(grid: Grid, x: number, y: number, orient: Orientation): number {

@@ -18,7 +18,7 @@ import { Game } from "../scripts/Core/Game";
 import TechList from "./TechList.vue";
 
 @Component({
-  components: { TechList }
+  components: { TechList },
 })
 export default class EconList extends Vue {
   @Prop() game!: Game;

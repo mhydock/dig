@@ -25,14 +25,14 @@ const BLOCK_TYPE_PHRASE = [
   "Sandstone",
   "Marble",
   "Granite",
-  "Bedrock"
+  "Bedrock",
 ];
 
 export enum BlockType {
   SDIRT = 1,
   MDIRT,
   HDIRT,
-  BDROCK
+  BDROCK,
 }
 
 export class Block {

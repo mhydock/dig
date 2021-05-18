@@ -18,7 +18,7 @@ import { Game } from "../scripts/Core/Game";
 import TechBox from "./TechBox.vue";
 
 @Component({
-  components: { TechBox }
+  components: { TechBox },
 })
 export default class ToolsList extends Vue {
   @Prop() game!: Game;

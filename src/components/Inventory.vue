@@ -26,8 +26,8 @@ import ToolsList from "./ToolsList.vue";
   components: {
     ToolsList,
     ItemsList,
-    EconList
-  }
+    EconList,
+  },
 })
 export default class Inventory extends Vue {
   @Prop() game!: Game;

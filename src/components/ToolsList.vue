@@ -18,7 +18,7 @@ import { Game } from "../scripts/Core/Game";
 import ToolBox from "./ToolBox.vue";
 
 @Component({
-  components: { ToolBox }
+  components: { ToolBox },
 })
 export default class ToolsList extends Vue {
   @Prop() game!: Game;

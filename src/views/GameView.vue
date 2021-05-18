@@ -1,9 +1,7 @@
 <template>
   <div id="game">
     <div id="progress">
-      <div id="progCursor" :style="{ top: game.Progress + '%' }">
-        &gt;
-      </div>
+      <div id="progCursor" :style="{ top: game.Progress + '%' }">&gt;</div>
     </div>
     <div id="gridWrapper">
       <TextGrid :game="game" @updateToolTip="updateToolTip"></TextGrid>
@@ -24,7 +22,7 @@ import { Game } from "../scripts/Core/Game";
 import { HoverText } from "../scripts/UI/GameGrid";
 
 @Component({
-  components: { Inventory, TextGrid, Tooltip }
+  components: { Inventory, TextGrid, Tooltip },
 })
 export default class GameView extends Vue {
   private game: Game;

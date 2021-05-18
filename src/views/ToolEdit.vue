@@ -2,7 +2,11 @@
   <div class="wrapper">
     <div class="editor">
       <div class="collision-mask">
-        <div class="grid">
+        <ul class="tabs">
+          <li id="draw" @click="activeTab = 'draw'">Draw</li>
+          <li id="view" @click="activeTab = 'view'">View</li>
+        </ul>
+        <div class="grid" v-if="activeTab === 'draw'">
           <div class="grid-wrapper" ref="grid">
             <div
               class="row"
@@ -16,14 +20,15 @@
                 :style="{
                   background: getShade(cell),
                   height: CellEdgeLen + 'px',
-                  width: CellEdgeLen + 'px'
+                  width: CellEdgeLen + 'px',
                 }"
                 @click="setIntensity(i, j)"
               ></div>
             </div>
           </div>
         </div>
-        <div class="grid-options">
+        <div class="mask-view" v-if="activeTab === 'view'"></div>
+        <div class="grid-options" v-if="activeTab === 'draw'">
           <div>
             <label>Intensity</label>
             <span
@@ -42,12 +47,12 @@
             <label>X</label><input v-model="currTool.offset.x" type="number" />
             <label>Y</label><input v-model="currTool.offset.y" type="number" />
           </div>
-          <div>
+          <div v-if="activeTab === 'draw'">
             <label>Dimensions</label>
             <label>Width</label><input v-model="Width" type="number" />
             <label>Height</label><input v-model="Height" type="number" />
           </div>
-          <div>
+          <div v-if="activeTab === 'draw'">
             <button @click="clearGrid">Clear</button>
           </div>
         </div>
@@ -120,6 +125,7 @@ export default class ToolEdit extends Vue {
   tools: ToolsInventory = new ToolsInventory(this.tech);
   currTool: Tool = this.tools.Tools[0];
   currIntensity = 0;
+  activeTab: "draw" | "view" = "draw";
 
   private gridDims = { width: 0, height: 0 };
 
@@ -137,7 +143,7 @@ export default class ToolEdit extends Vue {
 
   get ID() {
     const m = this.tools.ToolsMap;
-    return Object.keys(m).filter(k => m[k] === this.currTool)[0] || "";
+    return Object.keys(m).filter((k) => m[k] === this.currTool)[0] || "";
   }
 
   set ID(value: string) {
@@ -253,6 +259,10 @@ export default class ToolEdit extends Vue {
   flex-direction: column;
   align-items: stretch;
   overflow: hidden;
+
+  .mask-view {
+    flex: 1 1 auto;
+  }
 
   .grid {
     height: auto;

@@ -18,7 +18,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import { HoverText } from "../scripts/UI/GameGrid";
 
 @Component({
-  components: {}
+  components: {},
 })
 export default class ToolsList extends Vue {
   @Prop() x!: number;
