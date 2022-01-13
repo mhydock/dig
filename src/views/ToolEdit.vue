@@ -3,11 +3,11 @@
     <div class="editor">
       <div class="collision-mask">
         <ul class="tabs">
-          <li id="draw" @click="activeTab = 'draw'">Draw</li>
-          <li id="view" @click="activeTab = 'view'">View</li>
+          <li id="draw" @click="setTab('draw')">Draw</li>
+          <li id="view" @click="setTab('view')">View</li>
         </ul>
         <div class="grid" v-if="activeTab === 'draw'">
-          <div class="grid-wrapper" ref="grid">
+          <div class="grid-wrapper" ref="grid-draw">
             <div
               class="row"
               v-for="(row, i) of currTool.CollisionMask"
@@ -19,15 +19,43 @@
                 :key="'cell' + j"
                 :style="{
                   background: getShade(cell),
-                  height: CellEdgeLen + 'px',
-                  width: CellEdgeLen + 'px',
+                  height: CellEdgeLength + 'px',
+                  width: CellEdgeLength + 'px',
                 }"
                 @click="setIntensity(i, j)"
               ></div>
             </div>
           </div>
         </div>
-        <div class="mask-view" v-if="activeTab === 'view'"></div>
+        <div class="grid" v-if="activeTab === 'view'">
+          <div class="grid-wrapper" ref="grid-view">
+            <div
+              class="row"
+              v-for="(row, i) of FullCollisionMask"
+              :key="'row' + i"
+            >
+              <div
+                class="cell"
+                v-for="(cell, j) of row"
+                :key="'cell' + j"
+                :style="{
+                  background: getShade(cell),
+                  height: FCMCellEdgeLength + 'px',
+                  width: FCMCellEdgeLength + 'px',
+                }"
+              ></div>
+            </div>
+          </div>
+          <div class="overlay">
+            <div
+              class="player-icon"
+              :style="{
+                height: FCMCellEdgeLength - 10 + 'px',
+                width: FCMCellEdgeLength - 10 + 'px',
+              }"
+            ></div>
+          </div>
+        </div>
         <div class="grid-options" v-if="activeTab === 'draw'">
           <div>
             <label>Intensity</label>
@@ -44,13 +72,13 @@
         <div class="grid-options">
           <div>
             <label>Offsets</label>
-            <label>X</label><input v-model="currTool.offset.x" type="number" />
-            <label>Y</label><input v-model="currTool.offset.y" type="number" />
+            <label>X</label><input v-model.number="currTool.offset.x" type="number" />
+            <label>Y</label><input v-model.number="currTool.offset.y" type="number" />
           </div>
           <div v-if="activeTab === 'draw'">
             <label>Dimensions</label>
-            <label>Width</label><input v-model="Width" type="number" />
-            <label>Height</label><input v-model="Height" type="number" />
+            <label>Width</label><input v-model.number="Width" type="number" />
+            <label>Height</label><input v-model.number="Height" type="number" />
           </div>
           <div v-if="activeTab === 'draw'">
             <button @click="clearGrid">Clear</button>
@@ -134,11 +162,20 @@ export default class ToolEdit extends Vue {
   }
 
   mounted() {
-    const grid = this.$refs["grid"] as HTMLDivElement;
+    this.setGridDims();
+  }
+
+  setGridDims() {
+    const grid = this.$refs[`grid-${this.activeTab}`] as HTMLDivElement;
     if (grid) {
       this.gridDims.width = grid.offsetWidth;
       this.gridDims.height = grid.offsetHeight;
     }
+  }
+
+  setTab(tab: "draw" | "view") {
+    this.activeTab = tab;
+    this.setGridDims();
   }
 
   get ID() {
@@ -178,9 +215,54 @@ export default class ToolEdit extends Vue {
     }
   }
 
-  get CellEdgeLen() {
+  get CellEdgeLength() {
     const w = this.gridDims.width / this.Width;
     const h = this.gridDims.height / this.Height;
+    return Math.min(w, h);
+  }
+
+  get FullCollisionMask() {
+    const mask = this.currTool.CollisionMask;
+    const offset = this.currTool.Offset;
+    console.log(typeof offset.x);
+    const rowWidth =
+      offset.x > mask[0].length / 2
+        ? (mask[0].length + offset.x) * 2 - 1
+        : Math.abs(offset.x) * 2 + 1;
+    const colHeight =
+      offset.y > mask.length / 2
+        ? (mask.length + offset.y) * 2 - 1
+        : Math.abs(offset.y) * 2 + 1;
+
+    const fullMask = [];
+    const sideDim = Math.max(rowWidth, colHeight);
+    for (let i = 0; i < sideDim; i++) fullMask.push(new Array(sideDim));
+
+    const c = Math.floor(fullMask.length / 2);
+    console.log(c, sideDim);
+    const h = Math.floor(mask.length / 2);
+    for (let i = 0; i < mask.length; i++)
+      for (let j = 0; j < Math.ceil(mask[i].length); j++) {
+        const l = c + offset.x + j;
+        const t = c - h - offset.y + i;
+        const r = c - offset.x - j;
+        const m = mask[i][j];
+        console.log(l, t, r);
+        fullMask[t][l] = m;
+        fullMask[t][r] = m;
+        fullMask[l][t] = m;
+        fullMask[r][t] = m;
+      }
+
+    console.log(fullMask);
+
+    return fullMask;
+  }
+
+  get FCMCellEdgeLength() {
+    const side = this.FullCollisionMask.length;
+    const w = this.gridDims.width / side;
+    const h = this.gridDims.height / side;
     return Math.min(w, h);
   }
 
@@ -188,7 +270,7 @@ export default class ToolEdit extends Vue {
     return this.getShade(intensity / this.SHADES);
   }
 
-  getShade(intensity: number) {
+  getShade(intensity = 0) {
     const i = Math.max(255 - 255 * intensity, 0);
     return `rgba(${i}, ${i}, ${i}, 1)`;
   }
@@ -260,10 +342,6 @@ export default class ToolEdit extends Vue {
   align-items: stretch;
   overflow: hidden;
 
-  .mask-view {
-    flex: 1 1 auto;
-  }
-
   .grid {
     height: auto;
     flex: 1 1 auto;
@@ -279,6 +357,8 @@ export default class ToolEdit extends Vue {
     background-size: calc(10 * 1px) calc(10 * 1px);
     background-position: 0 0, calc(5 * 1px) calc(5 * 1px);
 
+    position: relative;
+
     .grid-wrapper {
       display: flex;
       flex-direction: column;
@@ -286,42 +366,61 @@ export default class ToolEdit extends Vue {
       align-items: center;
       overflow: hidden;
       flex: 1 1 auto;
-    }
 
-    .row {
-      display: flex;
-      flex-direction: row;
-      justify-content: stretch;
+      .row {
+        display: flex;
+        flex-direction: row;
+        justify-content: stretch;
 
-      .cell {
-        cursor: pointer;
-        border: 1px solid black;
-        border-top: none;
-        border-left: none;
-        width: 100%;
-        position: relative;
+        .cell {
+          cursor: pointer;
+          border: 1px solid black;
+          border-top: none;
+          border-left: none;
+          width: 100%;
+          position: relative;
+
+          &:first-child {
+            border-left: 1px solid black;
+          }
+
+          img {
+            width: 100%;
+          }
+
+          span {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+          }
+        }
 
         &:first-child {
-          border-left: 1px solid black;
-        }
-
-        img {
-          width: 100%;
-        }
-
-        span {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
+          .cell {
+            border-top: 1px solid black;
+          }
         }
       }
+    }
 
-      &:first-child {
-        .cell {
-          border-top: 1px solid black;
-        }
+    .overlay {
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      right: 0;
+      bottom: 0;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .player-icon {
+        border: 2px solid black;
+        border-radius: 100rem;
+        box-shadow: 1px 0px white, -1px 0px white, 0px 1px white, 0px -1px white;
       }
     }
   }
