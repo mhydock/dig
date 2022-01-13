@@ -5,6 +5,11 @@
         <ul class="tabs">
           <li id="draw" @click="setTab('draw')">Draw</li>
           <li id="view" @click="setTab('view')">View</li>
+          <li class="fill">
+            <a :href="JsonBlobUrl" :download="ID + '.json'" class="button">
+              Export to JSON
+            </a>
+          </li>
         </ul>
         <div class="grid" v-if="activeTab === 'draw'">
           <div class="grid-wrapper" ref="grid-draw">
@@ -63,7 +68,7 @@
               class="shade"
               :class="{ selected: currIntensity == i, dark: i > SHADES / 2 }"
               :style="{ background: getShadeFromIndex(i) }"
-              v-for="(_, i) of new Array(SHADES)"
+              v-for="(_, i) of new Array(SHADES + 1)"
               :key="'shade' + i"
               @click="currIntensity = i"
             ></span>
@@ -147,7 +152,7 @@ import { ToolsInventory } from "../scripts/Core/ToolsInventory";
 
 @Component
 export default class ToolEdit extends Vue {
-  SHADES = 16;
+  SHADES = 15; // not counting white
 
   tech: TechnologyTree = new TechnologyTree();
   tools: ToolsInventory = new ToolsInventory(this.tech);
@@ -224,13 +229,12 @@ export default class ToolEdit extends Vue {
   get FullCollisionMask() {
     const mask = this.currTool.CollisionMask;
     const offset = this.currTool.Offset;
-    console.log(typeof offset.x);
     const rowWidth =
-      offset.x > mask[0].length / 2
+      offset.x > -mask[0].length / 2
         ? (mask[0].length + offset.x) * 2 - 1
         : Math.abs(offset.x) * 2 + 1;
     const colHeight =
-      offset.y > mask.length / 2
+      offset.y > -mask.length / 2
         ? (mask.length + offset.y) * 2 - 1
         : Math.abs(offset.y) * 2 + 1;
 
@@ -243,15 +247,16 @@ export default class ToolEdit extends Vue {
     const h = Math.floor(mask.length / 2);
     for (let i = 0; i < mask.length; i++)
       for (let j = 0; j < Math.ceil(mask[i].length); j++) {
-        const l = c + offset.x + j;
+        const l = c - offset.x - j;
+        const r = c + offset.x + j;
         const t = c - h - offset.y + i;
-        const r = c - offset.x - j;
+        const b = c + h + offset.y - i;
         const m = mask[i][j];
-        console.log(l, t, r);
-        fullMask[t][l] = m;
-        fullMask[t][r] = m;
-        fullMask[l][t] = m;
-        fullMask[r][t] = m;
+        console.log(l, r, t);
+        fullMask[t][l] = Math.max(fullMask[t][l] || 0, m || 0);
+        fullMask[t][r] = Math.max(fullMask[t][r] || 0, m || 0);
+        fullMask[l][t] = Math.max(fullMask[l][t] || 0, m || 0);
+        fullMask[r][b] = Math.max(fullMask[r][b] || 0, m || 0);
       }
 
     console.log(fullMask);
@@ -264,6 +269,12 @@ export default class ToolEdit extends Vue {
     const w = this.gridDims.width / side;
     const h = this.gridDims.height / side;
     return Math.min(w, h);
+  }
+
+  get JsonBlobUrl() {
+    const textData = JSON.stringify(this.currTool, null, 2);
+    const blobData = new Blob([textData], { type: "application/json" });
+    return window.URL.createObjectURL(blobData);
   }
 
   getShadeFromIndex(intensity: number) {
@@ -304,6 +315,10 @@ export default class ToolEdit extends Vue {
     const id = uuidv4().split("-")[0];
     this.tools.ToolsMap[id] = newTool;
     this.tools.Tools.push(newTool);
+  }
+
+  exportToJSON() {
+    console.log(JSON.stringify(this.currTool, null, 2));
   }
 }
 </script>
@@ -516,7 +531,10 @@ export default class ToolEdit extends Vue {
   input,
   select,
   input:focus,
-  select:focus {
+  select:focus,
+  input:focus-visible,
+  select:focus-visible {
+    outline: none;
     height: 2rem;
     flex: 1 1 auto;
     border: 1px solid black;
@@ -528,6 +546,50 @@ export default class ToolEdit extends Vue {
   input:active,
   select:active {
     border-radius: 0;
+  }
+
+  input[type="checkbox"] {
+    appearance: none;
+    max-width: 2rem;
+    margin: 0;
+    position: relative;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &:checked::after {
+      content: "\2713";
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      right: 5px;
+      bottom: 5px;
+      font-size: 2rem;
+    }
+  }
+}
+
+.tabs li.fill {
+  border: none;
+  flex: 1 1 auto;
+  text-align: right;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: stretch;
+  padding: 0;
+
+  &:hover {
+    background: transparent;
+  }
+
+  .button {
+    margin: 0.25rem;
   }
 }
 </style>
