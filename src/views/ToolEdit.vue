@@ -3,9 +3,16 @@
     <div class="editor">
       <div class="collision-mask">
         <ul class="tabs">
-          <li id="draw" @click="setTab('draw')">Draw</li>
-          <li id="view" @click="setTab('view')">View</li>
+          <li
+            v-for="(tabName, key) of tabs"
+            :class="{ selected: activeTab === tabName }"
+            @click="setTab(tabName)"
+            :key="key"
+          >
+            {{ tabName[0].toUpperCase() + tabName.substring(1) }}
+          </li>
           <li class="fill">
+            <button @click="addNew()">Create New</button>
             <a :href="JsonBlobUrl" :download="ID + '.json'" class="button">
               Export to JSON
             </a>
@@ -77,6 +84,9 @@ import { TechnologyTree } from "../scripts/Core/TechnologyTree";
 import { Tool } from "../scripts/Core/Tool";
 import { ToolsInventory } from "../scripts/Core/ToolsInventory";
 
+const TABS = ["draw", "view"] as const;
+type EditorTabs = typeof TABS[number];
+
 @Component({
   components: { DrawView, MaskView },
 })
@@ -84,7 +94,9 @@ export default class ToolEdit extends Vue {
   tech: TechnologyTree = new TechnologyTree();
   tools: ToolsInventory = new ToolsInventory(this.tech);
   currTool: Tool = this.tools.Tools[0];
-  activeTab: "draw" | "view" = "draw";
+
+  tabs = TABS;
+  activeTab: EditorTabs = "draw";
   component = {
     draw: DrawView,
     view: MaskView,
@@ -105,7 +117,7 @@ export default class ToolEdit extends Vue {
 
   set ID(value: string) {
     delete this.tools.ToolsMap[this.ID];
-    this.tools.ToolsMap[value] = this.currTool;
+    this.$set(this.tools.ToolsMap, value, this.currTool);
   }
 
   get JsonBlobUrl() {
@@ -130,6 +142,7 @@ export default class ToolEdit extends Vue {
     const id = uuidv4().split("-")[0];
     this.tools.ToolsMap[id] = newTool;
     this.tools.Tools.push(newTool);
+    this.currTool = newTool;
   }
 }
 </script>
@@ -259,6 +272,10 @@ export default class ToolEdit extends Vue {
       margin: -1px;
     }
 
+    div:last-child {
+      border-right: none;
+    }
+
     label {
       padding: 0rem 0.5rem;
       flex: 0 0 auto;
@@ -357,8 +374,11 @@ input[type="checkbox"] {
     background: transparent;
   }
 
-  .button {
+  .button,
+  button {
     margin: 0.25rem;
+    margin-left: 0;
+    padding: 0rem 0.75rem;
   }
 }
 </style>

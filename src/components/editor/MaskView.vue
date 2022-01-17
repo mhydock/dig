@@ -86,7 +86,6 @@ export default class MaskView extends GridView {
     for (let i = 0; i < sideDim; i++) fullMask.push(new Array(sideDim));
 
     const c = Math.floor(fullMask.length / 2);
-    console.log(c, sideDim);
     const h = Math.floor(mask.length / 2);
     for (let i = 0; i < mask.length; i++)
       for (let j = 0; j < Math.ceil(mask[i].length); j++) {
@@ -95,7 +94,6 @@ export default class MaskView extends GridView {
         const t = c - h - offset.y + i;
         const b = c + h + offset.y - i;
         const m = mask[i][j];
-        console.log(l, r, t);
         if (this.showLeft) {
           fullMask[t][l] = Math.max(fullMask[t][l] || 0, m || 0);
         }
@@ -109,8 +107,6 @@ export default class MaskView extends GridView {
           fullMask[r][b] = Math.max(fullMask[r][b] || 0, m || 0);
         }
       }
-
-    console.log(fullMask);
 
     return fullMask;
   }

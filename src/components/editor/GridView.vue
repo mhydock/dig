@@ -11,17 +11,27 @@ export default class GridView extends Vue {
 
   gridDims = { width: 0, height: 0 };
   currIntensity = 0;
+  resizeObserver!: ResizeObserver;
 
   constructor() {
     super();
   }
 
-  mounted() {
-    const grid = this.$refs["grid"] as HTMLDivElement;
+  getGridDims() {
+    const grid = this.$refs.grid as HTMLDivElement;
     if (grid) {
       this.gridDims.width = grid.offsetWidth;
       this.gridDims.height = grid.offsetHeight;
     }
+  }
+
+  mounted() {
+    this.resizeObserver = new ResizeObserver(this.getGridDims);
+    this.resizeObserver.observe(this.$refs.grid as HTMLDivElement);
+  }
+
+  beforeDestroy() {
+    this.resizeObserver.unobserve(this.$refs.grid as HTMLDivElement);
   }
 
   getShadeFromIndex(intensity: number) {
