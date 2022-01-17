@@ -11,84 +11,9 @@
             </a>
           </li>
         </ul>
-        <div class="grid" v-if="activeTab === 'draw'">
-          <div class="grid-wrapper" ref="grid-draw">
-            <div
-              class="row"
-              v-for="(row, i) of currTool.CollisionMask"
-              :key="'row' + i"
-            >
-              <div
-                class="cell"
-                v-for="(cell, j) of row"
-                :key="'cell' + j"
-                :style="{
-                  background: getShade(cell),
-                  height: CellEdgeLength + 'px',
-                  width: CellEdgeLength + 'px',
-                }"
-                @click="setIntensity(i, j)"
-              ></div>
-            </div>
-          </div>
-        </div>
-        <div class="grid" v-if="activeTab === 'view'">
-          <div class="grid-wrapper" ref="grid-view">
-            <div
-              class="row"
-              v-for="(row, i) of FullCollisionMask"
-              :key="'row' + i"
-            >
-              <div
-                class="cell"
-                v-for="(cell, j) of row"
-                :key="'cell' + j"
-                :style="{
-                  background: getShade(cell),
-                  height: FCMCellEdgeLength + 'px',
-                  width: FCMCellEdgeLength + 'px',
-                }"
-              ></div>
-            </div>
-          </div>
-          <div class="overlay">
-            <div
-              class="player-icon"
-              :style="{
-                height: FCMCellEdgeLength - 10 + 'px',
-                width: FCMCellEdgeLength - 10 + 'px',
-              }"
-            ></div>
-          </div>
-        </div>
-        <div class="grid-options" v-if="activeTab === 'draw'">
-          <div>
-            <label>Intensity</label>
-            <span
-              class="shade"
-              :class="{ selected: currIntensity == i, dark: i > SHADES / 2 }"
-              :style="{ background: getShadeFromIndex(i) }"
-              v-for="(_, i) of new Array(SHADES + 1)"
-              :key="'shade' + i"
-              @click="currIntensity = i"
-            ></span>
-          </div>
-        </div>
-        <div class="grid-options">
-          <div>
-            <label>Offsets</label>
-            <label>X</label><input v-model.number="currTool.offset.x" type="number" />
-            <label>Y</label><input v-model.number="currTool.offset.y" type="number" />
-          </div>
-          <div v-if="activeTab === 'draw'">
-            <label>Dimensions</label>
-            <label>Width</label><input v-model.number="Width" type="number" />
-            <label>Height</label><input v-model.number="Height" type="number" />
-          </div>
-          <div v-if="activeTab === 'draw'">
-            <button @click="clearGrid">Clear</button>
-          </div>
-        </div>
+        <keep-alive>
+          <component :is="component[activeTab]" :currTool="currTool" />
+        </keep-alive>
       </div>
 
       <div class="fields">
@@ -146,41 +71,31 @@ import { v4 as uuidv4 } from "uuid";
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 
+import DrawView from "../components/editor/DrawView.vue";
+import MaskView from "../components/editor/MaskView.vue";
 import { TechnologyTree } from "../scripts/Core/TechnologyTree";
 import { Tool } from "../scripts/Core/Tool";
 import { ToolsInventory } from "../scripts/Core/ToolsInventory";
 
-@Component
+@Component({
+  components: { DrawView, MaskView },
+})
 export default class ToolEdit extends Vue {
-  SHADES = 15; // not counting white
-
   tech: TechnologyTree = new TechnologyTree();
   tools: ToolsInventory = new ToolsInventory(this.tech);
   currTool: Tool = this.tools.Tools[0];
-  currIntensity = 0;
   activeTab: "draw" | "view" = "draw";
-
-  private gridDims = { width: 0, height: 0 };
+  component = {
+    draw: DrawView,
+    view: MaskView,
+  };
 
   constructor() {
     super();
   }
 
-  mounted() {
-    this.setGridDims();
-  }
-
-  setGridDims() {
-    const grid = this.$refs[`grid-${this.activeTab}`] as HTMLDivElement;
-    if (grid) {
-      this.gridDims.width = grid.offsetWidth;
-      this.gridDims.height = grid.offsetHeight;
-    }
-  }
-
   setTab(tab: "draw" | "view") {
     this.activeTab = tab;
-    this.setGridDims();
   }
 
   get ID() {
@@ -193,110 +108,10 @@ export default class ToolEdit extends Vue {
     this.tools.ToolsMap[value] = this.currTool;
   }
 
-  get Height() {
-    return this.currTool.CollisionMask.length;
-  }
-
-  set Height(value: number) {
-    if (value < 1) return;
-
-    while (this.currTool.CollisionMask.length > value)
-      this.currTool.CollisionMask.pop();
-
-    while (this.currTool.CollisionMask.length < value)
-      this.currTool.CollisionMask.push(new Array(this.Width).fill(0));
-  }
-
-  get Width() {
-    return this.currTool.CollisionMask[0].length;
-  }
-
-  set Width(value: number) {
-    if (value < 1) return;
-
-    for (const r of this.currTool.CollisionMask) {
-      while (r.length > value) r.pop();
-      while (r.length < value) r.push(0);
-    }
-  }
-
-  get CellEdgeLength() {
-    const w = this.gridDims.width / this.Width;
-    const h = this.gridDims.height / this.Height;
-    return Math.min(w, h);
-  }
-
-  get FullCollisionMask() {
-    const mask = this.currTool.CollisionMask;
-    const offset = this.currTool.Offset;
-    const rowWidth =
-      offset.x > -mask[0].length / 2
-        ? (mask[0].length + offset.x) * 2 - 1
-        : Math.abs(offset.x) * 2 + 1;
-    const colHeight =
-      offset.y > -mask.length / 2
-        ? (mask.length + offset.y) * 2 - 1
-        : Math.abs(offset.y) * 2 + 1;
-
-    const fullMask = [];
-    const sideDim = Math.max(rowWidth, colHeight);
-    for (let i = 0; i < sideDim; i++) fullMask.push(new Array(sideDim));
-
-    const c = Math.floor(fullMask.length / 2);
-    console.log(c, sideDim);
-    const h = Math.floor(mask.length / 2);
-    for (let i = 0; i < mask.length; i++)
-      for (let j = 0; j < Math.ceil(mask[i].length); j++) {
-        const l = c - offset.x - j;
-        const r = c + offset.x + j;
-        const t = c - h - offset.y + i;
-        const b = c + h + offset.y - i;
-        const m = mask[i][j];
-        console.log(l, r, t);
-        fullMask[t][l] = Math.max(fullMask[t][l] || 0, m || 0);
-        fullMask[t][r] = Math.max(fullMask[t][r] || 0, m || 0);
-        fullMask[l][t] = Math.max(fullMask[l][t] || 0, m || 0);
-        fullMask[r][b] = Math.max(fullMask[r][b] || 0, m || 0);
-      }
-
-    console.log(fullMask);
-
-    return fullMask;
-  }
-
-  get FCMCellEdgeLength() {
-    const side = this.FullCollisionMask.length;
-    const w = this.gridDims.width / side;
-    const h = this.gridDims.height / side;
-    return Math.min(w, h);
-  }
-
   get JsonBlobUrl() {
     const textData = JSON.stringify(this.currTool, null, 2);
     const blobData = new Blob([textData], { type: "application/json" });
     return window.URL.createObjectURL(blobData);
-  }
-
-  getShadeFromIndex(intensity: number) {
-    return this.getShade(intensity / this.SHADES);
-  }
-
-  getShade(intensity = 0) {
-    const i = Math.max(255 - 255 * intensity, 0);
-    return `rgba(${i}, ${i}, ${i}, 1)`;
-  }
-
-  setIntensity(row: number, col: number) {
-    this.$set(
-      this.currTool.CollisionMask[row],
-      col,
-      this.currIntensity / this.SHADES
-    );
-  }
-
-  clearGrid() {
-    for (const row of this.currTool.CollisionMask)
-      for (let col = 0; col < row.length; col++) this.$set(row, col, 0);
   }
 
   addNew() {
@@ -316,14 +131,10 @@ export default class ToolEdit extends Vue {
     this.tools.ToolsMap[id] = newTool;
     this.tools.Tools.push(newTool);
   }
-
-  exportToJSON() {
-    console.log(JSON.stringify(this.currTool, null, 2));
-  }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .wrapper {
   height: 100%;
   display: flex;
@@ -356,6 +167,12 @@ export default class ToolEdit extends Vue {
   flex-direction: column;
   align-items: stretch;
   overflow: hidden;
+
+  .grid-view-wrapper {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+  }
 
   .grid {
     height: auto;
@@ -419,25 +236,6 @@ export default class ToolEdit extends Vue {
         }
       }
     }
-
-    .overlay {
-      position: absolute;
-      top: -1px;
-      left: -1px;
-      right: 0;
-      bottom: 0;
-      z-index: 5;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-
-      .player-icon {
-        border: 2px solid black;
-        border-radius: 100rem;
-        box-shadow: 1px 0px white, -1px 0px white, 0px 1px white, 0px -1px white;
-      }
-    }
   }
 
   .grid-options {
@@ -472,41 +270,12 @@ export default class ToolEdit extends Vue {
       border-radius: 0;
       height: 1.5rem;
       font-size: 0.85rem;
-      width: 1rem;
+      width: 2rem;
     }
 
     button {
       flex: 1 1 auto;
       margin-left: 0.5rem;
-    }
-
-    .shade {
-      cursor: pointer;
-      flex: 1 1 auto;
-      width: 1.5rem;
-      height: 1.5rem;
-      border: 1px solid black;
-      display: block;
-      flex: 0 0 auto;
-
-      &.selected {
-        border-width: 3px;
-        border-style: double;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        color: black;
-
-        &::before {
-          content: "\2022";
-        }
-      }
-
-      &.selected.dark {
-        color: white;
-        border-color: white;
-      }
     }
   }
 }
@@ -547,30 +316,30 @@ export default class ToolEdit extends Vue {
   select:active {
     border-radius: 0;
   }
+}
 
-  input[type="checkbox"] {
-    appearance: none;
-    max-width: 2rem;
-    margin: 0;
-    position: relative;
+input[type="checkbox"] {
+  appearance: none;
+  max-width: 2rem;
+  margin: 0;
+  position: relative;
 
-    &:hover {
-      cursor: pointer;
-    }
+  &:hover {
+    cursor: pointer;
+  }
 
-    &:checked::after {
-      content: "\2713";
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      position: absolute;
-      top: 5px;
-      left: 5px;
-      right: 5px;
-      bottom: 5px;
-      font-size: 2rem;
-    }
+  &:checked::after {
+    content: "\2713";
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    font-size: 2rem;
   }
 }
 
