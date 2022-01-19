@@ -16,6 +16,23 @@ body {
   height: 100%;
 }
 
+input,
+select,
+input:focus,
+select:focus,
+input:focus-visible,
+select:focus-visible {
+  outline: none;
+  border: 1px solid black;
+  border-radius: 0;
+  background: white;
+}
+
+input:active,
+select:active {
+  border-radius: 0;
+}
+
 button,
 .button {
   cursor: pointer;
@@ -31,10 +48,14 @@ button,
 button:disabled,
 button:disabled:hover,
 .button:disabled,
-.button:disabled:hover {
-  border-color: grey;
-  background-color: darkgray;
-  color: lightgray;
+.button:disabled:hover,
+input:disabled,
+input:disabled:hover,
+select:disabled,
+select:disabled:hover {
+  border-color: #555;
+  background-color: #ccc;
+  color: #555;
 }
 
 a.button {

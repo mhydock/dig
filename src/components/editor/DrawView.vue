@@ -108,28 +108,29 @@ export default class DrawView extends GridView {
 <style lang="scss" scoped>
 .shade {
   cursor: pointer;
-  flex: 1 1 auto;
   width: 1.5rem;
   height: 1.5rem;
   border: 1px solid black;
   display: block;
   flex: 0 0 auto;
+  position: relative;
 
-  &.selected {
-    border-width: 3px;
-    border-style: double;
+  &.selected::before {
+    color: black;
+    content: "\2022";
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    color: black;
-
-    &::before {
-      content: "\2022";
-    }
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    right: 1px;
+    bottom: 1px;
+    border: 1px solid black;
   }
 
-  &.selected.dark {
+  &.selected.dark::before {
     color: white;
     border-color: white;
   }

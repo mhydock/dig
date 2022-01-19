@@ -12,8 +12,10 @@ export class TechnologyTree {
       const tech = new Technology(
         t.name,
         t.baseCost,
-        t.dependTech ? this.techMap[t.dependTech] : null,
-        t.dependLevel
+        t.techDepends.map((td) => ({
+          tech: this.techMap[td.tech],
+          level: td.level,
+        }))
       );
       this.technologies.push(tech);
       this.techMap[t.id] = tech;
@@ -26,5 +28,12 @@ export class TechnologyTree {
 
   get TechMap() {
     return this.techMap;
+  }
+
+  keyFor(tech: Technology) {
+    return (
+      (Object.entries(this.techMap).find((kvp) => kvp[1] === tech) || [])[0] ||
+      ""
+    );
   }
 }

@@ -19,9 +19,11 @@ export class ToolsInventory {
         tt.amount,
         tt.power,
         tt.baseCost,
-        this.techTree.TechMap[tt.technology],
+        tt.techDepends.map((td) => ({
+          tech: this.techTree.TechMap[td.tech],
+          level: td.level,
+        })),
         tt.workers,
-        tt.level,
         tt.canMove,
         tt.orientation as ToolOrientation,
         tt.offset

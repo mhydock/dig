@@ -5,12 +5,19 @@
     "amount": 1,
     "power": 1,
     "baseCost": 5,
-    "technology": "SHOVEL",
-    "offset": { "x": 1, "y": 0 },
+    "techDepends": [
+      {
+        "tech": "SHOVEL",
+        "level": 0
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": 0
+    },
     "orientation": "any",
     "workers": 1,
-    "level": 0,
-    "canMove":false
+    "canMove": false
   },
   {
     "id": "GdHose",
@@ -18,11 +25,18 @@
     "amount": 0,
     "power": 2,
     "baseCost": 10,
-    "technology": "WATER1",
-    "offset": { "x": 1, "y": 0 },
+    "techDepends": [
+      {
+        "tech": "WATER1",
+        "level": 1
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": 0
+    },
     "orientation": "any",
     "workers": 1,
-    "level": 1,
     "canMove": false
   },
   {
@@ -31,11 +45,18 @@
     "amount": 1,
     "power": 4,
     "baseCost": 20,
-    "technology": "SHOVEL",
-    "offset": { "x": 1, "y": 0 },
+    "techDepends": [
+      {
+        "tech": "SHOVEL",
+        "level": 1
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": 0
+    },
     "orientation": "any",
     "workers": 1,
-    "level": 1,
     "canMove": true
   },
   {
@@ -44,11 +65,18 @@
     "amount": 0,
     "power": 30,
     "baseCost": 50,
-    "technology": "HAMMER",
-    "offset": { "x": 1, "y": 0 },
+    "techDepends": [
+      {
+        "tech": "HAMMER",
+        "level": 1
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": 0
+    },
     "orientation": "any",
     "workers": 1,
-    "level": 1,
     "canMove": false
   },
   {
@@ -57,11 +85,18 @@
     "amount": 0,
     "power": 40,
     "baseCost": 100,
-    "technology": "HAMMER",
-    "offset": { "x": 1, "y": 0 },
+    "techDepends": [
+      {
+        "tech": "HAMMER",
+        "level": 2
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": 0
+    },
     "orientation": "any",
     "workers": 1,
-    "level": 2,
     "canMove": false
   },
   {
@@ -70,12 +105,19 @@
     "amount": 0,
     "power": 100,
     "baseCost": 300,
-    "technology": "WATER2",
-    "offset": { "x": 1, "y": 0 },
+    "techDepends": [
+      {
+        "tech": "WATER2",
+        "level": 1
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": 0
+    },
     "orientation": "any",
     "workers": 1,
-    "level": 1,
-     "canMove": false
+    "canMove": false
   },
   {
     "id": "FrHose",
@@ -83,12 +125,19 @@
     "amount": 0,
     "power": 200,
     "baseCost": 200,
-    "technology": "WATER1",
-    "offset": { "x": 1, "y": 0 },
+    "techDepends": [
+      {
+        "tech": "WATER1",
+        "level": 2
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": 0
+    },
     "orientation": "any",
     "workers": 1,
-    "level": 2,
-    "canMove":false
+    "canMove": false
   },
   {
     "id": "JakHmr",
@@ -96,12 +145,19 @@
     "amount": 0,
     "power": 200,
     "baseCost": 500,
-    "technology": "HAMMER",
-    "offset": { "x": 1, "y": 0 },
+    "techDepends": [
+      {
+        "tech": "HAMMER",
+        "level": 3
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": 0
+    },
     "orientation": "vert",
     "workers": 1,
-    "level": 3,
-    "canMove":false
+    "canMove": false
   },
   {
     "id": "SDrill",
@@ -110,11 +166,18 @@
     "amount": 0,
     "power": 400,
     "baseCost": 1200,
-    "technology": "DRILLS",
-    "offset": { "x": 1, "y": 0 },
+    "techDepends": [
+      {
+        "tech": "DRILLS",
+        "level": 1
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": 0
+    },
     "orientation": "vert",
     "workers": 1,
-    "level": 1,
     "canMove": true
   },
   {
@@ -124,12 +187,19 @@
     "amount": 0,
     "power": 1000,
     "baseCost": 25000,
-    "technology": "SHOVEL",
-    "offset": { "x": -2, "y": 1 },
+    "techDepends": [
+      {
+        "tech": "SHOVEL",
+        "level": 2
+      }
+    ],
+    "offset": {
+      "x": -2,
+      "y": 1
+    },
     "orientation": "vert",
     "workers": 1,
-    "level": 2,
-    "canMove":false
+    "canMove": false
   },
   {
     "id": "HydMin",
@@ -137,11 +207,18 @@
     "amount": 0,
     "power": 2000,
     "baseCost": 5000,
-    "technology": "WATER2",
-    "offset": { "x": 1, "y": 0 },
+    "techDepends": [
+      {
+        "tech": "WATER2",
+        "level": 2
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": 0
+    },
     "orientation": "any",
     "workers": 1,
-    "level": 2,
     "canMove": false
   },
   {
@@ -151,11 +228,18 @@
     "amount": 0,
     "power": 4000,
     "baseCost": 10000,
-    "technology": "DRILLS",
-    "offset": { "x": 1, "y": -2 },
+    "techDepends": [
+      {
+        "tech": "DRILLS",
+        "level": 2
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": -2
+    },
     "orientation": "horz",
     "workers": 1,
-    "level": 2,
     "canMove": true
   },
   {
@@ -165,12 +249,19 @@
     "amount": 0,
     "power": 8000,
     "baseCost": 150000,
-    "technology": "SHOVEL",
-    "offset": { "x": -3, "y": 1 },
+    "techDepends": [
+      {
+        "tech": "SHOVEL",
+        "level": 3
+      }
+    ],
+    "offset": {
+      "x": -3,
+      "y": 1
+    },
     "orientation": "vert",
     "workers": 1,
-    "level": 3,
-    "canMove":false
+    "canMove": false
   },
   {
     "id": "Dynmte",
@@ -178,11 +269,18 @@
     "amount": 0,
     "power": 4000,
     "baseCost": 15000,
-    "technology": "EXPLOS",
-    "offset": { "x": -1, "y": -1 },
+    "techDepends": [
+      {
+        "tech": "EXPLOS",
+        "level": 1
+      }
+    ],
+    "offset": {
+      "x": -1,
+      "y": -1
+    },
     "orientation": "any",
     "workers": 1,
-    "level": 1,
     "canMove": false
   },
   {
@@ -192,11 +290,18 @@
     "amount": 0,
     "power": 10000,
     "baseCost": 500000,
-    "technology": "DRILLS",
-    "offset": { "x": 1, "y": -4 },
+    "techDepends": [
+      {
+        "tech": "DRILLS",
+        "level": 3
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": -4
+    },
     "orientation": "horz",
     "workers": 1,
-    "level": 3,
     "canMove": true
   },
   {
@@ -205,11 +310,18 @@
     "amount": 0,
     "power": 20000,
     "baseCost": 300000,
-    "technology": "SHOVEL",
-    "offset": { "width": 11, "height": 3, "x": -5, "y": 1 },
+    "techDepends": [
+      {
+        "tech": "SHOVEL",
+        "level": 4
+      }
+    ],
+    "offset": {
+      "x": -5,
+      "y": 1
+    },
     "orientation": "vert",
     "workers": 1,
-    "level": 4,
     "canMove": false
   },
   {
@@ -218,10 +330,14 @@
     "amount": 0,
     "power": 40000,
     "baseCost": 150000,
-    "technology": "EXPLOS",
+    "techDepends": [
+      {
+        "tech": "EXPLOS",
+        "level": 2
+      }
+    ],
     "orientation": "any",
     "workers": 1,
-    "level": 2,
     "canMove": false
   },
   {
@@ -231,10 +347,14 @@
     "amount": 0,
     "power": 100000,
     "baseCost": 80000000,
-    "technology": "DRILLS",
+    "techDepends": [
+      {
+        "tech": "DRILLS",
+        "level": 4
+      }
+    ],
     "orientation": "horz",
     "workers": 1,
-    "level": 4,
     "canMove": true
   },
   {
@@ -244,10 +364,14 @@
     "amount": 0,
     "power": 200000,
     "baseCost": 100000000,
-    "technology": "SHOVEL",
+    "techDepends": [
+      {
+        "tech": "SHOVEL",
+        "level": 5
+      }
+    ],
     "orientation": "vert",
     "workers": 1,
-    "level": 5,
     "canMove": false
   },
   {
@@ -256,10 +380,14 @@
     "amount": 0,
     "power": 400000,
     "baseCost": 1000000000,
-    "technology": "EXPLOS",
+    "techDepends": [
+      {
+        "tech": "EXPLOS",
+        "level": 3
+      }
+    ],
     "orientation": "any",
     "workers": 1,
-    "level": 3,
     "canMove": false
   }
 ]

@@ -49,12 +49,8 @@
           <label>Power</label><input v-model="currTool.power" />
         </div>
         <div class="tool-field">
-          <label>Technology</label
-          ><select v-model="currTool.technology">
-            <template v-for="(tech, i) of tech.technologies">
-              <option :value="tech" :key="'tech' + i">{{ tech.name }}</option>
-            </template>
-          </select>
+          <label>Technologies</label>
+          <TechDepends :currTool="currTool" :techTree="techTree" />
         </div>
         <div class="tool-field">
           <label>Orientation</label>
@@ -80,6 +76,7 @@ import { Component } from "vue-property-decorator";
 
 import DrawView from "../components/editor/DrawView.vue";
 import MaskView from "../components/editor/MaskView.vue";
+import TechDepends from "../components/editor/TechDepends.vue";
 import { TechnologyTree } from "../scripts/Core/TechnologyTree";
 import { Tool } from "../scripts/Core/Tool";
 import { ToolsInventory } from "../scripts/Core/ToolsInventory";
@@ -88,11 +85,11 @@ const TABS = ["draw", "view"] as const;
 type EditorTabs = typeof TABS[number];
 
 @Component({
-  components: { DrawView, MaskView },
+  components: { DrawView, MaskView, TechDepends },
 })
 export default class ToolEdit extends Vue {
-  tech: TechnologyTree = new TechnologyTree();
-  tools: ToolsInventory = new ToolsInventory(this.tech);
+  techTree: TechnologyTree = new TechnologyTree();
+  tools: ToolsInventory = new ToolsInventory(this.techTree);
   currTool: Tool = this.tools.Tools[0];
 
   tabs = TABS;
@@ -121,23 +118,20 @@ export default class ToolEdit extends Vue {
   }
 
   get JsonBlobUrl() {
-    const textData = JSON.stringify(this.currTool, null, 2);
+    const depends = this.currTool.TechDependencies.map((td) => ({
+      tech: this.techTree.keyFor(td.tech),
+      level: td.level,
+    }));
+
+    const tempTool = { ...this.currTool } as Record<string, unknown>;
+    tempTool["techDepends"] = depends;
+    const textData = JSON.stringify(tempTool, null, 2);
     const blobData = new Blob([textData], { type: "application/json" });
     return window.URL.createObjectURL(blobData);
   }
 
   addNew() {
-    const newTool = new Tool(
-      "New Tool",
-      "",
-      0,
-      0,
-      0,
-      this.tech.Technologies[0],
-      0,
-      0,
-      false
-    );
+    const newTool = new Tool("New Tool", "", 0, 0, 0, [], 0, false);
 
     const id = uuidv4().split("-")[0];
     this.tools.ToolsMap[id] = newTool;
@@ -175,7 +169,7 @@ export default class ToolEdit extends Vue {
   border: 1px solid black;
   flex: 1 1 auto;
   height: auto;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -315,23 +309,10 @@ export default class ToolEdit extends Vue {
   }
 
   input,
-  select,
-  input:focus,
-  select:focus,
-  input:focus-visible,
-  select:focus-visible {
-    outline: none;
+  select {
     height: 2rem;
     flex: 1 1 auto;
-    border: 1px solid black;
-    border-radius: 0;
-    background: white;
     font-size: 1rem;
-  }
-
-  input:active,
-  select:active {
-    border-radius: 0;
   }
 }
 

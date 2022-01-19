@@ -1,5 +1,10 @@
 import { CostFunction } from "./Common";
 
+export interface TechDependency {
+  tech: Technology;
+  level: number;
+}
+
 export class Technology {
   private static defaultCostFunc: CostFunction = (baseCost, level) =>
     baseCost * Math.pow(level + 1, 2);
@@ -11,8 +16,7 @@ export class Technology {
   constructor(
     private name: string,
     private baseCost: number,
-    private dependTech: Technology | null = null,
-    private dependLevel: number = 0,
+    private techDepends: TechDependency[] | null = null,
     private costFunc: CostFunction = Technology.defaultCostFunc
   ) {
     this.currCost = baseCost;
@@ -49,8 +53,8 @@ export class Technology {
 
   get IsVisible(): boolean {
     return (
-      !this.dependTech ||
-      (this.dependTech.IsVisible && this.level >= this.dependLevel)
+      !this.techDepends ||
+      this.techDepends.every((td) => td.tech.Level >= td.level)
     );
   }
 }
