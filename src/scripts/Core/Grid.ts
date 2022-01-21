@@ -55,7 +55,7 @@ export class Grid {
     return {
       type: block.TypePhrase,
       maxHP: block.Durability,
-      currHP: Math.ceil(health * block.Durability)
+      currHP: Math.ceil(health * block.Durability),
     };
   }
 

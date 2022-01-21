@@ -1,15 +1,22 @@
 <template>
-  <div :title="item.Description">
+  <div :title="item.Description" class="list-item">
     <h4>{{ item.Name }}</h4>
-    <label :title="AmountTooltip">x {{ AmountWithSuffix }}</label>
-    <label>$ {{ item.Value }} per</label>
-    <button @click="clickSellButton" :disabled="item.Amount <= 0">Sell</button>
-    <button @click="clickSell100Button" v-if="item.Amount >= 100">
-      Sell x100
-    </button>
-    <button @click="clickSellAllButton" v-if="item.Amount >= 1000">
-      Sell All
-    </button>
+    <div class="list-item-body">
+      <label class="quantity" :title="AmountTooltip"
+        >x {{ AmountWithSuffix }}</label
+      >
+      <label>$ {{ item.Value }} per</label>
+      <span class="gap"></span>
+      <button @click="clickSellAllButton" v-if="item.Amount >= 1000">
+        Sell All
+      </button>
+      <button @click="clickSell100Button" v-if="item.Amount >= 100">
+        Sell x100
+      </button>
+      <button @click="clickSellButton" :disabled="item.Amount <= 0">
+        Sell
+      </button>
+    </div>
   </div>
 </template>
 

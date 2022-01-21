@@ -1,5 +1,5 @@
 <template>
-  <div id="inventory">
+  <div id="inventory" class="list-panel">
     <ul class="tabs">
       <li id="tools" @click="selectTab('tools')">Tools</li>
       <li id="items" @click="selectTab('items')">Items</li>
@@ -26,8 +26,8 @@ import ToolsList from "./ToolsList.vue";
   components: {
     ToolsList,
     ItemsList,
-    EconList
-  }
+    EconList,
+  },
 })
 export default class Inventory extends Vue {
   @Prop() game!: Game;

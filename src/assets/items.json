@@ -1,0 +1,74 @@
+[
+  {
+    "id": "CMDIRT",
+    "name": "Common Dirt",
+    "desc": "Just some dirt, no big deal.",
+    "amount": 0,
+    "value": 1,
+    "known": true
+  },
+  {
+    "id": "TFCLAY",
+    "name": "Tough Clay",
+    "desc": "Tough clay, not good for much.",
+    "amount": 0,
+    "value": 2,
+    "known": false
+  },
+  {
+    "id": "GDDIRT",
+    "name": "Quality Topsoil",
+    "desc": "The good stuff; great for gardens.",
+    "amount": 0,
+    "value": 3,
+    "known": false
+  },
+  {
+    "id": "SFCLAY",
+    "name": "Soft Clay",
+    "desc": "Soft, smooth clay; great for ceramics.",
+    "amount": 0,
+    "value": 4,
+    "known": false
+  },
+  {
+    "id": "GRAVEL",
+    "name": "Gravel",
+    "desc": "Tiny rocks, good for cheap driveways/parking lots.",
+    "amount": 0,
+    "value": 5,
+    "known": false
+  },
+  {
+    "id": "SMSTNS",
+    "name": "Small Stones",
+    "desc": "Small, smooth rocks. Would look nice in a garden.",
+    "amount": 0,
+    "value": 10,
+    "known": false
+  },
+  {
+    "id": "LGSTNS",
+    "name": "Large Stones",
+    "desc": "Large, heavy stones. Could have decorative uses?",
+    "amount": 0,
+    "value": 25,
+    "known": false
+  },
+  {
+    "id": "HGSTNS",
+    "name": "Huge Stones",
+    "desc": "Very large stones. Can probably be used in sculpture.",
+    "amount": 0,
+    "value": 50,
+    "known": false
+  },
+  {
+    "id": "BOULDR",
+    "name": "Boulder",
+    "desc": "A huge rock; not much you can do with it but break it.",
+    "amount": 0,
+    "value": 100,
+    "known": false
+  }
+]

@@ -12,7 +12,7 @@ import { Player } from "../scripts/Core/Player";
 import { GameGrid, HoverText } from "../scripts/UI/GameGrid";
 
 @Component({
-  components: {}
+  components: {},
 })
 export default class TextGrid extends Vue implements GameGrid {
   private static SPRITE_LIST = [
@@ -23,7 +23,7 @@ export default class TextGrid extends Vue implements GameGrid {
     "#",
     "=",
     "?",
-    "&amp;"
+    "&amp;",
   ];
 
   @Prop() game!: Game;
@@ -124,8 +124,8 @@ export default class TextGrid extends Vue implements GameGrid {
       hoverText: this.getHoverText(x, y),
       pos: {
         x,
-        y
-      }
+        y,
+      },
     });
   }
 

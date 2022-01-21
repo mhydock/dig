@@ -1,5 +1,5 @@
 <template>
-  <div id="econList">
+  <div id="econList" class="list-panel">
     <ul class="tabs">
       <li @click="selectTab('tech')">Technologies</li>
       <li @click="selectTab('busi')">Businesses</li>
@@ -18,7 +18,7 @@ import { Game } from "../scripts/Core/Game";
 import TechList from "./TechList.vue";
 
 @Component({
-  components: { TechList }
+  components: { TechList },
 })
 export default class EconList extends Vue {
   @Prop() game!: Game;
@@ -31,4 +31,9 @@ export default class EconList extends Vue {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+#econList {
+  border: none;
+  width: 100%;
+}
+</style>

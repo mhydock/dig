@@ -1,0 +1,393 @@
+[
+  {
+    "id": "Trowel",
+    "name": "Trowel",
+    "amount": 1,
+    "power": 1,
+    "baseCost": 5,
+    "techDepends": [
+      {
+        "tech": "SHOVEL",
+        "level": 0
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": 0
+    },
+    "orientation": "any",
+    "workers": 1,
+    "canMove": false
+  },
+  {
+    "id": "GdHose",
+    "name": "Garden Hose",
+    "amount": 0,
+    "power": 2,
+    "baseCost": 10,
+    "techDepends": [
+      {
+        "tech": "WATER1",
+        "level": 1
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": 0
+    },
+    "orientation": "any",
+    "workers": 1,
+    "canMove": false
+  },
+  {
+    "id": "Shovel",
+    "name": "Shovel",
+    "amount": 1,
+    "power": 4,
+    "baseCost": 20,
+    "techDepends": [
+      {
+        "tech": "SHOVEL",
+        "level": 1
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": 0
+    },
+    "orientation": "any",
+    "workers": 1,
+    "canMove": true
+  },
+  {
+    "id": "PickAx",
+    "name": "Pickaxe",
+    "amount": 0,
+    "power": 30,
+    "baseCost": 50,
+    "techDepends": [
+      {
+        "tech": "HAMMER",
+        "level": 1
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": 0
+    },
+    "orientation": "any",
+    "workers": 1,
+    "canMove": false
+  },
+  {
+    "id": "Sledge",
+    "name": "Sledge Hammer",
+    "amount": 0,
+    "power": 40,
+    "baseCost": 100,
+    "techDepends": [
+      {
+        "tech": "HAMMER",
+        "level": 2
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": 0
+    },
+    "orientation": "any",
+    "workers": 1,
+    "canMove": false
+  },
+  {
+    "id": "PrsWsh",
+    "name": "Pressure Washer",
+    "amount": 0,
+    "power": 100,
+    "baseCost": 300,
+    "techDepends": [
+      {
+        "tech": "WATER2",
+        "level": 1
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": 0
+    },
+    "orientation": "any",
+    "workers": 1,
+    "canMove": false
+  },
+  {
+    "id": "FrHose",
+    "name": "Firehose",
+    "amount": 0,
+    "power": 200,
+    "baseCost": 200,
+    "techDepends": [
+      {
+        "tech": "WATER1",
+        "level": 2
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": 0
+    },
+    "orientation": "any",
+    "workers": 1,
+    "canMove": false
+  },
+  {
+    "id": "JakHmr",
+    "name": "Jackhammer",
+    "amount": 0,
+    "power": 200,
+    "baseCost": 500,
+    "techDepends": [
+      {
+        "tech": "HAMMER",
+        "level": 3
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": 0
+    },
+    "orientation": "vert",
+    "workers": 1,
+    "canMove": false
+  },
+  {
+    "id": "SDrill",
+    "name": "Small Drill",
+    "desc": "well-boring drill",
+    "amount": 0,
+    "power": 400,
+    "baseCost": 1200,
+    "techDepends": [
+      {
+        "tech": "DRILLS",
+        "level": 1
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": 0
+    },
+    "orientation": "vert",
+    "workers": 1,
+    "canMove": true
+  },
+  {
+    "id": "SXcvtr",
+    "name": "Small Excavator",
+    "desc": "small, Bobcat-esque excavator",
+    "amount": 0,
+    "power": 1000,
+    "baseCost": 25000,
+    "techDepends": [
+      {
+        "tech": "SHOVEL",
+        "level": 2
+      }
+    ],
+    "offset": {
+      "x": -2,
+      "y": 1
+    },
+    "orientation": "vert",
+    "workers": 1,
+    "canMove": false
+  },
+  {
+    "id": "HydMin",
+    "name": "Hydraulic Mining",
+    "amount": 0,
+    "power": 2000,
+    "baseCost": 5000,
+    "techDepends": [
+      {
+        "tech": "WATER2",
+        "level": 2
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": 0
+    },
+    "orientation": "any",
+    "workers": 1,
+    "canMove": false
+  },
+  {
+    "id": "MDrill",
+    "name": "Medium Drill",
+    "desc": "subway tunnel drill",
+    "amount": 0,
+    "power": 4000,
+    "baseCost": 10000,
+    "techDepends": [
+      {
+        "tech": "DRILLS",
+        "level": 2
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": -2
+    },
+    "orientation": "horz",
+    "workers": 1,
+    "canMove": true
+  },
+  {
+    "id": "MXcvtr",
+    "name": "Medium Excavator",
+    "desc": "small/medium construction excavator",
+    "amount": 0,
+    "power": 8000,
+    "baseCost": 150000,
+    "techDepends": [
+      {
+        "tech": "SHOVEL",
+        "level": 3
+      }
+    ],
+    "offset": {
+      "x": -3,
+      "y": 1
+    },
+    "orientation": "vert",
+    "workers": 1,
+    "canMove": false
+  },
+  {
+    "id": "Dynmte",
+    "name": "Dynamite",
+    "amount": 0,
+    "power": 4000,
+    "baseCost": 15000,
+    "techDepends": [
+      {
+        "tech": "EXPLOS",
+        "level": 1
+      }
+    ],
+    "offset": {
+      "x": -1,
+      "y": -1
+    },
+    "orientation": "any",
+    "workers": 1,
+    "canMove": false
+  },
+  {
+    "id": "LDrill",
+    "name": "Large Drill",
+    "desc": "mountain tunnel drill",
+    "amount": 0,
+    "power": 10000,
+    "baseCost": 500000,
+    "techDepends": [
+      {
+        "tech": "DRILLS",
+        "level": 3
+      }
+    ],
+    "offset": {
+      "x": 1,
+      "y": -4
+    },
+    "orientation": "horz",
+    "workers": 1,
+    "canMove": true
+  },
+  {
+    "id": "LXcvtr",
+    "name": "Large Excavator",
+    "amount": 0,
+    "power": 20000,
+    "baseCost": 300000,
+    "techDepends": [
+      {
+        "tech": "SHOVEL",
+        "level": 4
+      }
+    ],
+    "offset": {
+      "x": -5,
+      "y": 1
+    },
+    "orientation": "vert",
+    "workers": 1,
+    "canMove": false
+  },
+  {
+    "id": "PolExp",
+    "name": "Polymer Explosives",
+    "amount": 0,
+    "power": 40000,
+    "baseCost": 150000,
+    "techDepends": [
+      {
+        "tech": "EXPLOS",
+        "level": 2
+      }
+    ],
+    "orientation": "any",
+    "workers": 1,
+    "canMove": false
+  },
+  {
+    "id": "GDrill",
+    "name": "GIGA DRILL",
+    "desc": "Big Bertha, world's largest drill",
+    "amount": 0,
+    "power": 100000,
+    "baseCost": 80000000,
+    "techDepends": [
+      {
+        "tech": "DRILLS",
+        "level": 4
+      }
+    ],
+    "orientation": "horz",
+    "workers": 1,
+    "canMove": true
+  },
+  {
+    "id": "Bagger",
+    "name": "GIANT EXCAVATOR",
+    "desc": "Bagger 293, world's largest excavator",
+    "amount": 0,
+    "power": 200000,
+    "baseCost": 100000000,
+    "techDepends": [
+      {
+        "tech": "SHOVEL",
+        "level": 5
+      }
+    ],
+    "orientation": "vert",
+    "workers": 1,
+    "canMove": false
+  },
+  {
+    "id": "NukExp",
+    "name": "Nuclear Explosives",
+    "amount": 0,
+    "power": 400000,
+    "baseCost": 1000000000,
+    "techDepends": [
+      {
+        "tech": "EXPLOS",
+        "level": 3
+      }
+    ],
+    "orientation": "any",
+    "workers": 1,
+    "canMove": false
+  }
+]

@@ -1,14 +1,17 @@
 <template>
-  <div>
+  <div class="list-item">
     <h3>{{ tech.Name }}</h3>
-    <label>Level: {{ tech.Level }}</label>
-    <label>Next: $ {{ tech.ResearchCost }}</label>
-    <button
-      @click="clickResearchButton"
-      :disabled="tech.ResearchCost > game.Money"
-    >
-      Research
-    </button>
+    <div class="list-item-body">
+      <label class="quantity">Level: {{ tech.Level }}</label>
+      <label>Next: $ {{ tech.ResearchCost }}</label>
+      <span class="gap"></span>
+      <button
+        @click="clickResearchButton"
+        :disabled="tech.ResearchCost > game.Money"
+      >
+        Research
+      </button>
+    </div>
   </div>
 </template>
 

@@ -1,0 +1,63 @@
+[
+  {
+    "id": "SHOVEL",
+    "name": "Shovels and Diggers",
+    "baseCost": 100,
+    "techDepends": []
+  },
+  {
+    "id": "HAMMER",
+    "name": "Hammers and Picks",
+    "baseCost": 500,
+    "techDepends": [
+      {
+        "tech": "SHOVEL",
+        "level": 1
+      }
+    ]
+  },
+  {
+    "id": "DRILLS",
+    "name": "Drills and Borers",
+    "baseCost": 1000,
+    "techDepends": [
+      {
+        "tech": "HAMMER",
+        "level": 1
+      }
+    ]
+  },
+  {
+    "id": "WATER1",
+    "name": "Low-Pressure Water-based Erosion",
+    "baseCost": 100,
+    "techDepends": [
+      {
+        "tech": "SHOVEL",
+        "level": 1
+      }
+    ]
+  },
+  {
+    "id": "WATER2",
+    "name": "High-pressure Water-based Erosion",
+    "baseCost": 1000,
+    "techDepends": [
+      {
+        "tech": "WATER1",
+        "level": 2
+      }
+    ]
+  },
+  {
+    "id": "EXPLOS",
+    "name": "Explosives",
+    "baseCost": 1000,
+    "techDepends": [
+      {
+        "tech": "HAMMER",
+        "level": 3
+      }
+    ]
+  }
+]

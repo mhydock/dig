@@ -1,101 +1,61 @@
 <template>
   <div id="app">
-    <div id="progress">
-      <div id="progCursor" :style="{ top: game.Progress + '%' }">
-        &gt;
-      </div>
+    <div id="nav">
+      <router-link to="/">Play Dig!</router-link> |
+      <router-link to="/tools">Tool Editor</router-link> |
+      <router-link to="/about">About</router-link>
     </div>
-    <div id="gridWrapper">
-      <TextGrid :game="game" @updateToolTip="updateToolTip"></TextGrid>
-      <Tooltip :hoverText="hoverText" :x="toolTipX" :y="toolTipY"></Tooltip>
-    </div>
-    <Inventory :game="game"></Inventory>
+    <router-view />
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-
-import Inventory from "./components/Inventory.vue";
-import TextGrid from "./components/TextGrid.vue";
-import Tooltip from "./components/Tooltip.vue";
-import { log } from "./scripts/Core/Common";
-import { Game } from "./scripts/Core/Game";
-import { HoverText } from "./scripts/UI/GameGrid";
-
-@Component({
-  components: { Inventory, TextGrid, Tooltip }
-})
-export default class App extends Vue {
-  private game: Game;
-  private toolTipX!: number;
-  private toolTipY!: number;
-  private hoverText: HoverText | null;
-
-  constructor() {
-    super();
-
-    this.game = new Game();
-    this.hoverText = null;
-    this.toolTipX = 0;
-    this.toolTipY = 0;
-  }
-
-  mounted() {
-    document.onkeydown = this.onKeyDownFunc;
-    log("Game has begun");
-  }
-
-  private updateToolTip(event: {
-    hoverText: HoverText | null;
-    pos: { x: number; y: number };
-  }) {
-    this.hoverText = event.hoverText;
-    this.toolTipX = event.pos.x;
-    this.toolTipY = event.pos.y;
-  }
-
-  // keycodes found here http://www.javascriptkeycode.com/
-  private onKeyDownFunc = (event: KeyboardEvent) => {
-    if (event.which == 37)
-      // left arrow
-      this.game.moveLeft();
-    if (event.which == 38)
-      // up arrow
-      this.game.moveUp();
-    if (event.which == 39)
-      // right arrow
-      this.game.moveRight();
-    if (event.which == 40)
-      // down arrow
-      this.game.moveDown();
-  };
-}
-</script>
-
 <style lang="scss">
-@import "./assets/main.css";
-
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: black;
 
   height: 100%;
-
-  margin: 0;
-  padding: 1rem;
-
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  justify-content: center;
-  overflow: hidden;
+  width: 100%;
 }
 
-#gridWrapper {
-  position: relative;
+#nav {
+  position: absolute;
+  padding: 1rem;
+  right: 0;
+  top: 0;
+
+  a {
+    display: inline-block;
+    text-decoration: none;
+    position: relative;
+    font-weight: bold;
+    color: #2c3e50;
+    text-shadow: 0px 2px 0px #fff, 2px 0px 0px #fff, 0px -2px 0px #fff,
+      -2px 0px 0px #fff;
+
+    &.router-link-exact-active,
+    &:hover {
+      color: black;
+
+      &::before {
+        width: 100%;
+      }
+    }
+
+    &::before {
+      content: "";
+      background: black;
+      display: block;
+      position: absolute;
+      bottom: -2px;
+      height: 2px;
+      width: 0%;
+      z-index: -1;
+      transition: width 0.1s;
+    }
+  }
 }
 </style>

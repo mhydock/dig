@@ -16,18 +16,54 @@ body {
   height: 100%;
 }
 
-button {
+input,
+select,
+input:focus,
+select:focus,
+input:focus-visible,
+select:focus-visible {
+  outline: none;
+  border: 1px solid black;
+  border-radius: 0;
+  background: white;
+}
+
+input:active,
+select:active {
+  border-radius: 0;
+}
+
+button,
+.button {
   cursor: pointer;
   border: 1px solid black;
   background: white;
   line-height: 1.2rem;
+  color: black;
+  font-size: 0.75rem;
+  font-weight: normal;
+  padding: 0.1rem 0.375rem; 
 }
 
 button:disabled,
-button:disabled:hover {
-  border-color: grey;
-  background-color: darkgray;
-  color: lightgray;
+button:disabled:hover,
+.button:disabled,
+.button:disabled:hover,
+input:disabled,
+input:disabled:hover,
+select:disabled,
+select:disabled:hover {
+  border-color: #555;
+  background-color: #ccc;
+  color: #555;
+}
+
+a.button {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 #gameScreen {
@@ -73,22 +109,18 @@ button:disabled:hover {
   position: absolute;
 }
 
-#inventory,
-#econList {
+.list-panel {
   border: 1px solid black;
   width: 30rem;
   height: 100%;
   padding: 0;
-  padding-top: 3rem;
 
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  align-items: stretch;
+
   position: relative;
-}
-
-#econList {
-  border: none;
-  border-top: 1px solid black;
-  width: 100%;
 }
 
 #tooltip {
@@ -113,41 +145,54 @@ button:disabled:hover {
   width: 100%;
   max-height: 100%;
   overflow-y: auto;
+  flex: 1 1 auto;
 }
 
-.content > div {
+.list-item {
   padding: 1rem;
   padding-top: none;
 }
 
-.content div {
+.list-item div {
   margin-bottom: 1rem;
   overflow: auto;
   position: relative;
 }
 
-.content h3,
-.content h4 {
+.list-item h3,
+.list-item h4 {
   margin-top: 0rem;
 }
 
-.content h4 {
+.list-item h4 {
   margin-bottom: 0rem;
 }
 
-.content label {
-  float: left;
+.list-item-body {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  align-items: center;
 }
 
-.content label:nth-child(2) {
+.list-item .quantity {
   width: 6rem;
 }
 
-.content button {
+.list-item button {
   min-width: 5rem;
   margin-left: 0.5rem;
   padding: 0rem 1rem;
-  float: right;
+}
+
+.list-item label,
+.list-item button {
+  flex: 0 0 auto;
+}
+
+.gap {
+  display: block;
+  flex: 1 1 auto;
 }
 
 .tabs {
@@ -159,9 +204,12 @@ button:disabled:hover {
   padding: 0;
   margin: 0;
 
-  position: absolute;
-  top: 0;
-  left: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+
+  flex: 0 0 auto;
 }
 
 .tabs li {
@@ -178,11 +226,12 @@ button:disabled:hover {
   padding: 0rem 1rem;
 
   display: block;
-  float: left;
+  flex: 0 0 auto;
 }
 
 .tabs li:hover,
-button:hover {
+button:hover,
+.button:hover {
   border-color: grey;
   background-color: black;
   color: white;
