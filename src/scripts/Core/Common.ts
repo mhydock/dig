@@ -1,7 +1,15 @@
 const printLogs = true;
 
-export function log(message: any) {
+export function debug(message: any) {
   if (printLogs) console.log(message);
+}
+
+export function log2(value: number): number {
+  return Math.log(value) / Math.log(2);
+}
+
+export function log10(value: number): number {
+  return Math.log(value) / Math.log(10);
 }
 
 const Suffix = ["", "k", "m", "b", "t"];

@@ -1,14 +1,7 @@
+import { debug } from "./Common";
 import { ItemPrize } from "./ItemChance";
 import { ItemsFactory } from "./ItemsFactory";
 import { Listener } from "./Listener";
-
-function log2(value: number): number {
-  return Math.log(value) / Math.log(2);
-}
-
-function log10(value: number): number {
-  return Math.log(value) / Math.log(10);
-}
 
 export interface BlockClearedListenerFunc {
   (items: ItemPrize): void;
@@ -58,9 +51,9 @@ export class Block {
     const remainingHP: number = this.health;
     this.health -= Math.min(remainingHP, damage);
 
-    console.log("Caused " + damage + " damage to block [" + x + "," + y + "]");
+    debug("Caused " + damage + " damage to block [" + x + "," + y + "]");
     if (this.health == 0) {
-      console.log("Block obliterated");
+      debug("Block obliterated");
       this.itemsFactory.produceItems(this.Type);
     }
 

@@ -1,8 +1,12 @@
 <template>
   <div id="econList" class="list-panel">
     <ul class="tabs">
-      <li @click="selectTab('tech')">Technologies</li>
-      <li @click="selectTab('busi')">Businesses</li>
+      <li @click="selectTab('tech')" :class="{ selected: tab === 'tech' }">
+        Technologies
+      </li>
+      <li @click="selectTab('busi')" :class="{ selected: tab === 'busi' }">
+        Businesses
+      </li>
     </ul>
     <div class="content">
       <TechList v-if="tab === 'tech'" :game="game"></TechList>

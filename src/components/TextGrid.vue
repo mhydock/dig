@@ -1,11 +1,16 @@
 <template>
-  <div id="gameScreen" @mousemove="updateToolTip"></div>
+  <div id="gameScreen" @mousemove="updateToolTip" @mouseout="clearToolTip"></div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 
-import { byId, getTrueOffsets, log, Orientation } from "../scripts/Core/Common";
+import {
+  byId,
+  debug,
+  getTrueOffsets,
+  Orientation,
+} from "../scripts/Core/Common";
 import { Game } from "../scripts/Core/Game";
 import { Grid } from "../scripts/Core/Grid";
 import { Player } from "../scripts/Core/Player";
@@ -59,7 +64,7 @@ export default class TextGrid extends Vue implements GameGrid {
   set ViewRows(height: number) {
     this.viewRows = Math.ceil(height / this.TileSize);
 
-    log("view rows: " + this.viewRows);
+    debug("view rows: " + this.viewRows);
   }
 
   get YOffset(): number {
@@ -129,11 +134,21 @@ export default class TextGrid extends Vue implements GameGrid {
     });
   }
 
+  clearToolTip() {
+    this.$emit("updateToolTip", {
+      hoverText: null,
+      pos: {
+        x: 0,
+        y: 0,
+      },
+    });
+  }
+
   drawScreen(): void {
     const maxRows = this.ViewRows;
     const maxSky = Math.ceil(maxRows / 3);
 
-    log("maxSky: " + maxSky);
+    debug("maxSky: " + maxSky);
 
     let bottomRow = this.Player.Y + Math.ceil(maxRows / 2);
     if (bottomRow > this.GameGrid.Height) bottomRow = this.GameGrid.Height;
@@ -154,7 +169,7 @@ export default class TextGrid extends Vue implements GameGrid {
 
     let i, j;
     let output = "";
-    log("generating sky");
+    debug("generating sky");
     for (i = 0; i < sky; i++) {
       for (j = 0; j < this.GameGrid.Width; j++)
         output += this._getEmptyOrPlayer(j, i - sky);
@@ -162,7 +177,7 @@ export default class TextGrid extends Vue implements GameGrid {
       output += "</br>";
     }
 
-    log("generating ground");
+    debug("generating ground");
     for (i = topRow; i < bottomRow; i++) {
       for (j = 0; j < this.GameGrid.Width; j++) {
         const block = this.GameGrid.block(j, i);

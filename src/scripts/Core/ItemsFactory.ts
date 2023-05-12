@@ -1,51 +1,55 @@
-import { ItemChance, ProduceListenerFunc } from "./ItemChance";
-import { ItemsInventory } from "./ItemsInventory";
+import { ItemChance, ItemProducedListenerFunc } from "./ItemChance";
+import { ItemsInventory, ItemsMap } from "./ItemsInventory";
 import { Listener } from "./Listener";
 
 export class ItemsFactory {
-  constructor(private itemsInventory: ItemsInventory) {}
+  produceListeners: Listener<ItemProducedListenerFunc>;
+  items: ItemsMap;
+  itemMap: (ItemChance[] | never[])[];
 
-  produceListeners = new Listener();
+  constructor(private itemsInventory: ItemsInventory) {
+    this.produceListeners = new Listener();
 
-  items = this.itemsInventory.Items;
-  itemMap = [
-    [
-      new ItemChance(this.items.CMDIRT, 1.0, 1, 10),
-      new ItemChance(this.items.GDDIRT, 0.5, 1, 5),
-      new ItemChance(this.items.TFCLAY, 0.4, 1, 5),
-      new ItemChance(this.items.SFCLAY, 0.2, 1, 2),
-      new ItemChance(this.items.SMSTNS, 0.1, 1, 3),
-    ],
-    [
-      new ItemChance(this.items.TFCLAY, 1.0, 1, 10),
-      new ItemChance(this.items.SFCLAY, 0.5, 1, 5),
-      new ItemChance(this.items.GRAVEL, 0.2, 1, 3),
-      new ItemChance(this.items.SMSTNS, 0.1, 1, 2),
-      new ItemChance(this.items.LGSTNS, 0.1, 1, 1),
-    ],
-    [
-      new ItemChance(this.items.GRAVEL, 1.0, 1, 10),
-      new ItemChance(this.items.TFCLAY, 0.4, 1, 5),
-      new ItemChance(this.items.SMSTNS, 0.3, 1, 3),
-      new ItemChance(this.items.LGSTNS, 0.1, 1, 2),
-    ],
-    [
-      new ItemChance(this.items.SMSTNS, 1.0, 1, 10),
-      new ItemChance(this.items.LGSTNS, 0.4, 1, 5),
-      new ItemChance(this.items.GRAVEL, 0.2, 1, 5),
-      new ItemChance(this.items.HGSTNS, 0.1, 1, 2),
-    ],
-    [
-      new ItemChance(this.items.LGSTNS, 1.0, 1, 10),
-      new ItemChance(this.items.SMSTNS, 0.4, 1, 10),
-      new ItemChance(this.items.HGSTNS, 0.4, 1, 5),
-      new ItemChance(this.items.GRAVEL, 0.1, 1, 3),
-      new ItemChance(this.items.BOULDR, 0.1, 1, 1),
-    ],
-    [],
-    [],
-    [],
-  ];
+    this.items = this.itemsInventory.Items;
+    this.itemMap = [
+      [
+        new ItemChance(this.items.CMDIRT, 1.0, 1, 10),
+        new ItemChance(this.items.GDDIRT, 0.5, 1, 5),
+        new ItemChance(this.items.TFCLAY, 0.4, 1, 5),
+        new ItemChance(this.items.SFCLAY, 0.2, 1, 2),
+        new ItemChance(this.items.SMSTNS, 0.1, 1, 3),
+      ],
+      [
+        new ItemChance(this.items.TFCLAY, 1.0, 1, 10),
+        new ItemChance(this.items.SFCLAY, 0.5, 1, 5),
+        new ItemChance(this.items.GRAVEL, 0.2, 1, 3),
+        new ItemChance(this.items.SMSTNS, 0.1, 1, 2),
+        new ItemChance(this.items.LGSTNS, 0.1, 1, 1),
+      ],
+      [
+        new ItemChance(this.items.GRAVEL, 1.0, 1, 10),
+        new ItemChance(this.items.TFCLAY, 0.4, 1, 5),
+        new ItemChance(this.items.SMSTNS, 0.3, 1, 3),
+        new ItemChance(this.items.LGSTNS, 0.1, 1, 2),
+      ],
+      [
+        new ItemChance(this.items.SMSTNS, 1.0, 1, 10),
+        new ItemChance(this.items.LGSTNS, 0.4, 1, 5),
+        new ItemChance(this.items.GRAVEL, 0.2, 1, 5),
+        new ItemChance(this.items.HGSTNS, 0.1, 1, 2),
+      ],
+      [
+        new ItemChance(this.items.LGSTNS, 1.0, 1, 10),
+        new ItemChance(this.items.SMSTNS, 0.4, 1, 10),
+        new ItemChance(this.items.HGSTNS, 0.4, 1, 5),
+        new ItemChance(this.items.GRAVEL, 0.1, 1, 3),
+        new ItemChance(this.items.BOULDR, 0.1, 1, 1),
+      ],
+      [],
+      [],
+      [],
+    ];
+  }
 
   produceItems(type: number) {
     type -= 1; // Type/array offset
@@ -62,7 +66,7 @@ export class ItemsFactory {
     }
   }
 
-  addProduceListener(func: ProduceListenerFunc) {
+  addProduceListener(func: ItemProducedListenerFunc) {
     return this.produceListeners.add(func);
   }
 }

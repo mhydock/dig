@@ -1,4 +1,4 @@
-import { log, Orientation } from "./Common";
+import { debug, Orientation } from "./Common";
 import { Grid } from "./Grid";
 import { ToolsInventory } from "./ToolsInventory";
 
@@ -16,22 +16,22 @@ export class Player {
     if (x < 0 || x >= this.grid.Width || y < -1 || y >= this.grid.Height)
       return -1;
 
-    log("Attempting to move to [" + x + "," + y + "]");
+    debug("Attempting to move to [" + x + "," + y + "]");
 
     // if player is above ground, just let them move.
     if (this.y == -1 && y == this.y) {
-      log("Player is above ground");
+      debug("Player is above ground");
       this.x = x;
       return 0;
     }
 
     if (this.grid.isCleared(x, y)) {
-      log("Path is clear");
+      debug("Path is clear");
       this.y = y;
       this.x = x;
       return -1;
     } else {
-      log("Path is not clear");
+      debug("Path is not clear");
       const damage = this.tools.dig(this.grid, x, y, this.orient);
 
       if (this.tools.canMoveAndStep() && this.grid.isCleared(x, y)) {

@@ -133,6 +133,10 @@ export default class TechDepends extends Vue {
     height: 1.25rem;
     margin: 0.25rem;
     vertical-align: middle;
+
+    &:checked::after {
+      font-size: 2rem;
+    }
   }
 }
 </style>
