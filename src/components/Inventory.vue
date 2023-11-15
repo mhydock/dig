@@ -29,6 +29,7 @@
       <ItemsList v-if="tab === 'items'" :game="game"></ItemsList>
       <EconList v-if="tab === 'econ'" :game="game"></EconList>
     </div>
+    <MessageLog :game="game"></MessageLog>
   </div>
 </template>
 
@@ -38,6 +39,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import { Game } from "../scripts/Core/Game";
 import EconList from "./EconList.vue";
 import ItemsList from "./ItemsList.vue";
+import MessageLog from "./MessageLog.vue";
 import ToolsList from "./ToolsList.vue";
 
 @Component({
@@ -45,6 +47,7 @@ import ToolsList from "./ToolsList.vue";
     ToolsList,
     ItemsList,
     EconList,
+    MessageLog,
   },
 })
 export default class Inventory extends Vue {

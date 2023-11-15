@@ -55,18 +55,23 @@ export default class GameView extends Vue {
 
   // keycodes found here http://www.javascriptkeycode.com/
   private onKeyDownFunc = (event: KeyboardEvent) => {
-    if (event.which == 37)
-      // left arrow
-      this.game.moveLeft();
-    if (event.which == 38)
-      // up arrow
-      this.game.moveUp();
-    if (event.which == 39)
-      // right arrow
-      this.game.moveRight();
-    if (event.which == 40)
-      // down arrow
-      this.game.moveDown();
+    switch (event.key) {
+      case "ArrowUp":
+        this.game.moveUp();
+        break;
+      case "ArrowDown":
+        this.game.moveDown();
+        break;
+      case "ArrowLeft":
+        this.game.moveLeft();
+        break;
+      case "ArrowRight":
+        this.game.moveRight();
+        break;
+      case " ":
+        this.game.tryDig();
+        break;
+    }
   };
 }
 </script>

@@ -46,7 +46,7 @@
           <label>Base Cost</label><input v-model="currTool.baseCost" />
         </div>
         <div class="tool-field">
-          <label>Power</label><input v-model="currTool.power" />
+          <label>Base Power</label><input v-model="currTool.basePower" />
         </div>
         <div class="tool-field">
           <label>Technologies</label>
@@ -125,13 +125,14 @@ export default class ToolEdit extends Vue {
 
     const tempTool = { ...this.currTool } as Record<string, unknown>;
     tempTool["techDepends"] = depends;
+    delete tempTool["orientedColMasks"];
     const textData = JSON.stringify(tempTool, null, 2);
     const blobData = new Blob([textData], { type: "application/json" });
     return window.URL.createObjectURL(blobData);
   }
 
   addNew() {
-    const newTool = new Tool("New Tool", "", 0, 0, 0, [], 0, false);
+    const newTool = new Tool("New Tool", "", 0, 0, 0, [], false);
 
     const id = uuidv4().split("-")[0];
     this.tools.ToolsMap[id] = newTool;

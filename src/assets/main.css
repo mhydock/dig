@@ -85,6 +85,7 @@ a.button {
   display: inline-block;
   text-align: left;
   overflow: hidden;
+  position: relative;
 }
 
 #progress {
@@ -164,8 +165,17 @@ a.button {
   margin-top: 0rem;
 }
 
+.list-item h3,
 .list-item h4 {
   margin-bottom: 0rem;
+}
+
+.list-item-head {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
 .list-item-body {
@@ -240,4 +250,9 @@ button:hover,
 .tabs li.selected {
   background-color: #666;
   color: white;
+}
+
+.highlight {
+  background: rgb(255, 50, 50);
+  position: absolute;
 }

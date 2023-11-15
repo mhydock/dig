@@ -1,5 +1,22 @@
 <template>
-  <div id="gameScreen" @mousemove="updateToolTip" @mouseout="clearToolTip"></div>
+  <div id="gameScreen" @mousemove="updateToolTip" @mouseout="clearToolTip">
+    <div id="tiles"></div>
+    <template v-if="GameGrid.affected.length > 0">
+      <template v-for="bp of GameGrid.affected">
+        <div
+          class="highlight"
+          :key="`${bp.point.x},${bp.point.y}`"
+          :style="{
+            left: `${(bp.point.x * TileSize) / 2}px`,
+            top: `${(bp.point.y - YOffset) * TileSize}px`,
+            width: `${TileSize / 2}px`,
+            height: `${TileSize}px`,
+            opacity: bp.point.weight,
+          }"
+        ></div>
+      </template>
+    </template>
+  </div>
 </template>
 
 <script lang="ts">
@@ -46,7 +63,7 @@ export default class TextGrid extends Vue implements GameGrid {
   }
 
   get Screen(): HTMLDivElement {
-    return byId("gameScreen") as HTMLDivElement;
+    return byId("tiles") as HTMLDivElement;
   }
 
   get TileSize(): number {
@@ -92,6 +109,7 @@ export default class TextGrid extends Vue implements GameGrid {
   @Watch("Player.X")
   @Watch("Player.Y")
   @Watch("Player.Orientation")
+  @Watch("GameGrid.affected")
   private playerMoved() {
     this.drawScreen();
   }
@@ -180,7 +198,7 @@ export default class TextGrid extends Vue implements GameGrid {
     debug("generating ground");
     for (i = topRow; i < bottomRow; i++) {
       for (j = 0; j < this.GameGrid.Width; j++) {
-        const block = this.GameGrid.block(j, i);
+        const block = this.GameGrid.blockAt(j, i);
         if (block == null) continue;
 
         const type = block.Type;

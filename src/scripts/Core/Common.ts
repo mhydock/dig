@@ -1,7 +1,7 @@
 const printLogs = true;
 
-export function debug(message: any) {
-  if (printLogs) console.log(message);
+export function debug(...message: any[]) {
+  if (printLogs) console.log(...message);
 }
 
 export function log2(value: number): number {
@@ -52,6 +52,12 @@ export enum Orientation {
   WEST,
 }
 
-export interface CostFunction {
-  (baseCost: number, level: number): number;
+export interface Point {
+  x: number;
+  y: number;
+  weight?: number;
+}
+
+export interface GrowthFunction {
+  (baseValue: number, level: number): number;
 }

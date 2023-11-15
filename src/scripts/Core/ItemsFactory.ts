@@ -52,8 +52,6 @@ export class ItemsFactory {
   }
 
   produceItems(type: number) {
-    type -= 1; // Type/array offset
-
     if (type > this.itemMap.length) return;
 
     const chances = this.itemMap[type];
