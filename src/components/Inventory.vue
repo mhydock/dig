@@ -1,9 +1,27 @@
 <template>
   <div id="inventory" class="list-panel">
     <ul class="tabs">
-      <li id="tools" @click="selectTab('tools')">Tools</li>
-      <li id="items" @click="selectTab('items')">Items</li>
-      <li id="econ" @click="selectTab('econ')">Econ</li>
+      <li
+        id="tools"
+        @click="selectTab('tools')"
+        :class="{ selected: tab === 'tools' }"
+      >
+        Tools
+      </li>
+      <li
+        id="items"
+        @click="selectTab('items')"
+        :class="{ selected: tab === 'items' }"
+      >
+        Items
+      </li>
+      <li
+        id="econ"
+        @click="selectTab('econ')"
+        :class="{ selected: tab === 'econ' }"
+      >
+        Econ
+      </li>
     </ul>
     <div id="money">$ {{ game.Money }}</div>
     <div class="content">
@@ -11,6 +29,7 @@
       <ItemsList v-if="tab === 'items'" :game="game"></ItemsList>
       <EconList v-if="tab === 'econ'" :game="game"></EconList>
     </div>
+    <MessageLog :game="game"></MessageLog>
   </div>
 </template>
 
@@ -20,6 +39,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import { Game } from "../scripts/Core/Game";
 import EconList from "./EconList.vue";
 import ItemsList from "./ItemsList.vue";
+import MessageLog from "./MessageLog.vue";
 import ToolsList from "./ToolsList.vue";
 
 @Component({
@@ -27,6 +47,7 @@ import ToolsList from "./ToolsList.vue";
     ToolsList,
     ItemsList,
     EconList,
+    MessageLog,
   },
 })
 export default class Inventory extends Vue {

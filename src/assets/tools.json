@@ -16,8 +16,8 @@
       "y": 0
     },
     "orientation": "any",
-    "workers": 1,
-    "canMove": false
+    "canMove": false,
+    "collisionMask": [[1]]
   },
   {
     "id": "GdHose",
@@ -36,8 +36,8 @@
       "y": 0
     },
     "orientation": "any",
-    "workers": 1,
-    "canMove": false
+    "canMove": false,
+    "collisionMask": [[1]]
   },
   {
     "id": "Shovel",
@@ -56,8 +56,8 @@
       "y": 0
     },
     "orientation": "any",
-    "workers": 1,
-    "canMove": true
+    "canMove": true,
+    "collisionMask": [[1]]
   },
   {
     "id": "PickAx",
@@ -76,8 +76,8 @@
       "y": 0
     },
     "orientation": "any",
-    "workers": 1,
-    "canMove": false
+    "canMove": false,
+    "collisionMask": [[1]]
   },
   {
     "id": "Sledge",
@@ -96,8 +96,8 @@
       "y": 0
     },
     "orientation": "any",
-    "workers": 1,
-    "canMove": false
+    "canMove": false,
+    "collisionMask": [[1]]
   },
   {
     "id": "PrsWsh",
@@ -116,8 +116,8 @@
       "y": 0
     },
     "orientation": "any",
-    "workers": 1,
-    "canMove": false
+    "canMove": false,
+    "collisionMask": [[1]]
   },
   {
     "id": "FrHose",
@@ -136,8 +136,8 @@
       "y": 0
     },
     "orientation": "any",
-    "workers": 1,
-    "canMove": false
+    "canMove": false,
+    "collisionMask": [[1]]
   },
   {
     "id": "JakHmr",
@@ -156,8 +156,8 @@
       "y": 0
     },
     "orientation": "vert",
-    "workers": 1,
-    "canMove": false
+    "canMove": false,
+    "collisionMask": [[1]]
   },
   {
     "id": "SDrill",
@@ -177,8 +177,8 @@
       "y": 0
     },
     "orientation": "vert",
-    "workers": 1,
-    "canMove": true
+    "canMove": true,
+    "collisionMask": [[1]]
   },
   {
     "id": "SXcvtr",
@@ -198,8 +198,8 @@
       "y": 1
     },
     "orientation": "vert",
-    "workers": 1,
-    "canMove": false
+    "canMove": false,
+    "collisionMask": [[1]]
   },
   {
     "id": "HydMin",
@@ -218,8 +218,8 @@
       "y": 0
     },
     "orientation": "any",
-    "workers": 1,
-    "canMove": false
+    "canMove": false,
+    "collisionMask": [[1]]
   },
   {
     "id": "MDrill",
@@ -239,8 +239,8 @@
       "y": -2
     },
     "orientation": "horz",
-    "workers": 1,
-    "canMove": true
+    "canMove": true,
+    "collisionMask": [[1]]
   },
   {
     "id": "MXcvtr",
@@ -260,8 +260,8 @@
       "y": 1
     },
     "orientation": "vert",
-    "workers": 1,
-    "canMove": false
+    "canMove": false,
+    "collisionMask": [[1]]
   },
   {
     "id": "Dynmte",
@@ -280,8 +280,8 @@
       "y": -1
     },
     "orientation": "any",
-    "workers": 1,
-    "canMove": false
+    "canMove": false,
+    "collisionMask": [[1]]
   },
   {
     "id": "LDrill",
@@ -301,8 +301,8 @@
       "y": -4
     },
     "orientation": "horz",
-    "workers": 1,
-    "canMove": true
+    "canMove": true,
+    "collisionMask": [[1]]
   },
   {
     "id": "LXcvtr",
@@ -321,8 +321,8 @@
       "y": 1
     },
     "orientation": "vert",
-    "workers": 1,
-    "canMove": false
+    "canMove": false,
+    "collisionMask": [[1]]
   },
   {
     "id": "PolExp",
@@ -337,8 +337,8 @@
       }
     ],
     "orientation": "any",
-    "workers": 1,
-    "canMove": false
+    "canMove": false,
+    "collisionMask": [[1]]
   },
   {
     "id": "GDrill",
@@ -354,8 +354,8 @@
       }
     ],
     "orientation": "horz",
-    "workers": 1,
-    "canMove": true
+    "canMove": true,
+    "collisionMask": [[1]]
   },
   {
     "id": "Bagger",
@@ -371,8 +371,8 @@
       }
     ],
     "orientation": "vert",
-    "workers": 1,
-    "canMove": false
+    "canMove": false,
+    "collisionMask": [[1]]
   },
   {
     "id": "NukExp",
@@ -387,7 +387,7 @@
       }
     ],
     "orientation": "any",
-    "workers": 1,
-    "canMove": false
+    "canMove": false,
+    "collisionMask": [[1]]
   }
 ]

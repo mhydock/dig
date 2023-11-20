@@ -1,6 +1,15 @@
 <template>
   <div :title="tool.Description" class="list-item">
-    <h3>{{ tool.Name }}</h3>
+    <span class="list-item-head">
+      <button
+        class="selectButton"
+        @click="game.selectTool(tool)"
+        :disabled="game.ToolsInventory.activeTool === tool"
+      ></button>
+      <h3>{{ tool.Name }}</h3>
+      <span class="gap"></span>
+      <h3 v-if="game.ToolsInventory.activeTool === tool">Selected</h3>
+    </span>
     <div class="list-item-body">
       <label class="quantity" :title="AmountTooltip"
         >x {{ AmountWithSuffix }}</label
@@ -37,18 +46,27 @@ export default class ToolBox extends Vue {
     return this.tool.Amount > 1000 ? this.tool.Amount : "";
   }
 
-  private clickBuyButton = () => {
+  private clickBuyButton() {
     const cost = this.tool.tryBuy(this.game.Money);
     if (cost >= 0) this.game.subMoney(cost);
     else alert("You do not have enough money to buy a " + this.tool.Name);
-  };
+  }
 
-  private clickSellButton = () => {
+  private clickSellButton() {
     const sale = this.tool.trySell();
     if (sale >= 0) this.game.addMoney(sale);
     else alert("You cannot sell that tool");
-  };
+  }
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss" scoped>
+.selectButton {
+  min-width: unset;
+  padding: unset;
+  width: 1rem;
+  height: 1rem;
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+</style>

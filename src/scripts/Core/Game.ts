@@ -3,6 +3,7 @@ import { ItemsFactory } from "./ItemsFactory";
 import { ItemsInventory } from "./ItemsInventory";
 import { Player } from "./Player";
 import { TechnologyTree } from "./TechnologyTree";
+import { Tool } from "./Tool";
 import { ToolsInventory } from "./ToolsInventory";
 
 export class Game {
@@ -20,6 +21,13 @@ export class Game {
   );
 
   private _money = 0;
+  private _messages: string[] = [];
+
+  constructor() {
+    this._itemFac.addProduceListener((prize) => {
+      this._messages.push(`Received ${prize.amount} ${prize.item.Name}(s)`);
+    });
+  }
 
   get ToolsInventory() {
     return this._tools;
@@ -49,6 +57,10 @@ export class Game {
     return this._money;
   }
 
+  get Messages() {
+    return this._messages;
+  }
+
   addMoney(money: number) {
     this._money += money;
   }
@@ -71,5 +83,17 @@ export class Game {
 
   moveRight() {
     this._player.moveRight();
+  }
+
+  tryDig() {
+    this._player.dig();
+  }
+
+  selectTool(tool: Tool) {
+    this.ToolsInventory.activeTool = tool;
+  }
+
+  clearMessages() {
+    this._messages = [];
   }
 }

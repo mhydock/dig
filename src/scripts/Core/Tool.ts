@@ -1,4 +1,4 @@
-import { CostFunction } from "./Common";
+import { debug, GrowthFunction, Orientation, Point } from "./Common";
 import { TechDependency, Technology } from "./Technology";
 
 interface Offset {
@@ -9,32 +9,73 @@ interface Offset {
 export type ToolOrientation = "horz" | "vert" | "any";
 
 export class Tool {
-  private static defaultCostFunc: CostFunction = (baseCost, amount) =>
+  private static defaultCostFunc: GrowthFunction = (baseCost, amount) =>
     baseCost + Math.floor((amount * amount) / 4);
+  private static defaultPowerFunc: GrowthFunction = (basePower, amount) =>
+    Math.floor(basePower * amount);
 
   private static saleMult = 0.75;
+  private orientedColMasks: { [key in Orientation]: Point[] } = {
+    [Orientation.EAST]: [],
+    [Orientation.WEST]: [],
+    [Orientation.NORTH]: [],
+    [Orientation.SOUTH]: [],
+  };
 
   constructor(
     private name: string,
     private desc: string,
     private amount: number,
-    private power: number,
     private baseCost: number,
+    private basePower: number,
     private techDepends: TechDependency[],
-    private workers: number,
     private canMove: boolean,
     private orientation: ToolOrientation = "any",
     private offset: Offset = { x: 0, y: 0 },
-    private collisionMask: number[][] = [[0]],
-    private costFunc: CostFunction = Tool.defaultCostFunc
-  ) {}
+    private collisionMask: number[][] = [],
+    private costFunc: GrowthFunction = Tool.defaultCostFunc,
+    private powerFunc: GrowthFunction = Tool.defaultPowerFunc
+  ) {
+    const h = Math.floor(collisionMask.length / 2);
+    for (let row = 0; row < collisionMask.length; row++) {
+      for (let col = 0; col < collisionMask[row].length; col++) {
+        if (collisionMask[row][col] > 0) {
+          const l = -offset.x - col;
+          const r = offset.x + col;
+          const t = h - offset.y + row;
+          const b = h + offset.y - row;
+          const m = collisionMask[row][col];
+          this.orientedColMasks[Orientation.EAST].push({
+            x: r,
+            y: t,
+            weight: m,
+          });
+          this.orientedColMasks[Orientation.WEST].push({
+            x: l,
+            y: t,
+            weight: m,
+          });
+          this.orientedColMasks[Orientation.NORTH].push({
+            x: t,
+            y: l,
+            weight: m,
+          });
+          this.orientedColMasks[Orientation.SOUTH].push({
+            x: b,
+            y: r,
+            weight: m,
+          });
+        }
+      }
+    }
+  }
 
   private getCostForAmount(amount: number): number {
     return this.costFunc(this.baseCost, amount);
   }
 
   tryBuy(money: number): number {
-    if (this.IsResearched) return -1;
+    if (!this.IsResearched) return -1;
 
     const cost = this.BuyCost;
     if (money >= cost) {
@@ -68,10 +109,6 @@ export class Tool {
     return this.amount;
   }
 
-  get Workers(): number {
-    return this.workers;
-  }
-
   get BuyCost(): number {
     return this.getCostForAmount(this.amount + 1);
   }
@@ -89,7 +126,7 @@ export class Tool {
   }
 
   get TotalPower(): number {
-    return this.amount * this.power;
+    return this.powerFunc(this.basePower, this.amount);
   }
 
   get IsKnown(): boolean {
@@ -120,5 +157,9 @@ export class Tool {
 
   get CollisionMask() {
     return this.collisionMask;
+  }
+
+  public getCollisionMask(orient: Orientation) {
+    return this.orientedColMasks[orient];
   }
 }

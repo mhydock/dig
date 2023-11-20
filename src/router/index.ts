@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 
-import About from "../views/About.vue";
+import AboutPage from "../views/AboutPage.vue";
 import GameView from "../views/GameView.vue";
 import ToolEdit from "../views/ToolEdit.vue";
 
@@ -21,7 +21,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/about",
     name: "About",
-    component: About,
+    component: AboutPage,
   },
 ];
 

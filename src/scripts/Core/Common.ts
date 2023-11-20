@@ -1,7 +1,15 @@
 const printLogs = true;
 
-export function log(message: any) {
-  if (printLogs) console.log(message);
+export function debug(...message: any[]) {
+  if (printLogs) console.log(...message);
+}
+
+export function log2(value: number): number {
+  return Math.log(value) / Math.log(2);
+}
+
+export function log10(value: number): number {
+  return Math.log(value) / Math.log(10);
 }
 
 const Suffix = ["", "k", "m", "b", "t"];
@@ -44,6 +52,12 @@ export enum Orientation {
   WEST,
 }
 
-export interface CostFunction {
-  (baseCost: number, level: number): number;
+export interface Point {
+  x: number;
+  y: number;
+  weight?: number;
+}
+
+export interface GrowthFunction {
+  (baseValue: number, level: number): number;
 }

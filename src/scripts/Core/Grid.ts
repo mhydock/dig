@@ -1,17 +1,14 @@
-import { Block, BlockClearedListenerFunc } from "./Block";
+import { Block, BlockClearedListenerFunc, BlockCoordPair } from "./Block";
+import { Point } from "./Common";
 import { ItemsFactory } from "./ItemsFactory";
 import { Listener } from "./Listener";
 
 const WIDTH = 64; // blocks/row
 const HEIGHT = 10240; // rows
 
-export interface Point {
-  x: number;
-  y: number;
-}
-
 export class Grid {
   grid = new Array<Block>(WIDTH * HEIGHT);
+  affected: BlockCoordPair[] = [];
 
   constructor(private itemsFactory: ItemsFactory) {}
 
@@ -29,14 +26,14 @@ export class Grid {
   }
 
   healthPercent(x: number, y: number): number {
-    const bl = this.block(x, y);
+    const bl = this.blockAt(x, y);
     if (bl != null) return bl.HealthPercent;
 
     return -1;
   }
 
   isCleared(x: number, y: number): boolean {
-    const bl = this.block(x, y);
+    const bl = this.blockAt(x, y);
     if (bl != null) return bl.IsCleared;
 
     return false;
@@ -49,7 +46,7 @@ export class Grid {
     const health = this.healthPercent(x, y);
     if (health === 0) return null;
 
-    const block = this.block(x, y);
+    const block = this.blockAt(x, y);
     if (block === null) return null;
 
     return {
@@ -59,7 +56,7 @@ export class Grid {
     };
   }
 
-  block(x: number, y: number): Block | null {
+  blockAt(x: number, y: number): Block | null {
     if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT) {
       const i = y * WIDTH + x;
       if (this.grid[i] == null)
@@ -75,14 +72,13 @@ export class Grid {
     return null;
   }
 
-  blocks(coords: Array<Point>): Array<Block> {
-    let bl: Block | null;
-    const blocks = Array<Block>();
-    for (const coord of coords) {
-      if ((bl = this.block(coord.x, coord.y)) != null) blocks.push(bl);
-    }
-
-    return blocks;
+  blocks(coords: Array<Point>): BlockCoordPair[] {
+    return coords
+      .map((c) => ({
+        block: this.blockAt(c.x, c.y),
+        point: c,
+      }))
+      .filter((b) => b.block !== null && b.block) as BlockCoordPair[];
   }
 
   addBlockClearedListener(func: BlockClearedListenerFunc) {

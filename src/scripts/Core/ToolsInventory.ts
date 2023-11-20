@@ -1,5 +1,6 @@
 import toolTemplates from "../../assets/tools.json";
-import { Orientation } from "./Common";
+import { BlockCoordPair } from "./Block";
+import { debug, Orientation } from "./Common";
 import { Grid } from "./Grid";
 import { TechnologyTree } from "./TechnologyTree";
 import { Tool, ToolOrientation } from "./Tool";
@@ -7,6 +8,7 @@ import { Tool, ToolOrientation } from "./Tool";
 export class ToolsInventory {
   private tools: Tool[] = [];
   private toolsMap: { [key: string]: Tool } = {};
+  public activeTool: Tool;
 
   constructor(private techTree: TechnologyTree) {
     if (typeof techTree === "undefined" || techTree == null)
@@ -23,14 +25,16 @@ export class ToolsInventory {
           tech: this.techTree.TechMap[td.tech],
           level: td.level,
         })),
-        tt.workers,
         tt.canMove,
         tt.orientation as ToolOrientation,
-        tt.offset
+        tt.offset,
+        tt.collisionMask
       );
       this.toolsMap[tt.id] = tool;
       this.tools.push(tool);
     });
+
+    this.activeTool = this.tools[0];
   }
 
   get Tools() {
@@ -42,18 +46,31 @@ export class ToolsInventory {
   }
 
   get Power(): number {
-    let total = 0;
-    for (const i in this.tools) {
-      if (this.tools[i]) total += this.tools[i].TotalPower;
+    return this.activeTool.TotalPower;
+  }
+
+  canMoveAndDig(): boolean {
+    return !!this.activeTool.CanMoveAndDig;
+  }
+
+  getAffected(
+    grid: Grid,
+    x: number,
+    y: number,
+    orient: Orientation
+  ): BlockCoordPair[] {
+    const coords = this.activeTool.getCollisionMask(orient).map((p) => ({
+      x: x + p.x,
+      y: y + p.y,
+      weight: p.weight,
+    }));
+    return grid.blocks(coords);
+  }
+
+  digAffected(blocks: BlockCoordPair[]) {
+    for (const b of blocks) {
+      const damage = b.block.dig(this.Power);
+      debug(`Caused ${damage} damage to block [${b.point.x}, ${b.point.y}]`);
     }
-    return total;
-  }
-
-  canMoveAndStep(): boolean {
-    return this.tools.filter((t) => t.CanMoveAndDig).length > 0;
-  }
-
-  dig(grid: Grid, x: number, y: number, orient: Orientation): number {
-    return 0;
   }
 }

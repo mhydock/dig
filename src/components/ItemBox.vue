@@ -7,7 +7,7 @@
       >
       <label>$ {{ item.Value }} per</label>
       <span class="gap"></span>
-      <button @click="clickSellAllButton" v-if="item.Amount >= 1000">
+      <button @click="clickSellAllButton" v-if="item.Amount >= 2">
         Sell All
       </button>
       <button @click="clickSell100Button" v-if="item.Amount >= 100">
@@ -44,23 +44,23 @@ export default class ItemBox extends Vue {
     return this.item.Amount > 1000 ? this.item.Amount : "";
   }
 
-  private clickSellButton = () => {
+  private clickSellButton() {
     const sale = this.item.trySell();
     if (sale >= 0) this.game.addMoney(sale);
     else alert("You cannot sell that item");
-  };
+  }
 
-  private clickSell100Button = () => {
+  private clickSell100Button() {
     const sale = this.item.trySellMany(100);
     if (sale >= 0) this.game.addMoney(sale);
     else alert("You cannot sell 100 of that item");
-  };
+  }
 
-  private clickSellAllButton = () => {
+  private clickSellAllButton() {
     const sale = this.item.trySellAll();
     if (sale >= 0) this.game.addMoney(sale);
     else alert("You cannot sell those items");
-  };
+  }
 }
 </script>
 

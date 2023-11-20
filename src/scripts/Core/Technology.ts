@@ -1,4 +1,4 @@
-import { CostFunction } from "./Common";
+import { GrowthFunction } from "./Common";
 
 export interface TechDependency {
   tech: Technology;
@@ -6,7 +6,7 @@ export interface TechDependency {
 }
 
 export class Technology {
-  private static defaultCostFunc: CostFunction = (baseCost, level) =>
+  private static defaultCostFunc: GrowthFunction = (baseCost, level) =>
     baseCost * Math.pow(level + 1, 2);
 
   private level = 0;
@@ -17,7 +17,7 @@ export class Technology {
     private name: string,
     private baseCost: number,
     private techDepends: TechDependency[] | null = null,
-    private costFunc: CostFunction = Technology.defaultCostFunc
+    private costFunc: GrowthFunction = Technology.defaultCostFunc
   ) {
     this.currCost = baseCost;
   }

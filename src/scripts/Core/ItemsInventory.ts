@@ -1,8 +1,12 @@
 import itemsTemplates from "../../assets/items.json";
 import { Item } from "./Item";
 
+export type ItemsMap = {
+  [key: string]: Item;
+};
+
 export class ItemsInventory {
-  private items: { [key: string]: Item } = {};
+  private items: ItemsMap = {};
 
   constructor() {
     itemsTemplates.forEach((i) => {

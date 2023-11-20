@@ -26,11 +26,11 @@ export default class TechBox extends Vue {
   @Prop() game!: Game;
   @Prop() tech!: Technology;
 
-  private clickResearchButton = () => {
+  private clickResearchButton() {
     const cost = this.tech.tryResearch(this.game.Money);
     if (cost >= 0) this.game.subMoney(cost);
     else alert("You do not have enough money to research " + this.tech.Name);
-  };
+  }
 }
 </script>
 

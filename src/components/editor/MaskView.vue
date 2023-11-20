@@ -142,6 +142,10 @@ export default class MaskView extends GridView {
 
 input[type="checkbox"] {
   max-width: 1.5rem;
+
+  &:checked::after {
+    font-size: 2.5rem;
+  }
 }
 
 .orient-toggle label {

@@ -15,6 +15,6 @@ export class Listener<T extends (...args: any[]) => any> {
 
   callAll(...args: Parameters<T>) {
     for (const i in this.listeners)
-      if (this.listeners[i]) this.listeners[i](args);
+      if (this.listeners[i]) this.listeners[i](...args);
   }
 }

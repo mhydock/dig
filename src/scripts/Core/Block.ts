@@ -1,17 +1,15 @@
+import { debug, Point } from "./Common";
 import { ItemPrize } from "./ItemChance";
 import { ItemsFactory } from "./ItemsFactory";
 import { Listener } from "./Listener";
 
-function log2(value: number): number {
-  return Math.log(value) / Math.log(2);
-}
-
-function log10(value: number): number {
-  return Math.log(value) / Math.log(10);
-}
-
 export interface BlockClearedListenerFunc {
   (items: ItemPrize): void;
+}
+
+export interface BlockCoordPair {
+  block: Block;
+  point: Point;
 }
 
 const BASE_DIGS_PER_UNIT_POWER = 2.0;
@@ -51,16 +49,15 @@ export class Block {
     this.type = Math.ceil(Math.log(this.durability / Math.LN10));
   }
 
-  dig(power: number, x: number, y: number): number {
+  dig(power: number): number {
     const damage: number = Math.ceil(
       (power * BASE_POWER_MULTIPLIER) / this.durability
     );
     const remainingHP: number = this.health;
     this.health -= Math.min(remainingHP, damage);
 
-    console.log("Caused " + damage + " damage to block [" + x + "," + y + "]");
     if (this.health == 0) {
-      console.log("Block obliterated");
+      debug("Block obliterated");
       this.itemsFactory.produceItems(this.Type);
     }
 

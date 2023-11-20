@@ -1,11 +1,33 @@
 <template>
-  <div id="gameScreen" @mousemove="updateToolTip"></div>
+  <div id="gameScreen" @mousemove="updateToolTip" @mouseout="clearToolTip">
+    <div id="tiles"></div>
+    <template v-if="GameGrid.affected.length > 0">
+      <template v-for="bp of GameGrid.affected">
+        <div
+          class="highlight"
+          :key="`${bp.point.x},${bp.point.y}`"
+          :style="{
+            left: `${(bp.point.x * TileSize) / 2}px`,
+            top: `${(bp.point.y - YOffset) * TileSize}px`,
+            width: `${TileSize / 2}px`,
+            height: `${TileSize}px`,
+            opacity: bp.point.weight,
+          }"
+        ></div>
+      </template>
+    </template>
+  </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 
-import { byId, getTrueOffsets, log, Orientation } from "../scripts/Core/Common";
+import {
+  byId,
+  debug,
+  getTrueOffsets,
+  Orientation,
+} from "../scripts/Core/Common";
 import { Game } from "../scripts/Core/Game";
 import { Grid } from "../scripts/Core/Grid";
 import { Player } from "../scripts/Core/Player";
@@ -41,7 +63,7 @@ export default class TextGrid extends Vue implements GameGrid {
   }
 
   get Screen(): HTMLDivElement {
-    return byId("gameScreen") as HTMLDivElement;
+    return byId("tiles") as HTMLDivElement;
   }
 
   get TileSize(): number {
@@ -59,7 +81,7 @@ export default class TextGrid extends Vue implements GameGrid {
   set ViewRows(height: number) {
     this.viewRows = Math.ceil(height / this.TileSize);
 
-    log("view rows: " + this.viewRows);
+    debug("view rows: " + this.viewRows);
   }
 
   get YOffset(): number {
@@ -87,6 +109,7 @@ export default class TextGrid extends Vue implements GameGrid {
   @Watch("Player.X")
   @Watch("Player.Y")
   @Watch("Player.Orientation")
+  @Watch("GameGrid.affected")
   private playerMoved() {
     this.drawScreen();
   }
@@ -129,11 +152,21 @@ export default class TextGrid extends Vue implements GameGrid {
     });
   }
 
+  clearToolTip() {
+    this.$emit("updateToolTip", {
+      hoverText: null,
+      pos: {
+        x: 0,
+        y: 0,
+      },
+    });
+  }
+
   drawScreen(): void {
     const maxRows = this.ViewRows;
     const maxSky = Math.ceil(maxRows / 3);
 
-    log("maxSky: " + maxSky);
+    debug("maxSky: " + maxSky);
 
     let bottomRow = this.Player.Y + Math.ceil(maxRows / 2);
     if (bottomRow > this.GameGrid.Height) bottomRow = this.GameGrid.Height;
@@ -154,7 +187,7 @@ export default class TextGrid extends Vue implements GameGrid {
 
     let i, j;
     let output = "";
-    log("generating sky");
+    debug("generating sky");
     for (i = 0; i < sky; i++) {
       for (j = 0; j < this.GameGrid.Width; j++)
         output += this._getEmptyOrPlayer(j, i - sky);
@@ -162,10 +195,10 @@ export default class TextGrid extends Vue implements GameGrid {
       output += "</br>";
     }
 
-    log("generating ground");
+    debug("generating ground");
     for (i = topRow; i < bottomRow; i++) {
       for (j = 0; j < this.GameGrid.Width; j++) {
-        const block = this.GameGrid.block(j, i);
+        const block = this.GameGrid.blockAt(j, i);
         if (block == null) continue;
 
         const type = block.Type;
