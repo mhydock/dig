@@ -9,7 +9,7 @@
     "serve": "vite preview",
     "build": "vite build",
     "test:unit": "jest --passWithNoTests --coverage src",
-    "test:e2e": "start-server-and-test dev http-get://localhost:3000 cypress",
+    "test:e2e": "start-server-and-test dev http-get://127.0.0.1:3000 cypress",
     "cypress": "cypress run",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src"
   },
