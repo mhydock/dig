@@ -2,6 +2,7 @@ module.exports = {
   root: true,
   env: {
     node: true,
+    es2022: true,
   },
   extends: [
     "plugin:vue/essential",
@@ -13,7 +14,7 @@ module.exports = {
     "plugin:import/typescript",
   ],
   parserOptions: {
-    ecmaVersion: 2020,
+    ecmaVersion: 2022,
   },
   plugins: ["simple-import-sort"],
   rules: {

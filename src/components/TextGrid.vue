@@ -25,7 +25,6 @@ import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import {
   byId,
   debug,
-  getTrueOffsets,
   Orientation,
 } from "../scripts/Core/Common";
 import { Game } from "../scripts/Core/Game";
@@ -115,10 +114,6 @@ export default class TextGrid extends Vue implements GameGrid {
   }
 
   normalizeXY(x: number, y: number): { row: number; col: number } {
-    // border offset (1px all sides)
-    x -= 1;
-    y -= 1;
-
     let row = Math.floor(y / this.TileSize); // height of row == height of text
     const col = Math.floor((x / this.TileSize) * 2); // text half as wide as tall
 
@@ -139,9 +134,8 @@ export default class TextGrid extends Vue implements GameGrid {
   }
 
   updateToolTip(event: MouseEvent) {
-    const offsets = getTrueOffsets(this.Screen);
-    const x = event.pageX - offsets.offsetLeft;
-    const y = event.pageY - offsets.offsetTop;
+    const x = event.offsetX;
+    const y = event.offsetY;
 
     this.$emit("updateToolTip", {
       hoverText: this.getHoverText(x, y),
