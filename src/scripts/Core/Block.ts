@@ -27,7 +27,7 @@ const BLOCK_TYPE_PHRASE = [
 ];
 
 export enum BlockType {
-  SDIRT = 1,
+  SDIRT = 0,
   MDIRT,
   HDIRT,
   BDROCK,
@@ -46,7 +46,7 @@ export class Block {
     this.health = BASE_BLOCK_DURABILITY;
     this.durability =
       Math.ceil((depth * depth + 1) / 100) * BASE_DIGS_PER_UNIT_POWER;
-    this.type = Math.ceil(Math.log(this.durability / Math.LN10));
+    this.type = Math.abs(Math.ceil(Math.log(this.durability / Math.LN10)));
   }
 
   dig(power: number): number {
