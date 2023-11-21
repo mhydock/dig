@@ -19,13 +19,22 @@
 
   height: 100%;
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 #nav {
-  position: absolute;
+  border-bottom: 1px solid #ddd;
+
+  position: relative;
   padding: 1rem;
-  right: 0;
-  top: 0;
+  width: 100%;
+  height: 2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 0 0 auto;
 
   a {
     display: inline-block;

@@ -78,7 +78,7 @@ export class Grid {
         block: this.blockAt(c.x, c.y),
         point: c,
       }))
-      .filter((b) => b.block !== null && b.block) as BlockCoordPair[];
+      .filter((b) => b.block && !b.block.IsCleared) as BlockCoordPair[];
   }
 
   addBlockClearedListener(func: BlockClearedListenerFunc) {

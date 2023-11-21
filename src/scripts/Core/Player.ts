@@ -34,11 +34,11 @@ export class Player {
       debug("Path is not clear");
       if (this.tools.canMoveAndDig()) {
         this.tools.digAffected(affected);
-        affected = affected.filter((p) => p.block.Health > 0);
         if (this.grid.isCleared(x, y)) {
           this.y = y;
           this.x = x;
         }
+        affected = this.tools.getAffected(this.grid, this.x, this.y, this.orient);
       }
     }
 
@@ -88,7 +88,7 @@ export class Player {
   dig(): void {
     let affected = this.tools.getAffected(this.grid, this.x, this.y, this.orient);
     this.tools.digAffected(affected);
-    affected = affected.filter((p) => p.block.Health > 0);
+    affected = affected.filter((p) => !p.block.IsCleared);
     this.grid.affected = affected;
   }
 
