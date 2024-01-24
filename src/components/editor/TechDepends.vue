@@ -23,7 +23,7 @@
           <td>
             <input
               :value="dependLevel(tech)"
-              @change="setDependLevel(tech, $event.target.value)"
+              @change="setDependLevel(tech, $event.target)"
               type="number"
               :disabled="!dependsOn(tech)"
             />
@@ -34,49 +34,47 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
-
+<script setup lang="ts">
 import { Technology } from "../../scripts/Core/Technology";
 import { TechnologyTree } from "../../scripts/Core/TechnologyTree";
 import { Tool } from "../../scripts/Core/Tool";
 
-@Component
-export default class TechDepends extends Vue {
-  @Prop() currTool!: Tool;
-  @Prop() techTree!: TechnologyTree;
+const props = defineProps<{
+  currTool: Tool;
+  techTree: TechnologyTree;
+}>();
 
-  findDependency(tech: Technology) {
-    return this.currTool.TechDependencies.find((td) => td.tech === tech);
+const { currTool, techTree } = props;
+
+function findDependency(tech: Technology) {
+  return currTool.techDepends.find((td) => td.tech === tech);
+}
+
+function toggleTech(tech: Technology) {
+  const index = currTool.techDepends.findIndex((td) => td.tech === tech);
+
+  if (index >= 0) {
+    currTool.techDepends.splice(index, 1);
+  } else {
+    currTool.techDepends.push({
+      tech,
+      level: 0,
+    });
   }
+}
 
-  toggleTech(tech: Technology) {
-    const index = this.currTool.TechDependencies.findIndex(
-      (td) => td.tech === tech
-    );
+function dependsOn(tech: Technology) {
+  return !!findDependency(tech);
+}
 
-    if (index >= 0) {
-      this.currTool.TechDependencies.splice(index, 1);
-    } else {
-      this.currTool.TechDependencies.push({
-        tech,
-        level: 0,
-      });
-    }
-  }
+function dependLevel(tech: Technology) {
+  return (findDependency(tech) || {}).level || 0;
+}
 
-  dependsOn(tech: Technology) {
-    return !!this.findDependency(tech);
-  }
-
-  dependLevel(tech: Technology) {
-    return (this.findDependency(tech) || {}).level || 0;
-  }
-
-  setDependLevel(tech: Technology, value: number) {
-    const depend = this.findDependency(tech);
-    if (depend) this.$set(depend, "level", Math.max(value, 0));
-  }
+function setDependLevel(tech: Technology, eventTarget: EventTarget | null) {
+  const value = (eventTarget as HTMLInputElement).valueAsNumber;
+  const depend = findDependency(tech);
+  if (depend) depend.level = Math.max(value, 0);
 }
 </script>
 

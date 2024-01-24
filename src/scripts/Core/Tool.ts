@@ -1,4 +1,4 @@
-import { debug, GrowthFunction, Orientation, Point } from "./Common";
+import { GrowthFunction, Orientation, Point } from "./Common";
 import { TechDependency, Technology } from "./Technology";
 
 interface Offset {
@@ -15,7 +15,7 @@ export class Tool {
     Math.floor(basePower * amount);
 
   private static saleMult = 0.75;
-  private orientedColMasks: { [key in Orientation]: Point[] } = {
+  public orientedColMasks: { [key in Orientation]: Point[] } = {
     [Orientation.EAST]: [],
     [Orientation.WEST]: [],
     [Orientation.NORTH]: [],
@@ -23,18 +23,19 @@ export class Tool {
   };
 
   constructor(
-    private name: string,
-    private desc: string,
-    private amount: number,
-    private baseCost: number,
-    private basePower: number,
-    private techDepends: TechDependency[],
-    private canMove: boolean,
-    private orientation: ToolOrientation = "any",
-    private offset: Offset = { x: 0, y: 0 },
-    private collisionMask: number[][] = [],
-    private costFunc: GrowthFunction = Tool.defaultCostFunc,
-    private powerFunc: GrowthFunction = Tool.defaultPowerFunc
+    public id: string,
+    public name: string,
+    public desc: string,
+    public amount: number,
+    public baseCost: number,
+    public basePower: number,
+    public techDepends: TechDependency[],
+    public canMove: boolean,
+    public orientation: ToolOrientation = "any",
+    public offset: Offset = { x: 0, y: 0 },
+    public collisionMask: number[][] = [],
+    public costFunc: GrowthFunction = Tool.defaultCostFunc,
+    public powerFunc: GrowthFunction = Tool.defaultPowerFunc
   ) {
     const h = Math.floor(collisionMask.length / 2);
     for (let row = 0; row < collisionMask.length; row++) {
@@ -70,14 +71,14 @@ export class Tool {
     }
   }
 
-  private getCostForAmount(amount: number): number {
+  getCostForAmount(amount: number): number {
     return this.costFunc(this.baseCost, amount);
   }
 
   tryBuy(money: number): number {
-    if (!this.IsResearched) return -1;
+    if (!this.isResearched) return -1;
 
-    const cost = this.BuyCost;
+    const cost = this.buyCost;
     if (money >= cost) {
       this.amount++;
       return cost;
@@ -90,73 +91,45 @@ export class Tool {
     //return -1;
 
     if (this.amount > 0) {
-      const sale = this.SaleCost;
+      const sale = this.saleCost;
       this.amount--;
       return sale;
     }
     return -1;
   }
 
-  get Name(): string {
-    return this.name;
-  }
-
-  get Description(): string {
-    return this.desc;
-  }
-
-  get Amount(): number {
-    return this.amount;
-  }
-
-  get BuyCost(): number {
+  get buyCost(): number {
     return this.getCostForAmount(this.amount + 1);
   }
 
-  get SaleCost(): number {
+  get saleCost(): number {
     return this.getCostForAmount(this.amount) * Tool.saleMult;
   }
 
-  get Technologies(): Technology[] {
+  get technologies(): Technology[] {
     return this.techDepends.map((td) => td.tech);
   }
 
-  get TechDependencies(): TechDependency[] {
-    return this.techDepends;
-  }
-
-  get TotalPower(): number {
+  get totalPower(): number {
     return this.powerFunc(this.basePower, this.amount);
   }
 
-  get IsKnown(): boolean {
+  get isKnown(): boolean {
     return (
       !this.techDepends ||
-      this.techDepends.every((td) => td.tech.IsVisible && td.tech.Level > 0)
+      this.techDepends.every((td) => td.tech.isVisible && td.tech.level > 0)
     );
   }
 
-  get IsResearched(): boolean {
+  get isResearched(): boolean {
     return (
       !this.techDepends ||
-      this.techDepends.every((td) => td.tech.Level >= td.level)
+      this.techDepends.every((td) => td.tech.level >= td.level)
     );
   }
 
-  get CanMoveAndDig(): boolean {
+  get canMoveAndDig(): boolean {
     return this.canMove && this.amount > 0;
-  }
-
-  get Orientation() {
-    return this.orientation;
-  }
-
-  get Offset() {
-    return this.offset;
-  }
-
-  get CollisionMask() {
-    return this.collisionMask;
   }
 
   public getCollisionMask(orient: Orientation) {

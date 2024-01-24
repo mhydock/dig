@@ -2,14 +2,15 @@ import techTemplates from "../../assets/tech.json";
 import { Technology } from "./Technology";
 
 export class TechnologyTree {
-  private technologies: Technology[];
-  private techMap: { [key: string]: Technology };
+  public technologies: Technology[];
+  public techMap: { [key: string]: Technology };
 
   constructor() {
     this.technologies = [];
     this.techMap = {};
     techTemplates.forEach((t) => {
       const tech = new Technology(
+        t.id,
         t.name,
         t.baseCost,
         t.techDepends.map((td) => ({
@@ -20,14 +21,6 @@ export class TechnologyTree {
       this.technologies.push(tech);
       this.techMap[t.id] = tech;
     });
-  }
-
-  get Technologies(): Technology[] {
-    return this.technologies;
-  }
-
-  get TechMap() {
-    return this.techMap;
   }
 
   keyFor(tech: Technology) {

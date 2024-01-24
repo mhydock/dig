@@ -2,8 +2,8 @@
   <div :title="item.Description" class="list-item">
     <h4>{{ item.Name }}</h4>
     <div class="list-item-body">
-      <label class="quantity" :title="AmountTooltip"
-        >x {{ AmountWithSuffix }}</label
+      <label class="quantity" :title="amountTooltip"
+        >x {{ amountWithSuffix }}</label
       >
       <label>$ {{ item.Value }} per</label>
       <span class="gap"></span>
@@ -20,47 +20,41 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+<script setup lang="ts">
+import { computed } from "vue";
 
 import { withSuffix } from "../scripts/Core/Common";
 import { Game } from "../scripts/Core/Game";
 import { Item } from "../scripts/Core/Item";
 
-@Component
-export default class ItemBox extends Vue {
-  @Prop() game!: Game;
-  @Prop() item!: Item;
+const props = defineProps<{
+  game: Game;
+  item: Item;
+}>();
 
-  constructor() {
-    super();
-  }
+const { game, item } = props;
 
-  get AmountWithSuffix() {
-    return withSuffix(this.item.Amount);
-  }
+const amountWithSuffix = computed(() => withSuffix(item.Amount));
+const amountTooltip = computed(() =>
+  item.Amount > 1000 ? item.Amount.toString() : ""
+);
 
-  get AmountTooltip() {
-    return this.item.Amount > 1000 ? this.item.Amount : "";
-  }
+function clickSellButton() {
+  const sale = item.trySell();
+  if (sale >= 0) game.addMoney(sale);
+  else alert("You cannot sell that item");
+}
 
-  private clickSellButton() {
-    const sale = this.item.trySell();
-    if (sale >= 0) this.game.addMoney(sale);
-    else alert("You cannot sell that item");
-  }
+function clickSell100Button() {
+  const sale = item.trySellMany(100);
+  if (sale >= 0) game.addMoney(sale);
+  else alert("You cannot sell 100 of that item");
+}
 
-  private clickSell100Button() {
-    const sale = this.item.trySellMany(100);
-    if (sale >= 0) this.game.addMoney(sale);
-    else alert("You cannot sell 100 of that item");
-  }
-
-  private clickSellAllButton() {
-    const sale = this.item.trySellAll();
-    if (sale >= 0) this.game.addMoney(sale);
-    else alert("You cannot sell those items");
-  }
+function clickSellAllButton() {
+  const sale = item.trySellAll();
+  if (sale >= 0) game.addMoney(sale);
+  else alert("You cannot sell those items");
 }
 </script>
 

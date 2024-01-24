@@ -4,7 +4,7 @@
       <div class="collision-mask">
         <ul class="tabs">
           <li
-            v-for="(tabName, key) of tabs"
+            v-for="(tabName, key) of TABS"
             :class="{ selected: activeTab === tabName }"
             @click="setTab(tabName)"
             :key="key"
@@ -13,21 +13,27 @@
           </li>
           <li class="fill">
             <button @click="addNew()">Create New</button>
-            <a :href="JsonBlobUrl" :download="ID + '.json'" class="button">
+            <a :href="jsonBlobUrl" :download="ID + '.json'" class="button">
               Export to JSON
             </a>
           </li>
         </ul>
         <keep-alive>
-          <component :is="component[activeTab]" :currTool="currTool" />
+          <component
+            :is="component[activeTab]"
+            :currTool="currTool"
+            :key="currToolId + activeTab"
+          />
         </keep-alive>
       </div>
 
       <div class="fields">
         <div class="tool-field">
-          <select v-model="currTool">
-            <template v-for="(tool, i) of tools.Tools">
-              <option :value="tool" :key="'tool' + i">{{ tool.name }}</option>
+          <select v-model="currToolId">
+            <template v-for="(tool, i) of tools.tools">
+              <option :value="tool.id" :key="'tool' + i">
+                {{ tool.name }}
+              </option>
             </template>
           </select>
         </div>
@@ -50,7 +56,11 @@
         </div>
         <div class="tool-field">
           <label>Technologies</label>
-          <TechDepends :currTool="currTool" :techTree="techTree" />
+          <TechDepends
+            :currTool="currTool"
+            :techTree="techTree"
+            :key="currToolId"
+          />
         </div>
         <div class="tool-field">
           <label>Orientation</label>
@@ -69,10 +79,9 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { v4 as uuidv4 } from "uuid";
-import Vue from "vue";
-import { Component } from "vue-property-decorator";
+import { computed, reactive, Ref, ref } from "vue";
 
 import DrawView from "../components/editor/DrawView.vue";
 import MaskView from "../components/editor/MaskView.vue";
@@ -84,61 +93,54 @@ import { ToolsInventory } from "../scripts/Core/ToolsInventory";
 const TABS = ["draw", "view"] as const;
 type EditorTabs = (typeof TABS)[number];
 
-@Component({
-  components: { DrawView, MaskView, TechDepends },
-})
-export default class ToolEdit extends Vue {
-  techTree: TechnologyTree = new TechnologyTree();
-  tools: ToolsInventory = new ToolsInventory(this.techTree);
-  currTool: Tool = this.tools.Tools[0];
+const techTree = reactive(new TechnologyTree());
+const tools = reactive(new ToolsInventory(techTree));
+const currToolId = ref(tools.tools[0].id);
+const activeTab: Ref<EditorTabs> = ref("draw");
 
-  tabs = TABS;
-  activeTab: EditorTabs = "draw";
-  component = {
-    draw: DrawView,
-    view: MaskView,
-  };
+const component = {
+  draw: DrawView,
+  view: MaskView,
+};
 
-  constructor() {
-    super();
-  }
+function setTab(tab: "draw" | "view") {
+  activeTab.value = tab;
+}
 
-  setTab(tab: "draw" | "view") {
-    this.activeTab = tab;
-  }
+const ID = computed({
+  get() {
+    const m = tools.toolsMap;
+    return Object.keys(m).filter((k) => k == currToolId.value)[0] || "";
+  },
+  set(value: string) {
+    delete tools.toolsMap[ID.value];
+    tools.toolsMap[value] = currTool.value;
+  },
+});
 
-  get ID() {
-    const m = this.tools.ToolsMap;
-    return Object.keys(m).filter((k) => m[k] === this.currTool)[0] || "";
-  }
+const currTool = computed(() => tools.toolsMap[currToolId.value]);
 
-  set ID(value: string) {
-    delete this.tools.ToolsMap[this.ID];
-    this.$set(this.tools.ToolsMap, value, this.currTool);
-  }
+const jsonBlobUrl = computed(() => {
+  const depends = currTool.value.techDepends.map((td) => ({
+    tech: techTree.keyFor(td.tech),
+    level: td.level,
+  }));
 
-  get JsonBlobUrl() {
-    const depends = this.currTool.TechDependencies.map((td) => ({
-      tech: this.techTree.keyFor(td.tech),
-      level: td.level,
-    }));
+  const tempTool = { ...currTool.value } as Record<string, unknown>;
+  tempTool["techDepends"] = depends;
+  delete tempTool["orientedColMasks"];
+  const textData = JSON.stringify(tempTool, null, 2);
+  const blobData = new Blob([textData], { type: "application/json" });
+  return window.URL.createObjectURL(blobData);
+});
 
-    const tempTool = { ...this.currTool } as Record<string, unknown>;
-    tempTool["techDepends"] = depends;
-    delete tempTool["orientedColMasks"];
-    const textData = JSON.stringify(tempTool, null, 2);
-    const blobData = new Blob([textData], { type: "application/json" });
-    return window.URL.createObjectURL(blobData);
-  }
+function addNew() {
+  const id = uuidv4().split("-")[0];
+  const newTool = new Tool(id, "New Tool", "", 0, 0, 0, [], false);
 
-  addNew() {
-    const newTool = new Tool("New Tool", "", 0, 0, 0, [], false);
-
-    const id = uuidv4().split("-")[0];
-    this.tools.ToolsMap[id] = newTool;
-    this.tools.Tools.push(newTool);
-    this.currTool = newTool;
-  }
+  tools.toolsMap[id] = newTool;
+  tools.tools.push(newTool);
+  currToolId.value = id;
 }
 </script>
 

@@ -1,28 +1,23 @@
 <template>
   <div id="toolsList">
-    <template v-for="(tool, key) of game.ToolsInventory.Tools">
+    <template v-for="(tool, key) of game.ToolsInventory.tools">
       <ToolBox
         :game="game"
         :tool="tool"
         :key="key"
-        v-if="tool.IsResearched"
+        v-if="tool.isResearched"
       ></ToolBox>
     </template>
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
-
+<script setup lang="ts">
 import { Game } from "../scripts/Core/Game";
 import ToolBox from "./ToolBox.vue";
 
-@Component({
-  components: { ToolBox },
-})
-export default class ToolsList extends Vue {
-  @Prop() game!: Game;
-}
+defineProps<{
+  game: Game;
+}>();
 </script>
 
 <style lang="scss"></style>

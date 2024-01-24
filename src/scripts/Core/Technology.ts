@@ -9,15 +9,16 @@ export class Technology {
   private static defaultCostFunc: GrowthFunction = (baseCost, level) =>
     baseCost * Math.pow(level + 1, 2);
 
-  private level = 0;
-  private maxLevel = 10;
-  private currCost: number;
+  public level = 0;
+  public maxLevel = 10;
+  public currCost: number;
 
   constructor(
-    private name: string,
-    private baseCost: number,
-    private techDepends: TechDependency[] | null = null,
-    private costFunc: GrowthFunction = Technology.defaultCostFunc
+    public id: string,
+    public name: string,
+    public baseCost: number,
+    public techDepends: TechDependency[] | null = null,
+    public costFunc: GrowthFunction = Technology.defaultCostFunc
   ) {
     this.currCost = baseCost;
   }
@@ -35,26 +36,14 @@ export class Technology {
     return -1;
   }
 
-  get Name(): string {
-    return this.name;
-  }
-
-  get Level(): number {
-    return this.level;
-  }
-
-  get MaxLevel(): number {
-    return this.maxLevel;
-  }
-
-  get ResearchCost(): number {
+  get researchCost(): number {
     return this.currCost;
   }
 
-  get IsVisible(): boolean {
+  get isVisible(): boolean {
     return (
       !this.techDepends ||
-      this.techDepends.every((td) => td.tech.Level >= td.level)
+      this.techDepends.every((td) => td.tech.level >= td.level)
     );
   }
 }

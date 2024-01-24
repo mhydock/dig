@@ -15,23 +15,20 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+<script setup lang="ts">
+import { ref } from "vue";
 
 import { Game } from "../scripts/Core/Game";
 import TechList from "./TechList.vue";
 
-@Component({
-  components: { TechList },
-})
-export default class EconList extends Vue {
-  @Prop() game!: Game;
+defineProps<{
+  game: Game;
+}>();
 
-  private tab = "tech";
+const tab = ref("tech");
 
-  selectTab(tab: string) {
-    this.tab = tab;
-  }
+function selectTab(newTab: string) {
+  tab.value = newTab;
 }
 </script>
 
