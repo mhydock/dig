@@ -32,7 +32,7 @@ export class Player {
     } else {
       affected = this.tools.getAffected(this.grid, this.x, this.y, this.orient);
       debug("Path is not clear");
-      if (this.tools.canMoveAndDig()) {
+      if (this.tools.canMoveAndDig) {
         this.tools.digAffected(affected);
         if (this.grid.isCleared(x, y)) {
           this.y = y;
@@ -105,6 +105,6 @@ export class Player {
   }
 
   get PlayerPower(): number {
-    return this.tools.Power;
+    return this.tools.power;
   }
 }

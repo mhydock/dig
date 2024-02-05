@@ -6,8 +6,8 @@ import { TechnologyTree } from "./TechnologyTree";
 import { Tool, ToolOrientation } from "./Tool";
 
 export class ToolsInventory {
-  private tools: Tool[] = [];
-  private toolsMap: { [key: string]: Tool } = {};
+  public tools: Tool[] = [];
+  public toolsMap: { [key: string]: Tool } = {};
   public activeTool: Tool;
 
   constructor(private techTree: TechnologyTree) {
@@ -16,13 +16,14 @@ export class ToolsInventory {
 
     toolTemplates.forEach((tt) => {
       const tool = new Tool(
+        tt.id,
         tt.name,
         tt.desc || "",
         tt.amount,
         tt.power,
         tt.baseCost,
         tt.techDepends.map((td) => ({
-          tech: this.techTree.TechMap[td.tech],
+          tech: this.techTree.techMap[td.tech],
           level: td.level,
         })),
         tt.canMove,
@@ -37,20 +38,12 @@ export class ToolsInventory {
     this.activeTool = this.tools[0];
   }
 
-  get Tools() {
-    return this.tools;
+  get power(): number {
+    return this.activeTool.totalPower;
   }
 
-  get ToolsMap() {
-    return this.toolsMap;
-  }
-
-  get Power(): number {
-    return this.activeTool.TotalPower;
-  }
-
-  canMoveAndDig(): boolean {
-    return !!this.activeTool.CanMoveAndDig;
+  get canMoveAndDig(): boolean {
+    return !!this.activeTool.canMoveAndDig;
   }
 
   getAffected(
@@ -69,7 +62,7 @@ export class ToolsInventory {
 
   digAffected(blocks: BlockCoordPair[]) {
     for (const b of blocks) {
-      const damage = b.block.dig(this.Power);
+      const damage = b.block.dig(this.power);
       debug(`Caused ${damage} damage to block [${b.point.x}, ${b.point.y}]`);
     }
   }

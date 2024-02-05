@@ -11,18 +11,13 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
-
+<script setup lang="ts">
 import { Game } from "../scripts/Core/Game";
 import ItemBox from "./ItemBox.vue";
 
-@Component({
-  components: { ItemBox },
-})
-export default class ItemsList extends Vue {
-  @Prop() game!: Game;
-}
+defineProps<{
+  game: Game;
+}>();
 </script>
 
 <style lang="scss"></style>

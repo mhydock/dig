@@ -2,11 +2,11 @@
   <div class="log">
     <div class="header">
       <a @click="toggleCollapse()">Message Log</a>
-      <span class="icon" :class="{open: !collapsed}"></span>
+      <span class="icon" :class="{ open: !collapsed }"></span>
       <span class="gap"></span>
       <button @click="game.clearMessages()">Clear Log</button>
     </div>
-    <div class="body" :class="{collapsed}" ref="messages">
+    <div class="body" :class="{ collapsed }" ref="messages">
       <div v-for="(message, i) of game.Messages" :key="i">
         {{ message }}
       </div>
@@ -14,36 +14,34 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+<script setup lang="ts">
+import { nextTick, Ref, ref, watch } from "vue";
 
+import { debug } from "../scripts/Core/Common";
 import { Game } from "../scripts/Core/Game";
-import { debug } from "@/scripts/Core/Common";
 
-@Component({})
-export default class MessageLog extends Vue {
-  @Prop() game!: Game;
-  collapsed = false;
+const props = defineProps<{
+  game: Game;
+}>();
 
-  $refs!: {
-    messages: HTMLDivElement;
-  };
+const { game } = props;
 
-  toggleCollapse() {
-    this.collapsed = !this.collapsed;
-    debug("is collapsed", this.collapsed);
-  }
+const collapsed = ref(false);
+const messages: Ref<HTMLDivElement | null> = ref(null);
 
-  @Watch("game.Messages")
-  private scrollToBottom() {
-    this.$nextTick(() =>
-      this.$refs.messages.scrollTo({
-        top: this.$refs.messages.scrollHeight,
-        behavior: "smooth",
-      })
-    );
-  }
+function toggleCollapse() {
+  collapsed.value = !collapsed.value;
+  debug("is collapsed", collapsed);
 }
+
+watch(game.Messages, () => {
+  nextTick(() =>
+    messages?.value?.scrollTo({
+      top: messages?.value?.scrollHeight,
+      behavior: "smooth",
+    })
+  );
+});
 </script>
 <style lang="scss">
 .log {
@@ -77,7 +75,7 @@ export default class MessageLog extends Vue {
   height: 20vh;
   max-height: 20vh;
 
-  transition: max-height ease .2s;
+  transition: max-height ease 0.2s;
   &.collapsed {
     max-height: 0;
     overflow: hidden;
@@ -102,7 +100,7 @@ export default class MessageLog extends Vue {
     transform: rotate(90deg);
     transform-origin: 50% 50%;
 
-    transition: transform ease .2s;
+    transition: transform ease 0.2s;
   }
 }
 </style>

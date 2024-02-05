@@ -2,15 +2,15 @@
   <div class="grid-view-wrapper">
     <div class="grid">
       <div class="grid-wrapper" ref="grid">
-        <div class="row" v-for="(row, i) of FullCollisionMask" :key="'row' + i">
+        <div class="row" v-for="(row, i) of fullCollisionMask" :key="'row' + i">
           <div
             class="cell"
             v-for="(cell, j) of row"
             :key="'cell' + j"
             :style="{
               background: getShade(cell),
-              height: FCMCellEdgeLength + 'px',
-              width: FCMCellEdgeLength + 'px',
+              height: maskCellEdgeLength + 'px',
+              width: maskCellEdgeLength + 'px',
             }"
           ></div>
         </div>
@@ -19,8 +19,8 @@
         <div
           class="player-icon"
           :style="{
-            height: FCMCellEdgeLength - 10 + 'px',
-            width: FCMCellEdgeLength - 10 + 'px',
+            height: maskCellEdgeLength - 10 + 'px',
+            width: maskCellEdgeLength - 10 + 'px',
           }"
         ></div>
       </div>
@@ -53,71 +53,74 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component } from "vue-property-decorator";
+<script setup lang="ts">
+import { computed, Ref, ref } from "vue";
 
-import GridView from "./GridView.vue";
+import { Tool } from "../../scripts/Core/Tool";
+import { getShade, useGridView } from "./GridView";
 
-@Component
-export default class MaskView extends GridView {
-  private showUp = true;
-  private showDown = true;
-  private showLeft = true;
-  private showRight = true;
+const props = defineProps<{
+  currTool: Tool;
+}>();
 
-  constructor() {
-    super();
-  }
+const { currTool } = props;
+const grid: Ref<HTMLDivElement | null> = ref(null);
 
-  get FullCollisionMask() {
-    const mask = this.currTool.CollisionMask;
-    const offset = this.currTool.Offset;
-    const rowWidth =
-      offset.x > -mask[0].length / 2
-        ? (mask[0].length + offset.x) * 2 - 1
-        : Math.abs(offset.x) * 2 + 1;
-    const colHeight =
-      offset.y > -mask.length / 2
-        ? (mask.length + offset.y) * 2 - 1
-        : Math.abs(offset.y) * 2 + 1;
+const { gridDims } = useGridView(grid);
 
-    const fullMask = [];
-    const sideDim = Math.max(rowWidth, colHeight);
-    for (let i = 0; i < sideDim; i++) fullMask.push(new Array(sideDim));
+const showUp = ref(true);
+const showDown = ref(true);
+const showLeft = ref(true);
+const showRight = ref(true);
 
-    const c = Math.floor(fullMask.length / 2);
-    const h = Math.floor(mask.length / 2);
-    for (let i = 0; i < mask.length; i++)
-      for (let j = 0; j < Math.ceil(mask[i].length); j++) {
-        const l = c - offset.x - j;
-        const r = c + offset.x + j;
-        const t = c - h - offset.y + i;
-        const b = c + h + offset.y - i;
-        const m = mask[i][j];
-        if (this.showLeft) {
-          fullMask[t][l] = Math.max(fullMask[t][l] || 0, m || 0);
-        }
-        if (this.showRight) {
-          fullMask[t][r] = Math.max(fullMask[t][r] || 0, m || 0);
-        }
-        if (this.showUp) {
-          fullMask[l][t] = Math.max(fullMask[l][t] || 0, m || 0);
-        }
-        if (this.showDown) {
-          fullMask[r][b] = Math.max(fullMask[r][b] || 0, m || 0);
-        }
+const fullCollisionMask = computed(() => {
+  const mask = currTool.collisionMask;
+  const offset = currTool.offset;
+  const rowWidth =
+    offset.x > -mask[0].length / 2
+      ? (mask[0].length + offset.x) * 2 - 1
+      : Math.abs(offset.x) * 2 + 1;
+  const colHeight =
+    offset.y > -mask.length / 2
+      ? (mask.length + offset.y) * 2 - 1
+      : Math.abs(offset.y) * 2 + 1;
+
+  const fullMask = [];
+  const sideDim = Math.max(rowWidth, colHeight);
+  for (let i = 0; i < sideDim; i++) fullMask.push(new Array(sideDim));
+
+  const c = Math.floor(fullMask.length / 2);
+  const h = Math.floor(mask.length / 2);
+  for (let i = 0; i < mask.length; i++)
+    for (let j = 0; j < Math.ceil(mask[i].length); j++) {
+      const l = c - offset.x - j;
+      const r = c + offset.x + j;
+      const t = c - h - offset.y + i;
+      const b = c + h + offset.y - i;
+      const m = mask[i][j];
+      if (showLeft.value) {
+        fullMask[t][l] = Math.max(fullMask[t][l] || 0, m || 0);
       }
+      if (showRight.value) {
+        fullMask[t][r] = Math.max(fullMask[t][r] || 0, m || 0);
+      }
+      if (showUp.value) {
+        fullMask[l][t] = Math.max(fullMask[l][t] || 0, m || 0);
+      }
+      if (showDown.value) {
+        fullMask[r][b] = Math.max(fullMask[r][b] || 0, m || 0);
+      }
+    }
 
-    return fullMask;
-  }
+  return fullMask;
+});
 
-  get FCMCellEdgeLength() {
-    const side = this.FullCollisionMask.length;
-    const w = this.gridDims.width / side;
-    const h = this.gridDims.height / side;
-    return Math.min(w, h);
-  }
-}
+const maskCellEdgeLength = computed(() => {
+  const side = fullCollisionMask.value.length;
+  const w = gridDims.value.width / side;
+  const h = gridDims.value.height / side;
+  return Math.min(w, h);
+});
 </script>
 
 <style lang="scss" scoped>

@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
-import { createVuePlugin as vue } from "vite-plugin-vue2";
+import vue from "@vitejs/plugin-vue2";
+import { defineConfig } from "vite";
 
 const path = require("path");
 
@@ -11,4 +11,8 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-})
+  server: {
+    host: "127.0.0.1",
+    port: 3000,
+  },
+});

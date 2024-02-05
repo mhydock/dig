@@ -1,62 +1,60 @@
 <template>
-  <div :title="tool.Description" class="list-item">
+  <div :title="tool.desc" class="list-item">
     <span class="list-item-head">
       <button
         class="selectButton"
         @click="game.selectTool(tool)"
         :disabled="game.ToolsInventory.activeTool === tool"
       ></button>
-      <h3>{{ tool.Name }}</h3>
+      <h3>{{ tool.name }}</h3>
       <span class="gap"></span>
       <h3 v-if="game.ToolsInventory.activeTool === tool">Selected</h3>
     </span>
     <div class="list-item-body">
-      <label class="quantity" :title="AmountTooltip"
-        >x {{ AmountWithSuffix }}</label
+      <label class="quantity" :title="amountTooltip"
+        >x {{ amountWithSuffix }}</label
       >
-      <label>Next: $ {{ tool.BuyCost }}</label>
+      <label>Next: $ {{ tool.buyCost }}</label>
       <span class="gap"></span>
-      <button @click="clickSellButton" :disabled="tool.Amount <= 0">
+      <button @click="clickSellButton" :disabled="tool.amount <= 0">
         Sell
       </button>
-      <button @click="clickBuyButton" :disabled="tool.BuyCost > game.Money">
+      <button @click="clickBuyButton" :disabled="tool.buyCost > game.Money">
         Buy
       </button>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+<script setup lang="ts">
+import { computed } from "vue";
 
 import { withSuffix } from "../scripts/Core/Common";
 import { Game } from "../scripts/Core/Game";
 import { Tool } from "../scripts/Core/Tool";
 
-@Component
-export default class ToolBox extends Vue {
-  @Prop() game!: Game;
-  @Prop() tool!: Tool;
+const props = defineProps<{
+  game: Game;
+  tool: Tool;
+}>();
 
-  get AmountWithSuffix() {
-    return withSuffix(this.tool.Amount);
-  }
+const { game, tool } = props;
 
-  get AmountTooltip() {
-    return this.tool.Amount > 1000 ? this.tool.Amount : "";
-  }
+const amountWithSuffix = computed(() => withSuffix(tool.amount));
+const amountTooltip = computed(() =>
+  tool.amount > 1000 ? tool.amount.toString() : ""
+);
 
-  private clickBuyButton() {
-    const cost = this.tool.tryBuy(this.game.Money);
-    if (cost >= 0) this.game.subMoney(cost);
-    else alert("You do not have enough money to buy a " + this.tool.Name);
-  }
+function clickBuyButton() {
+  const cost = tool.tryBuy(game.Money);
+  if (cost >= 0) game.subMoney(cost);
+  else alert("You do not have enough money to buy a " + tool.name);
+}
 
-  private clickSellButton() {
-    const sale = this.tool.trySell();
-    if (sale >= 0) this.game.addMoney(sale);
-    else alert("You cannot sell that tool");
-  }
+function clickSellButton() {
+  const sale = tool.trySell();
+  if (sale >= 0) game.addMoney(sale);
+  else alert("You cannot sell that tool");
 }
 </script>
 

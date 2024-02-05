@@ -22,3 +22,8 @@ export interface HoverText {
   maxHP?: number;
   currHP?: number;
 }
+
+export interface TooltipEvent {
+  hoverText: HoverText | null;
+  pos: { x: number; y: number };
+}

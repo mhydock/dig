@@ -11,69 +11,52 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+<script setup lang="ts">
+import { onMounted, reactive, Ref, ref } from "vue";
 
 import Inventory from "../components/Inventory.vue";
 import TextGrid from "../components/TextGrid.vue";
 import Tooltip from "../components/Tooltip.vue";
 import { debug } from "../scripts/Core/Common";
 import { Game } from "../scripts/Core/Game";
-import { HoverText } from "../scripts/UI/GameGrid";
+import { HoverText, TooltipEvent } from "../scripts/UI/GameGrid";
 
-@Component({
-  components: { Inventory, TextGrid, Tooltip },
-})
-export default class GameView extends Vue {
-  private game: Game;
-  private toolTipX!: number;
-  private toolTipY!: number;
-  private hoverText: HoverText | null;
+const game = reactive(new Game()) as Game;
+const toolTipX = ref(0);
+const toolTipY = ref(0);
+const hoverText: Ref<HoverText | null> = ref(null);
 
-  constructor() {
-    super();
+const updateToolTip = (event: TooltipEvent) => {
+  hoverText.value = event.hoverText;
+  toolTipX.value = event.pos.x;
+  toolTipY.value = event.pos.y;
+};
 
-    this.game = new Game();
-    this.hoverText = null;
-    this.toolTipX = 0;
-    this.toolTipY = 0;
+// keycodes found here http://www.javascriptkeycode.com/
+const onKeyDownFunc = (event: KeyboardEvent) => {
+  switch (event.key) {
+    case "ArrowUp":
+      game.moveUp();
+      break;
+    case "ArrowDown":
+      game.moveDown();
+      break;
+    case "ArrowLeft":
+      game.moveLeft();
+      break;
+    case "ArrowRight":
+      game.moveRight();
+      break;
+    case " ":
+      game.tryDig();
+      break;
   }
+};
 
-  mounted() {
-    document.onkeydown = this.onKeyDownFunc;
-    debug("Game has begun");
-  }
-
-  private updateToolTip(event: {
-    hoverText: HoverText | null;
-    pos: { x: number; y: number };
-  }) {
-    this.hoverText = event.hoverText;
-    this.toolTipX = event.pos.x;
-    this.toolTipY = event.pos.y;
-  }
-
-  // keycodes found here http://www.javascriptkeycode.com/
-  private onKeyDownFunc = (event: KeyboardEvent) => {
-    switch (event.key) {
-      case "ArrowUp":
-        this.game.moveUp();
-        break;
-      case "ArrowDown":
-        this.game.moveDown();
-        break;
-      case "ArrowLeft":
-        this.game.moveLeft();
-        break;
-      case "ArrowRight":
-        this.game.moveRight();
-        break;
-      case " ":
-        this.game.tryDig();
-        break;
-    }
-  };
-}
+onMounted(() => {
+  document.onkeydown = onKeyDownFunc;
+  debug("Game has begun");
+});
 </script>
 
 <style lang="scss">
@@ -94,5 +77,7 @@ export default class GameView extends Vue {
 
 #gridWrapper {
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 </style>

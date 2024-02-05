@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div
     id="tooltip"
@@ -12,24 +13,19 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
-
+<script setup lang="ts">
 import { HoverText } from "../scripts/UI/GameGrid";
 
-@Component({
-  components: {},
-})
-export default class ToolsList extends Vue {
-  @Prop() x!: number;
-  @Prop() y!: number;
-  @Prop() hoverText!: HoverText;
+defineProps<{
+  x: number;
+  y: number;
+  hoverText: HoverText | null;
+}>();
 
-  //   let offset =
-  //       this.tooltip.getBoundingClientRect().height -
-  //       (this.gameScreen.clientHeight - y);
-  //     offset = offset >= 0 ? offset : 0;
-}
+//   let offset =
+//       this.tooltip.getBoundingClientRect().height -
+//       (this.gameScreen.clientHeight - y);
+//     offset = offset >= 0 ? offset : 0;
 </script>
 
 <style lang="scss">

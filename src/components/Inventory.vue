@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div id="inventory" class="list-panel">
     <ul class="tabs">
@@ -33,8 +34,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+<script setup lang="ts">
+import { ref } from "vue";
 
 import { Game } from "../scripts/Core/Game";
 import EconList from "./EconList.vue";
@@ -42,22 +43,14 @@ import ItemsList from "./ItemsList.vue";
 import MessageLog from "./MessageLog.vue";
 import ToolsList from "./ToolsList.vue";
 
-@Component({
-  components: {
-    ToolsList,
-    ItemsList,
-    EconList,
-    MessageLog,
-  },
-})
-export default class Inventory extends Vue {
-  @Prop() game!: Game;
+defineProps<{
+  game: Game;
+}>();
 
-  private tab = "tools";
+const tab = ref("tools");
 
-  selectTab(tab: string) {
-    this.tab = tab;
-  }
+function selectTab(newTab: string) {
+  tab.value = newTab;
 }
 </script>
 
