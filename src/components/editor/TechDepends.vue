@@ -134,6 +134,7 @@ function setDependLevel(tech: Technology, eventTarget: EventTarget | null) {
 
     &:checked::after {
       font-size: 2rem;
+      max-height: 1.25rem;
     }
   }
 }

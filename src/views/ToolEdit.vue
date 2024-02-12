@@ -30,8 +30,8 @@
       <div class="fields">
         <div class="tool-field">
           <select v-model="currToolId">
-            <template v-for="(tool, i) of tools.tools">
-              <option :value="tool.id" :key="'tool' + i">
+            <template v-for="(tool, i) of tools.tools" :key="'tool' + i">
+              <option :value="tool.id">
                 {{ tool.name }}
               </option>
             </template>
@@ -331,13 +331,14 @@ input[type="checkbox"] {
 
   &:checked::after {
     content: "\2713";
+    max-height: 2rem;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     position: absolute;
     left: 0px;
-    bottom: -40%;
+    bottom: 0px;
     font-size: 3.33rem;
   }
 }

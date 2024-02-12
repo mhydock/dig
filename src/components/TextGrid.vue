@@ -2,10 +2,9 @@
   <div id="gameScreen" @mousemove="updateToolTip" @mouseout="clearToolTip">
     <div id="tiles" ref="tiles"></div>
     <template v-if="Grid.affected.length > 0">
-      <template v-for="bp of Grid.affected">
+      <template v-for="bp of Grid.affected" :key="`${bp.point.x},${bp.point.y}`">
         <div
           class="highlight"
-          :key="`${bp.point.x},${bp.point.y}`"
           :style="{
             left: `${(bp.point.x * tileSize) / 2}px`,
             top: `${(bp.point.y - yOffset) * tileSize}px`,

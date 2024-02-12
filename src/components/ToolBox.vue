@@ -2,9 +2,9 @@
   <div :title="tool.desc" class="list-item">
     <span class="list-item-head">
       <button
-        class="selectButton"
+        :class="['selectButton', game.ToolsInventory.activeTool === tool ? 'active' : '']"
         @click="game.selectTool(tool)"
-        :disabled="game.ToolsInventory.activeTool === tool"
+        :disabled="game.ToolsInventory.activeTool === tool || tool.amount === 0"
       ></button>
       <h3>{{ tool.name }}</h3>
       <span class="gap"></span>
@@ -66,5 +66,23 @@ function clickSellButton() {
   height: 1rem;
   margin-left: 0;
   margin-right: 0.5rem;
+  position: relative;
+
+  &:disabled {
+    cursor: default;
+  }
+
+  &.active:disabled::after {
+    content: "\2713";
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 0px;
+    bottom: 5%;
+    font-size: 2.5rem;
+    color: black;
+  }
 }
 </style>
