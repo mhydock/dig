@@ -35,12 +35,12 @@ function toggleCollapse() {
 }
 
 watch(game.Messages, () => {
-  nextTick(() =>
-    messages?.value?.scrollTo({
-      top: messages?.value?.scrollHeight,
-      behavior: "smooth",
-    })
-  );
+  messages?.value?.scrollTo({
+    top: messages?.value?.scrollHeight,
+    behavior: "smooth",
+  });
+}, {
+  flush: 'post',
 });
 </script>
 <style lang="scss">

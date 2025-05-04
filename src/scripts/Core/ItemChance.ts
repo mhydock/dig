@@ -18,9 +18,8 @@ export class ItemChance {
     private minAmount: number,
     private maxAmount: number
   ) {
-    minAmount =
-      minAmount > 0 ? (minAmount < maxAmount ? minAmount : maxAmount) : 1;
-    maxAmount = maxAmount > minAmount ? maxAmount : minAmount;
+    minAmount = Math.max(Math.min(minAmount, maxAmount), 1);
+    maxAmount = Math.max(minAmount, maxAmount);
     this.diff = this.maxAmount - this.minAmount;
   }
 

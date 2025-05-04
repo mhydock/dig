@@ -44,6 +44,8 @@ const {
   game: { Grid, Player },
 } = props;
 
+var lastX, lastY;
+
 function setViewRows(height: number) {
   viewRows.value = Math.ceil(height / tileSize.value);
 }
@@ -81,6 +83,7 @@ watch(
   ],
   () => {
     drawScreen();
+    updateToolTip({offsetX: lastX, offsetY: lastY});
   }
 );
 
@@ -106,14 +109,14 @@ function getHoverText(x: number, y: number): HoverText | null {
 }
 
 function updateToolTip(event: MouseEvent) {
-  const x = event.offsetX;
-  const y = event.offsetY;
+  lastX = event.offsetX;
+  lastY = event.offsetY;
 
   emit("updateToolTip", {
-    hoverText: getHoverText(x, y),
+    hoverText: getHoverText(lastX, lastY),
     pos: {
-      x,
-      y,
+      x: lastX,
+      y: lastY,
     },
   });
 }

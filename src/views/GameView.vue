@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, Ref, ref } from "vue";
+import { onMounted, reactive, Ref, ref, watch } from "vue";
 
 import Inventory from "../components/Inventory.vue";
 import TextGrid from "../components/TextGrid.vue";
@@ -26,11 +26,21 @@ const toolTipX = ref(0);
 const toolTipY = ref(0);
 const hoverText: Ref<HoverText | null> = ref(null);
 
+game.wireListeners();
+
 const updateToolTip = (event: TooltipEvent) => {
   hoverText.value = event.hoverText;
   toolTipX.value = event.pos.x;
   toolTipY.value = event.pos.y;
 };
+
+watch(() => game.ToolsInventory.activeTool, (tool) => {
+  if (tool?.amount === 0) {
+    game.selectTool(null);
+  }
+}, {
+  deep: true
+});
 
 // keycodes found here http://www.javascriptkeycode.com/
 const onKeyDownFunc = (event: KeyboardEvent) => {

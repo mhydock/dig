@@ -23,11 +23,7 @@ export class Game {
   private _money = 0;
   private _messages: string[] = [];
 
-  constructor() {
-    this._itemFac.addProduceListener((prize) => {
-      this._messages.push(`Received ${prize.amount} ${prize.item.Name}(s)`);
-    });
-  }
+  constructor() {  }
 
   get ToolsInventory() {
     return this._tools;
@@ -59,6 +55,13 @@ export class Game {
 
   get Messages() {
     return this._messages;
+  }
+
+  wireListeners() {
+  // Can't wire up listeners in constructor, because the Game object isn't reactive yet.
+    this._itemFac.addProduceListener((prize) => {
+      this._messages.push(`Received ${prize.amount} ${prize.item.Name}(s)`);
+    });
   }
 
   addMoney(money: number) {

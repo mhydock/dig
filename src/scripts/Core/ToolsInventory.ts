@@ -39,11 +39,11 @@ export class ToolsInventory {
   }
 
   get power(): number {
-    return this.activeTool.totalPower;
+    return this.activeTool?.totalPower ?? 0;
   }
 
   get canMoveAndDig(): boolean {
-    return !!this.activeTool.canMoveAndDig;
+    return !!this.activeTool?.canMoveAndDig;
   }
 
   getAffected(
@@ -52,6 +52,8 @@ export class ToolsInventory {
     y: number,
     orient: Orientation
   ): BlockCoordPair[] {
+    if (!this.activeTool) return [];
+
     const coords = this.activeTool.getCollisionMask(orient).map((p) => ({
       x: x + p.x,
       y: y + p.y,
