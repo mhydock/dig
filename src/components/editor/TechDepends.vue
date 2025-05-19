@@ -2,9 +2,11 @@
   <div class="tech-depends">
     <table>
       <thead>
-        <th></th>
-        <th>Technology</th>
-        <th>Min. Level</th>
+        <tr>
+          <th></th>
+          <th>Technology</th>
+          <th>Min. Level</th>
+        </tr>
       </thead>
       <tbody>
         <tr

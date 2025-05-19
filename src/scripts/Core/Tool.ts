@@ -1,4 +1,4 @@
-import { GrowthFunction, Orientation, Point } from "./Common";
+import { createGrowthFunction, FuncType, GrowthFunction, Orientation, Point } from "./Common";
 import { TechDependency, Technology } from "./Technology";
 
 interface Offset {
@@ -9,12 +9,9 @@ interface Offset {
 export type ToolOrientation = "horz" | "vert" | "any";
 
 export class Tool {
-  private static defaultCostFunc: GrowthFunction = (baseCost, amount) =>
-    baseCost + Math.floor((amount * amount) / 4);
-  private static defaultPowerFunc: GrowthFunction = (basePower, amount) =>
-    Math.floor(basePower * amount);
-
   private static saleMult = 0.75;
+  public costFunc: GrowthFunction;
+  public powerFunc: GrowthFunction;
   public orientedColMasks: { [key in Orientation]: Point[] } = {
     [Orientation.EAST]: [],
     [Orientation.WEST]: [],
@@ -34,9 +31,14 @@ export class Tool {
     public orientation: ToolOrientation = "any",
     public offset: Offset = { x: 0, y: 0 },
     public collisionMask: number[][] = [],
-    public costFunc: GrowthFunction = Tool.defaultCostFunc,
-    public powerFunc: GrowthFunction = Tool.defaultPowerFunc
+    public costFunctionType: FuncType = FuncType.LINEAR,
+    public costCoefficients: number[] = [],
+    public powerFunctionType: FuncType = FuncType.LINEAR,
+    public powerCoefficients: number[] = [],
   ) {
+    this.costFunc = createGrowthFunction(costFunctionType, costCoefficients);
+    this.powerFunc = createGrowthFunction(powerFunctionType, powerCoefficients);
+
     const h = Math.floor(collisionMask.length / 2);
     for (let row = 0; row < collisionMask.length; row++) {
       for (let col = 0; col < collisionMask[row].length; col++) {
