@@ -15,11 +15,13 @@ jobs:
     - name: Checkout 
       uses: actions/checkout@v4
 
-    - name: Run ESLint
+    - name: Setup Node.js 22
       uses: actions/setup-node@v4
       with:
         node-version: 22.x
         cache: 'npm'
-        run: |
-          npm ci
-          npm run lint-no-fix
+
+    - name: Run ESLint
+      run: |
+        npm ci
+        npx eslint --ext .js,.ts,.vue src

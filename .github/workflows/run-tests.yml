@@ -20,12 +20,14 @@ jobs:
     - name: Checkout 
       uses: actions/checkout@v4
 
-    - name: Run tests on Node.js ${{ matrix.node-version }}
+    - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        run: |
-          npm ci
-          npm run test:unit
-          npm run test:e2e
+
+    - name: Run tests on Node.js ${{ matrix.node-version }}
+      run: |
+        npm ci
+        npm run test:unit
+        npm run test:e2e
