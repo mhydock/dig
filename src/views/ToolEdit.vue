@@ -46,34 +46,83 @@
           <label>Description</label><input v-model="currTool.desc" />
         </div>
         <div class="tool-field">
-          <label>Start Amount</label><input v-model="currTool.amount" />
+          <label>Start Amount</label>
+          <NumberInput v-model="currTool.amount" placeholder="1" :default="1" />
         </div>
-        <div class="tool-field">
-          <label>Base Cost</label><input v-model="currTool.baseCost" />
-        </div>
-        <div class="tool-field">
-          <label>Base Power</label><input v-model="currTool.basePower" />
-        </div>
-        <div class="tool-field">
-          <label>Technologies</label>
-          <TechDepends
-            :currTool="currTool"
-            :techTree="techTree"
-            :key="currToolId"
-          />
-        </div>
-        <div class="tool-field">
-          <label>Orientation</label>
-          <select v-model="currTool.orientation">
-            <option value="any">Any</option>
-            <option value="horz">Horizontal</option>
-            <option value="vert">Vertical</option>
-          </select>
-        </div>
-        <div class="tool-field">
-          <label>Can Move And Dig?</label
-          ><input type="checkbox" v-model="currTool.canMove" />
-        </div>
+        <template v-if="activeTab === 'chart'">
+          <div class="tool-field">
+            <label>Base Cost</label>
+            <NumberInput
+              v-model="currTool.baseCost"
+              placeholder="1"
+              :default="1"
+            />
+          </div>
+          <div class="tool-field">
+            <label>Cost Func Type</label>
+            <select v-model="currTool.costFunctionType">
+              <template v-for="[key, value] of Object.entries(FuncType)">
+                <option :value="value" v-if="typeof value !== 'string'">
+                  {{ key[0] + key.substring(1).toLowerCase() }}
+                </option>
+              </template>
+            </select>
+          </div>
+          <div class="tool-field">
+            <label>&#x2BA1; Coefficients</label>
+            <MultiInput
+              :coefficients="currTool.costCoefficients"
+              :function-type="currTool.costFunctionType"
+            />
+          </div>
+          <div class="tool-field">
+            <label>Base Power</label>
+            <NumberInput
+              v-model="currTool.basePower"
+              placeholder="1"
+              :default="1"
+            />
+          </div>
+          <div class="tool-field">
+            <label>Power Func Type</label>
+            <select v-model="currTool.powerFunctionType">
+              <template v-for="[key, value] of Object.entries(FuncType)">
+                <option :value="value" v-if="typeof value !== 'string'">
+                  {{ key[0] + key.substring(1).toLowerCase() }}
+                </option>
+              </template>
+            </select>
+          </div>
+          <div class="tool-field">
+            <label>&#x2BA1; Coefficients</label>
+            <MultiInput
+              :coefficients="currTool.powerCoefficients"
+              :function-type="currTool.powerFunctionType"
+            />
+          </div>
+        </template>
+        <template v-else>
+          <div class="tool-field">
+            <label>Technologies</label>
+            <TechDepends
+              :currTool="currTool"
+              :techTree="techTree"
+              :key="currToolId"
+            />
+          </div>
+          <div class="tool-field">
+            <label>Orientation</label>
+            <select v-model="currTool.orientation">
+              <option value="any">Any</option>
+              <option value="horz">Horizontal</option>
+              <option value="vert">Vertical</option>
+            </select>
+          </div>
+          <div class="tool-field">
+            <label>Can Move And Dig?</label>
+            <input type="checkbox" v-model="currTool.canMove" />
+          </div>
+        </template>
       </div>
     </div>
   </div>
@@ -81,16 +130,20 @@
 
 <script setup lang="ts">
 import { v4 as uuidv4 } from "uuid";
-import { computed, reactive, Ref, ref } from "vue";
+import { computed, reactive, Ref, ref, watch } from "vue";
 
 import DrawView from "../components/editor/DrawView.vue";
 import MaskView from "../components/editor/MaskView.vue";
+import ChartView from "../components/editor/ChartView.vue";
 import TechDepends from "../components/editor/TechDepends.vue";
 import { TechnologyTree } from "../scripts/Core/TechnologyTree";
 import { Tool } from "../scripts/Core/Tool";
 import { ToolsInventory } from "../scripts/Core/ToolsInventory";
+import { createGrowthFunction, FuncType } from "@/scripts/Core/Common";
+import MultiInput from "@/components/editor/MultiInput.vue";
+import NumberInput from "@/components/editor/NumberInput.vue";
 
-const TABS = ["draw", "view"] as const;
+const TABS = ["draw", "view", "chart"] as const;
 type EditorTabs = (typeof TABS)[number];
 
 const techTree = reactive(new TechnologyTree());
@@ -101,9 +154,10 @@ const activeTab: Ref<EditorTabs> = ref("draw");
 const component = {
   draw: DrawView,
   view: MaskView,
+  chart: ChartView,
 };
 
-function setTab(tab: "draw" | "view") {
+function setTab(tab: "draw" | "view" | "chart") {
   activeTab.value = tab;
 }
 
@@ -142,6 +196,28 @@ function addNew() {
   tools.tools.push(newTool);
   currToolId.value = id;
 }
+
+watch(
+  [
+    () => currTool.value.costFunctionType,
+    () => currTool.value.costCoefficients,
+  ],
+  ([funcType, coefficients]) => {
+    currTool.value.costFunc = createGrowthFunction(funcType, coefficients);
+  },
+  { deep: true },
+);
+
+watch(
+  [
+    () => currTool.value.powerFunctionType,
+    () => currTool.value.powerCoefficients,
+  ],
+  ([funcType, coefficients]) => {
+    currTool.value.powerFunc = createGrowthFunction(funcType, coefficients);
+  },
+  { deep: true },
+);
 </script>
 
 <style lang="scss">
@@ -194,10 +270,13 @@ function addNew() {
     overflow: hidden;
     padding: 1rem;
 
-    background-image: radial-gradient(white 1px, transparent 1px),
+    background-image:
+      radial-gradient(white 1px, transparent 1px),
       radial-gradient(white 1px, #aaa 1px);
     background-size: calc(10 * 1px) calc(10 * 1px);
-    background-position: 0 0, calc(5 * 1px) calc(5 * 1px);
+    background-position:
+      0 0,
+      calc(5 * 1px) calc(5 * 1px);
 
     position: relative;
 
@@ -306,7 +385,7 @@ function addNew() {
   text-align: left;
   margin-bottom: 0.5rem;
 
-  label {
+  & > label {
     width: 10rem;
     flex: 0 0 auto;
   }
@@ -316,6 +395,18 @@ function addNew() {
     height: 2rem;
     flex: 1 1 auto;
     font-size: 1rem;
+    padding-left: 0.25rem;
+  }
+
+  select {
+    appearance: none;
+    position: relative;
+    background-color: transparent;
+    background-image: url("@/assets/icons/angle-down.svg");
+    background-repeat: no-repeat;
+    background-size: 1.25em .75em;
+    background-position: right center;
+    background-clip: border-box;
   }
 }
 

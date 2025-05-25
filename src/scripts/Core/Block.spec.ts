@@ -9,7 +9,6 @@ describe('Block module', () => {
     const inventory = new ItemsInventory();
     const factory = new ItemsFactory(inventory);
     const block = new Block(0, factory, listener);
-    console.log(block.Type);
     expect(block.Type).toBe(BlockType.SDIRT);
   });
 });
