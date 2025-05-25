@@ -214,7 +214,6 @@ watch(
     () => currTool.value.powerCoefficients,
   ],
   ([funcType, coefficients]) => {
-    console.log(coefficients);
     currTool.value.powerFunc = createGrowthFunction(funcType, coefficients);
   },
   { deep: true },
