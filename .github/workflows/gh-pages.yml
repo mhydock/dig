@@ -23,7 +23,7 @@ jobs:
     - name: Build project
       run: |
         npm ci
-        npm run build
+        npm run build -- --base=/dig/
 
     - name: Upload static files as artifact
       id: deployment
