@@ -1,29 +1,28 @@
 <template>
   <div class="number-input-wrapper">
     <input
-      type="number"
       v-model.number="model"
+      type="number"
       :placeholder="placeholder"
       @wheel="(e) => doChange(e.deltaY > 0)"
     />
     <div class="controls">
       <button @pointerdown="holdChange(false)" @pointerup="stopChange()">
-        <Icon name="angle-up" />
+        <SvgIcon name="angle-up" />
       </button>
       <button @pointerdown="holdChange(true)" @pointerup="stopChange()">
-        <Icon name="angle-down" />
+        <SvgIcon name="angle-down" />
       </button>
       <button class="clear" @click="tryClear()">
-        <Icon name="eraser" />
+        <SvgIcon name="eraser" />
       </button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import Icon from "@/components/Icon.vue";
+import SvgIcon from "@/components/SvgIcon.vue";
 
-const emit = defineEmits(["clear"]);
 const model = defineModel<number | undefined>();
 const props = withDefaults(
   defineProps<{
@@ -33,19 +32,19 @@ const props = withDefaults(
   }>(),
   {
     placeholder: "",
+    default: undefined,
     step: 1,
   },
 );
 
-var heldEvent: number = 0;
+let heldEvent: number = 0;
 
 function tryClear() {
-  model.value = props.default;
-  emit("clear");
+  model.value = undefined;
 }
 
 function doChange(decrement: boolean) {
-  var value = model.value;
+  let value = model.value;
   if (value === undefined) {
     value =
       props.default ??
@@ -57,7 +56,7 @@ function doChange(decrement: boolean) {
 function holdChange(decrement: boolean = false, timeMS: number = 512) {
   doChange(decrement);
 
-  var nextTimeMS = timeMS > 64 ? timeMS / 2.0 : Math.max(timeMS, 64);
+  const nextTimeMS = timeMS > 64 ? timeMS / 2.0 : Math.max(timeMS, 64);
   heldEvent = setTimeout(() => holdChange(decrement, nextTimeMS), timeMS);
 }
 

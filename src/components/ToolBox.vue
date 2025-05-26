@@ -2,9 +2,12 @@
   <div :title="tool.desc" class="list-item">
     <span class="list-item-head">
       <button
-        :class="['selectButton', game.ToolsInventory.activeTool === tool ? 'active' : '']"
-        @click="game.selectTool(tool)"
+        :class="[
+          'selectButton',
+          game.ToolsInventory.activeTool === tool ? 'active' : '',
+        ]"
         :disabled="game.ToolsInventory.activeTool === tool || tool.amount === 0"
+        @click="game.selectTool(tool)"
       ></button>
       <h3>{{ tool.name }}</h3>
       <span class="gap"></span>
@@ -16,10 +19,10 @@
       >
       <label>Next: $ {{ tool.buyCost }}</label>
       <span class="gap"></span>
-      <button @click="clickSellButton" :disabled="tool.amount <= 0">
+      <button :disabled="tool.amount <= 0" @click="clickSellButton">
         Sell
       </button>
-      <button @click="clickBuyButton" :disabled="tool.buyCost > game.Money">
+      <button :disabled="tool.buyCost > game.Money" @click="clickBuyButton">
         Buy
       </button>
     </div>
@@ -42,7 +45,7 @@ const { game, tool } = props;
 
 const amountWithSuffix = computed(() => withSuffix(tool.amount));
 const amountTooltip = computed(() =>
-  tool.amount > 1000 ? tool.amount.toString() : ""
+  tool.amount > 1000 ? tool.amount.toString() : "",
 );
 
 function clickBuyButton() {

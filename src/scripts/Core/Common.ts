@@ -80,25 +80,34 @@ export enum FuncType {
   EXPONENTIAL,
 }
 
+export type Coefficients = {
+  a?: number;
+  b?: number;
+  c?: number;
+};
+
 export function createGrowthFunction(
   funcType: FuncType,
-  coefficients: number[] = [],
+  coefficients: Coefficients = {},
 ) {
+  const {
+    a = 1,
+    b = funcType == FuncType.ASYMPTOTIC ? Math.E : 1,
+    c = 1,
+  } = coefficients;
+
   switch (funcType) {
     case FuncType.LINEAR:
-      var [a = 1] = coefficients;
-      return (b: number, x: number) => a * x + b;
+      return (base: number, x: number) => a * x + base;
     case FuncType.QUADRATIC:
-      var [a = 1, b = 1] = coefficients;
-      return (c: number, x: number) => a * x ** 2 + b * x + c;
+      return (base: number, x: number) => a * x ** 2 + b * x + base;
     case FuncType.CUBIC:
-      var [a = 1, b = 1, c = 1] = coefficients;
-      return (d: number, x: number) => a * x ** 3 + b * x ** 2 + c * x + d;
+      return (base: number, x: number) =>
+        a * x ** 3 + b * x ** 2 + c * x + base;
     case FuncType.ASYMPTOTIC:
-      var [a = 1, b = Math.E] = coefficients;
-      return (c: number, x: number) => a * Math.log(x) / Math.log(b) + c;
+      return (base: number, x: number) =>
+        (a * Math.log(x)) / Math.log(b) + base;
     case FuncType.EXPONENTIAL:
-      var [a = 1, b = 1] = coefficients;
-      return (c: number, x: number) => a * Math.E ** (b * x) + c;
+      return (base: number, x: number) => a * Math.E ** (b * x) + base;
   }
 }

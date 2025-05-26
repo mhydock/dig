@@ -2,7 +2,10 @@
   <div id="gameScreen" @mousemove="updateToolTip" @mouseout="clearToolTip">
     <div id="tiles" ref="tiles"></div>
     <template v-if="Grid.affected.length > 0">
-      <template v-for="bp of Grid.affected" :key="`${bp.point.x},${bp.point.y}`">
+      <template
+        v-for="bp of Grid.affected"
+        :key="`${bp.point.x},${bp.point.y}`"
+      >
         <div
           class="highlight"
           :style="{
@@ -44,7 +47,7 @@ const {
   game: { Grid, Player },
 } = props;
 
-var lastX, lastY;
+let lastX, lastY;
 
 function setViewRows(height: number) {
   viewRows.value = Math.ceil(height / tileSize.value);
@@ -83,8 +86,8 @@ watch(
   ],
   () => {
     drawScreen();
-    updateToolTip({offsetX: lastX, offsetY: lastY});
-  }
+    updateToolTip({ offsetX: lastX, offsetY: lastY });
+  },
 );
 
 function normalizeXY(x: number, y: number): { row: number; col: number } {

@@ -4,8 +4,8 @@
       <div id="progCursor" :style="{ top: game.Progress + '%' }">&gt;</div>
     </div>
     <div id="gridWrapper">
-      <TextGrid :game="game" @updateToolTip="updateToolTip"></TextGrid>
-      <Tooltip :hoverText="hoverText" :x="toolTipX" :y="toolTipY"></Tooltip>
+      <TextGrid :game="game" @update-tool-tip="updateToolTip"></TextGrid>
+      <Tooltip :hover-text="hoverText" :x="toolTipX" :y="toolTipY"></Tooltip>
     </div>
     <Inventory :game="game"></Inventory>
   </div>
@@ -34,13 +34,17 @@ const updateToolTip = (event: TooltipEvent) => {
   toolTipY.value = event.pos.y;
 };
 
-watch(() => game.ToolsInventory.activeTool, (tool) => {
-  if (tool?.amount === 0) {
-    game.selectTool(null);
-  }
-}, {
-  deep: true
-});
+watch(
+  () => game.ToolsInventory.activeTool,
+  (tool) => {
+    if (tool?.amount === 0) {
+      game.selectTool(null);
+    }
+  },
+  {
+    deep: true,
+  },
+);
 
 // keycodes found here http://www.javascriptkeycode.com/
 const onKeyDownFunc = (event: KeyboardEvent) => {

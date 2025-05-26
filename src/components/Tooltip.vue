@@ -1,8 +1,8 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div
-    id="tooltip"
     v-if="hoverText"
+    id="tooltip"
     :style="{ top: y + 4 + 'px', left: x + 4 + 'px' }"
   >
     <span v-if="hoverText.power">Power: {{ hoverText.power }}</span>

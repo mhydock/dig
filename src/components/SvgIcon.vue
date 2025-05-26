@@ -6,7 +6,7 @@
 import { defineAsyncComponent } from "vue";
 
 const props = defineProps<{
-  name: String;
+  name: string;
 }>();
 
 const icon = defineAsyncComponent(

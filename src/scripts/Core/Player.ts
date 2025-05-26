@@ -7,7 +7,7 @@ export class Player {
     private x: number,
     private y: number,
     private grid: Grid,
-    private tools: ToolsInventory
+    private tools: ToolsInventory,
   ) {}
 
   orient = Orientation.NORTH;
@@ -38,7 +38,12 @@ export class Player {
           this.y = y;
           this.x = x;
         }
-        affected = this.tools.getAffected(this.grid, this.x, this.y, this.orient);
+        affected = this.tools.getAffected(
+          this.grid,
+          this.x,
+          this.y,
+          this.orient,
+        );
       }
     }
 
@@ -67,26 +72,51 @@ export class Player {
 
   faceUp(): void {
     this.orient = Orientation.NORTH;
-    this.grid.affected = this.tools.getAffected(this.grid, this.x, this.y, this.orient);
+    this.grid.affected = this.tools.getAffected(
+      this.grid,
+      this.x,
+      this.y,
+      this.orient,
+    );
   }
 
   faceDown(): void {
     this.orient = Orientation.SOUTH;
-    this.grid.affected = this.tools.getAffected(this.grid, this.x, this.y, this.orient);
+    this.grid.affected = this.tools.getAffected(
+      this.grid,
+      this.x,
+      this.y,
+      this.orient,
+    );
   }
 
   faceLeft(): void {
     this.orient = Orientation.WEST;
-    this.grid.affected = this.tools.getAffected(this.grid, this.x, this.y, this.orient);
+    this.grid.affected = this.tools.getAffected(
+      this.grid,
+      this.x,
+      this.y,
+      this.orient,
+    );
   }
 
   faceRight(): void {
     this.orient = Orientation.EAST;
-    this.grid.affected = this.tools.getAffected(this.grid, this.x, this.y, this.orient);
+    this.grid.affected = this.tools.getAffected(
+      this.grid,
+      this.x,
+      this.y,
+      this.orient,
+    );
   }
 
   dig(): void {
-    let affected = this.tools.getAffected(this.grid, this.x, this.y, this.orient);
+    let affected = this.tools.getAffected(
+      this.grid,
+      this.x,
+      this.y,
+      this.orient,
+    );
     this.tools.digAffected(affected);
     affected = affected.filter((p) => !p.block.IsCleared);
     this.grid.affected = affected;

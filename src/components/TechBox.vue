@@ -6,8 +6,8 @@
       <label>Next: $ {{ tech.researchCost }}</label>
       <span class="gap"></span>
       <button
-        @click="clickResearchButton"
         :disabled="tech.researchCost > game.Money"
+        @click="clickResearchButton"
       >
         Research
       </button>

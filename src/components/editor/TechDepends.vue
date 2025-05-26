@@ -11,23 +11,23 @@
       <tbody>
         <tr
           v-for="tech in techTree.technologies"
-          :class="{ required: dependsOn(tech) }"
           :key="tech.id"
+          :class="{ required: dependsOn(tech) }"
         >
           <td>
             <input
-              @click="toggleTech(tech)"
               :checked="dependsOn(tech)"
               type="checkbox"
+              @click="toggleTech(tech)"
             />
           </td>
           <td>{{ tech.name }}</td>
           <td>
             <input
               :value="dependLevel(tech)"
-              @change="setDependLevel(tech, $event.target)"
               type="number"
               :disabled="!dependsOn(tech)"
+              @change="setDependLevel(tech, $event.target)"
             />
           </td>
         </tr>

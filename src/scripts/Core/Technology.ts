@@ -18,7 +18,7 @@ export class Technology {
     public name: string,
     public baseCost: number,
     public techDepends: TechDependency[] | null = null,
-    public costFunc: GrowthFunction = Technology.defaultCostFunc
+    public costFunc: GrowthFunction = Technology.defaultCostFunc,
   ) {
     this.currCost = baseCost;
   }

@@ -7,13 +7,13 @@
       >
       <label>$ {{ item.Value }} per</label>
       <span class="gap"></span>
-      <button @click="clickSellAllButton" v-if="item.Amount >= 2">
+      <button v-if="item.Amount >= 2" @click="clickSellAllButton">
         Sell All
       </button>
-      <button @click="clickSell100Button" v-if="item.Amount >= 100">
+      <button v-if="item.Amount >= 100" @click="clickSell100Button">
         Sell x100
       </button>
-      <button @click="clickSellButton" :disabled="item.Amount <= 0">
+      <button :disabled="item.Amount <= 0" @click="clickSellButton">
         Sell
       </button>
     </div>
@@ -36,7 +36,7 @@ const { game, item } = props;
 
 const amountWithSuffix = computed(() => withSuffix(item.Amount));
 const amountTooltip = computed(() =>
-  item.Amount > 1000 ? item.Amount.toString() : ""
+  item.Amount > 1000 ? item.Amount.toString() : "",
 );
 
 function clickSellButton() {

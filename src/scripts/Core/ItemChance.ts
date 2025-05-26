@@ -16,7 +16,7 @@ export class ItemChance {
     private item: Item,
     private chance: number,
     private minAmount: number,
-    private maxAmount: number
+    private maxAmount: number,
   ) {
     minAmount = Math.max(Math.min(minAmount, maxAmount), 1);
     maxAmount = Math.max(minAmount, maxAmount);

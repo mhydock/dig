@@ -29,7 +29,7 @@ export class ToolsInventory {
         tt.canMove,
         tt.orientation as ToolOrientation,
         tt.offset,
-        tt.collisionMask
+        tt.collisionMask,
       );
       this.toolsMap[tt.id] = tool;
       this.tools.push(tool);
@@ -50,7 +50,7 @@ export class ToolsInventory {
     grid: Grid,
     x: number,
     y: number,
-    orient: Orientation
+    orient: Orientation,
   ): BlockCoordPair[] {
     if (!this.activeTool) return [];
 

@@ -12,9 +12,9 @@
     "test:unit": "jest --passWithNoTests --coverage src",
     "test:e2e": "start-server-and-test dev http-get://127.0.0.1:3000 cypress",
     "cypress": "cypress run",
-    "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src"
+    "lint": "eslint --ext .js,.ts,.vue --fix src"
   },
-  "main": "Main.js",
+  "main": "main.ts",
   "dependencies": {
     "chart.js": "^4.4.9",
     "uuid": "^10.0.0",
@@ -26,14 +26,14 @@
     "@jest/globals": "^29.7.0",
     "@types/jest": "^29.5.1",
     "@types/uuid": "^10.0.0",
-    "@typescript-eslint/eslint-plugin": "^8.31.0",
-    "@typescript-eslint/parser": "^8.31.0",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vue/eslint-config-prettier": "^10.2.0",
     "@vue/eslint-config-typescript": "^14.5.0",
     "@vue/test-utils": "^2.4.0",
     "cypress": "^14.3.2",
     "eslint": "^9.26.0",
+    "eslint-config-flat-gitignore": "^2.1.0",
+    "eslint-import-resolver-vite": "^2.1.0",
     "eslint-plugin-import": "^2.23.2",
     "eslint-plugin-prettier": "^5.1.0",
     "eslint-plugin-simple-import-sort": "^12.0.0",
@@ -43,6 +43,7 @@
     "start-server-and-test": "^2.0.3",
     "ts-jest": "^29.1.1",
     "typescript": "^5.0.4",
+    "typescript-eslint": "^8.32.1",
     "vite": "^6.3.0",
     "vite-svg-loader": "^5.1.0"
   },

@@ -42,7 +42,10 @@
     position: relative;
     font-weight: bold;
     color: #2c3e50;
-    text-shadow: 0px 2px 0px #fff, 2px 0px 0px #fff, 0px -2px 0px #fff,
+    text-shadow:
+      0px 2px 0px #fff,
+      2px 0px 0px #fff,
+      0px -2px 0px #fff,
       -2px 0px 0px #fff;
 
     &.router-link-exact-active,

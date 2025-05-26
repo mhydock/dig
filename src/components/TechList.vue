@@ -2,10 +2,10 @@
   <div id="techList">
     <template v-for="(tech, key) of game.TechnologyTree.technologies">
       <TechBox
+        v-if="tech.isVisible"
+        :key="key"
         :game="game"
         :tech="tech"
-        :key="key"
-        v-if="tech.isVisible"
       ></TechBox>
     </template>
   </div>

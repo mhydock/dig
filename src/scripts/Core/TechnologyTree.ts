@@ -16,7 +16,7 @@ export class TechnologyTree {
         t.techDepends.map((td) => ({
           tech: this.techMap[td.tech],
           level: td.level,
-        }))
+        })),
       );
       this.technologies.push(tech);
       this.techMap[t.id] = tech;

@@ -6,7 +6,7 @@
       <span class="gap"></span>
       <button @click="game.clearMessages()">Clear Log</button>
     </div>
-    <div class="body" :class="{ collapsed }" ref="messages">
+    <div ref="messages" class="body" :class="{ collapsed }">
       <div v-for="(message, i) of game.Messages" :key="i">
         {{ message }}
       </div>
@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, Ref, ref, watch } from "vue";
+import { Ref, ref, watch } from "vue";
 
 import { debug } from "../scripts/Core/Common";
 import { Game } from "../scripts/Core/Game";
@@ -34,14 +34,18 @@ function toggleCollapse() {
   debug("is collapsed", collapsed);
 }
 
-watch(game.Messages, () => {
-  messages?.value?.scrollTo({
-    top: messages?.value?.scrollHeight,
-    behavior: "smooth",
-  });
-}, {
-  flush: 'post',
-});
+watch(
+  game.Messages,
+  () => {
+    messages?.value?.scrollTo({
+      top: messages?.value?.scrollHeight,
+      behavior: "smooth",
+    });
+  },
+  {
+    flush: "post",
+  },
+);
 </script>
 <style lang="scss">
 .log {

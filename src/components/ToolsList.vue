@@ -2,10 +2,10 @@
   <div id="toolsList">
     <template v-for="(tool, key) of game.ToolsInventory.tools">
       <ToolBox
+        v-if="tool.isResearched"
+        :key="key"
         :game="game"
         :tool="tool"
-        :key="key"
-        v-if="tool.isResearched"
       ></ToolBox>
     </template>
   </div>
