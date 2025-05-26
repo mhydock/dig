@@ -41,7 +41,7 @@ export class Grid {
 
   getTooltipText(
     x: number,
-    y: number
+    y: number,
   ): { type: string; maxHP: number; currHP: number } | null {
     const health = this.healthPercent(x, y);
     if (health === 0) return null;
@@ -63,7 +63,7 @@ export class Grid {
         this.grid[i] = new Block(
           y,
           this.itemsFactory,
-          this.blockClearedListeners
+          this.blockClearedListeners,
         );
 
       return this.grid[i];

@@ -1,4 +1,11 @@
-import { createGrowthFunction, FuncType, GrowthFunction, Orientation, Point } from "./Common";
+import {
+  Coefficients,
+  createGrowthFunction,
+  FuncType,
+  GrowthFunction,
+  Orientation,
+  Point,
+} from "./Common";
 import { TechDependency, Technology } from "./Technology";
 
 interface Offset {
@@ -32,9 +39,9 @@ export class Tool {
     public offset: Offset = { x: 0, y: 0 },
     public collisionMask: number[][] = [],
     public costFunctionType: FuncType = FuncType.LINEAR,
-    public costCoefficients: number[] = [],
+    public costCoefficients: Coefficients = {},
     public powerFunctionType: FuncType = FuncType.LINEAR,
-    public powerCoefficients: number[] = [],
+    public powerCoefficients: Coefficients = {},
   ) {
     this.costFunc = createGrowthFunction(costFunctionType, costCoefficients);
     this.powerFunc = createGrowthFunction(powerFunctionType, powerCoefficients);

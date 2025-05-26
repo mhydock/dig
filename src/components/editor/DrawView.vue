@@ -1,16 +1,16 @@
 <template>
   <div class="grid-view-wrapper">
     <div class="grid">
-      <div class="grid-wrapper" ref="grid">
+      <div ref="grid" class="grid-wrapper">
         <div
-          class="row"
           v-for="(row, i) of currTool.collisionMask"
           :key="'row' + i"
+          class="row"
         >
           <div
-            class="cell"
             v-for="(cell, j) of row"
             :key="'cell' + j"
+            class="cell"
             :style="{
               background: getShade(cell),
               height: cellEdgeLength + 'px',
@@ -25,11 +25,11 @@
       <div>
         <label>Intensity</label>
         <span
+          v-for="(_, i) of new Array(SHADES + 1)"
+          :key="'shade' + i"
           class="shade"
           :class="{ selected: currIntensity == i, dark: i > SHADES / 2 }"
           :style="{ background: getShadeFromIndex(i) }"
-          v-for="(_, i) of new Array(SHADES + 1)"
-          :key="'shade' + i"
           @click="currIntensity = i"
         ></span>
       </div>

@@ -41,7 +41,7 @@ export class Block {
   constructor(
     private depth: number,
     private itemsFactory: ItemsFactory,
-    private blockClearedListener: Listener<BlockClearedListenerFunc>
+    private blockClearedListener: Listener<BlockClearedListenerFunc>,
   ) {
     this.health = BASE_BLOCK_DURABILITY;
     this.durability =
@@ -51,7 +51,7 @@ export class Block {
 
   dig(power: number): number {
     const damage: number = Math.ceil(
-      (power * BASE_POWER_MULTIPLIER) / this.durability
+      (power * BASE_POWER_MULTIPLIER) / this.durability,
     );
     const remainingHP: number = this.health;
     this.health -= Math.min(remainingHP, damage);

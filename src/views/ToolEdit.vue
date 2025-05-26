@@ -5,9 +5,9 @@
         <ul class="tabs">
           <li
             v-for="(tabName, key) of TABS"
+            :key="key"
             :class="{ selected: activeTab === tabName }"
             @click="setTab(tabName)"
-            :key="key"
           >
             {{ tabName[0].toUpperCase() + tabName.substring(1) }}
           </li>
@@ -21,8 +21,8 @@
         <keep-alive>
           <component
             :is="component[activeTab]"
-            :currTool="currTool"
             :key="currToolId + activeTab"
+            :curr-tool="currTool"
           />
         </keep-alive>
       </div>
@@ -62,7 +62,11 @@
             <label>Cost Func Type</label>
             <select v-model="currTool.costFunctionType">
               <template v-for="[key, value] of Object.entries(FuncType)">
-                <option :value="value" v-if="typeof value !== 'string'">
+                <option
+                  v-if="typeof value !== 'string'"
+                  :key="key"
+                  :value="value"
+                >
                   {{ key[0] + key.substring(1).toLowerCase() }}
                 </option>
               </template>
@@ -71,7 +75,7 @@
           <div class="tool-field">
             <label>&#x2BA1; Coefficients</label>
             <MultiInput
-              :coefficients="currTool.costCoefficients"
+              v-model="currTool.costCoefficients"
               :function-type="currTool.costFunctionType"
             />
           </div>
@@ -87,7 +91,11 @@
             <label>Power Func Type</label>
             <select v-model="currTool.powerFunctionType">
               <template v-for="[key, value] of Object.entries(FuncType)">
-                <option :value="value" v-if="typeof value !== 'string'">
+                <option
+                  v-if="typeof value !== 'string'"
+                  :key="key"
+                  :value="value"
+                >
                   {{ key[0] + key.substring(1).toLowerCase() }}
                 </option>
               </template>
@@ -96,7 +104,7 @@
           <div class="tool-field">
             <label>&#x2BA1; Coefficients</label>
             <MultiInput
-              :coefficients="currTool.powerCoefficients"
+              v-model="currTool.powerCoefficients"
               :function-type="currTool.powerFunctionType"
             />
           </div>
@@ -105,9 +113,9 @@
           <div class="tool-field">
             <label>Technologies</label>
             <TechDepends
-              :currTool="currTool"
-              :techTree="techTree"
               :key="currToolId"
+              :curr-tool="currTool"
+              :tech-tree="techTree"
             />
           </div>
           <div class="tool-field">
@@ -120,7 +128,7 @@
           </div>
           <div class="tool-field">
             <label>Can Move And Dig?</label>
-            <input type="checkbox" v-model="currTool.canMove" />
+            <input v-model="currTool.canMove" type="checkbox" />
           </div>
         </template>
       </div>
@@ -132,16 +140,17 @@
 import { v4 as uuidv4 } from "uuid";
 import { computed, reactive, Ref, ref, watch } from "vue";
 
+import MultiInput from "@/components/editor/MultiInput.vue";
+import NumberInput from "@/components/editor/NumberInput.vue";
+import { createGrowthFunction, FuncType } from "@/scripts/Core/Common";
+
+import ChartView from "../components/editor/ChartView.vue";
 import DrawView from "../components/editor/DrawView.vue";
 import MaskView from "../components/editor/MaskView.vue";
-import ChartView from "../components/editor/ChartView.vue";
 import TechDepends from "../components/editor/TechDepends.vue";
 import { TechnologyTree } from "../scripts/Core/TechnologyTree";
 import { Tool } from "../scripts/Core/Tool";
 import { ToolsInventory } from "../scripts/Core/ToolsInventory";
-import { createGrowthFunction, FuncType } from "@/scripts/Core/Common";
-import MultiInput from "@/components/editor/MultiInput.vue";
-import NumberInput from "@/components/editor/NumberInput.vue";
 
 const TABS = ["draw", "view", "chart"] as const;
 type EditorTabs = (typeof TABS)[number];
@@ -404,7 +413,7 @@ watch(
     background-color: transparent;
     background-image: url("@/assets/icons/angle-down.svg");
     background-repeat: no-repeat;
-    background-size: 1.25em .75em;
+    background-size: 1.25em 0.75em;
     background-position: right center;
     background-clip: border-box;
   }

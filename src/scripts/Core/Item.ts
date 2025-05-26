@@ -4,7 +4,7 @@ export class Item {
     private desc: string,
     private amount: number,
     private value: number,
-    private known: boolean
+    private known: boolean,
   ) {}
 
   get Name(): string {

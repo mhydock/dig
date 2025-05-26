@@ -5,21 +5,22 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
 import {
-  Chart as ChartJS,
   CategoryScale,
+  Chart as ChartJS,
+  Legend,
   LinearScale,
-  PointElement,
   LineElement,
+  PointElement,
   Title,
   Tooltip,
-  Legend,
 } from "chart.js";
+import { computed } from "vue";
 import { Line } from "vue-chartjs";
 
-import { Tool } from "../../scripts/Core/Tool";
 import { withSuffix } from "@/scripts/Core/Common";
+
+import { Tool } from "../../scripts/Core/Tool";
 
 ChartJS.register(
   CategoryScale,
@@ -95,10 +96,15 @@ const options = computed(() => ({
       },
       position: "right",
       grid: {
-            color: ["#000", "#aaa"],
+        color: ["#000", "#aaa"],
       },
       suggestedMin: 0,
-      suggestedMax: Math.floor(costPoints.value.reduce((prev, curr) => curr[1] > prev[1] ? curr : prev)[1] / 10) * 10, 
+      suggestedMax:
+        Math.floor(
+          costPoints.value.reduce((prev, curr) =>
+            curr[1] > prev[1] ? curr : prev,
+          )[1] / 10,
+        ) * 10,
     },
     power: {
       title: {
@@ -111,21 +117,26 @@ const options = computed(() => ({
       },
       position: "left",
       grid: {
-            color: ["#000", "#aaa"],
+        color: ["#000", "#aaa"],
       },
       suggestedMin: 0,
-      suggestedMax: Math.floor(powerPoints.value.reduce((prev, curr) => curr[1] > prev[1] ? curr : prev)[1] / 10) * 10, 
+      suggestedMax:
+        Math.floor(
+          powerPoints.value.reduce((prev, curr) =>
+            curr[1] > prev[1] ? curr : prev,
+          )[1] / 10,
+        ) * 10,
     },
     x: {
-        type: "linear",
-        title: {
-            display: true,
-            text: "Amount",
-        },
-        ticks: {
-            display: true,
-        }
-    }
+      type: "linear",
+      title: {
+        display: true,
+        text: "Amount",
+      },
+      ticks: {
+        display: true,
+      },
+    },
   },
 }));
 </script>

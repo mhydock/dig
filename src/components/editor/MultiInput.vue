@@ -2,41 +2,34 @@
   <div class="multi-input">
     <div>
       <label>a</label>
-      <NumberInput
-        v-model="coefficients[0]"
-        @clear="delete coefficients[0]"
-        placeholder="1"
-      />
+      <NumberInput v-model="model.a" placeholder="1" />
     </div>
     <div v-if="functionType !== FuncType.LINEAR">
       <label>b</label>
       <NumberInput
-        v-model="coefficients[1]"
-        @clear="delete coefficients[1]"
+        v-model="model.b"
         :placeholder="isAsymp ? 'e' : '1'"
-        :default = "isAsymp ? Math.E : 1"
-        :step="isExpo ? 0.02: 1"
+        :default="isAsymp ? Math.E : 1"
+        :step="isExpo ? 0.02 : 1"
       />
     </div>
     <div v-if="functionType === FuncType.CUBIC">
       <label>c</label>
-      <NumberInput
-        v-model="coefficients[2]"
-        @clear="delete coefficients[2]"
-        placeholder="1"
-      />
+      <NumberInput v-model="model.c" placeholder="1" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { FuncType } from "@/scripts/Core/Common";
 import { computed } from "vue";
+
+import { Coefficients, FuncType } from "@/scripts/Core/Common";
+
 import NumberInput from "./NumberInput.vue";
 
+const model = defineModel<Coefficients>({ required: true });
 const props = defineProps<{
   functionType: FuncType;
-  coefficients: number[];
 }>();
 
 const isExpo = computed(() => props.functionType === FuncType.EXPONENTIAL);

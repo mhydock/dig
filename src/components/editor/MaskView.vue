@@ -1,12 +1,12 @@
 <template>
   <div class="grid-view-wrapper">
     <div class="grid">
-      <div class="grid-wrapper" ref="grid">
-        <div class="row" v-for="(row, i) of fullCollisionMask" :key="'row' + i">
+      <div ref="grid" class="grid-wrapper">
+        <div v-for="(row, i) of fullCollisionMask" :key="'row' + i" class="row">
           <div
-            class="cell"
             v-for="(cell, j) of row"
             :key="'cell' + j"
+            class="cell"
             :style="{
               background: getShade(cell),
               height: maskCellEdgeLength + 'px',
@@ -139,7 +139,11 @@ const maskCellEdgeLength = computed(() => {
   .player-icon {
     border: 2px solid black;
     border-radius: 100rem;
-    box-shadow: 1px 0px white, -1px 0px white, 0px 1px white, 0px -1px white;
+    box-shadow:
+      1px 0px white,
+      -1px 0px white,
+      0px 1px white,
+      0px -1px white;
   }
 }
 

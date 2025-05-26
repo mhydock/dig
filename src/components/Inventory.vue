@@ -4,22 +4,22 @@
     <ul class="tabs">
       <li
         id="tools"
-        @click="selectTab('tools')"
         :class="{ selected: tab === 'tools' }"
+        @click="selectTab('tools')"
       >
         Tools
       </li>
       <li
         id="items"
-        @click="selectTab('items')"
         :class="{ selected: tab === 'items' }"
+        @click="selectTab('items')"
       >
         Items
       </li>
       <li
         id="econ"
-        @click="selectTab('econ')"
         :class="{ selected: tab === 'econ' }"
+        @click="selectTab('econ')"
       >
         Econ
       </li>
